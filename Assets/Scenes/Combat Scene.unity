@@ -201,6 +201,10 @@ MonoBehaviour:
   Name: Sword God
   Race: Human
   Level: 10
+  HP: 0
+  EN: 0
+  SPD: 0
+  PWR: 0
 --- !u!1 &60001366 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3830764326356372091, guid: e500d36c23068b742864964d7f5d632a, type: 3}
@@ -1004,8 +1008,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 332.43243, y: -124.54054}
-  m_SizeDelta: {x: 468.32434, y: 0}
+  m_AnchoredPosition: {x: 333.70514, y: -123.346596}
+  m_SizeDelta: {x: 474.26288, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &719254498
 MonoBehaviour:
@@ -1141,6 +1145,10 @@ MonoBehaviour:
   Name: Fire Mage
   Race: Demon
   Level: 9
+  HP: 0
+  EN: 0
+  SPD: 0
+  PWR: 0
 --- !u!1 &793256286
 GameObject:
   m_ObjectHideFlags: 0
@@ -1417,6 +1425,10 @@ MonoBehaviour:
   Name: Water Mage
   Race: Human
   Level: 13
+  HP: 0
+  EN: 0
+  SPD: 0
+  PWR: 0
 --- !u!1 &1237157543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1560,8 +1572,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 332.43243, y: -41.513515}
-  m_SizeDelta: {x: 664.86487, y: 0}
+  m_AnchoredPosition: {x: 333.70514, y: -41.115532}
+  m_SizeDelta: {x: 667.4103, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1669875113
 MonoBehaviour:
@@ -1697,6 +1709,10 @@ MonoBehaviour:
   Name: North God
   Race: Elf
   Level: 11
+  HP: 0
+  EN: 0
+  SPD: 0
+  PWR: 0
 --- !u!1 &1849958810
 GameObject:
   m_ObjectHideFlags: 0
@@ -1733,8 +1749,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 332.43243, y: -207.56758}
-  m_SizeDelta: {x: 186.81082, y: 0}
+  m_AnchoredPosition: {x: 333.70514, y: -205.57767}
+  m_SizeDelta: {x: 187.41034, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1849958812
 MonoBehaviour:

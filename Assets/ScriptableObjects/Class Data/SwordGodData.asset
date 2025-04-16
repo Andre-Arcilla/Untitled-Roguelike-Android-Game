@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6fff08e89b814e41a13ed34ca4c80e3, type: 3}
+  m_Name: SwordGodData
+  m_EditorClassIdentifier: 
+  className: Sword God Style
+  description: sssssssssssssss
+  classSprite: {fileID: 895508148675619221, guid: 971ace9d9e00d2e40ad7aa478a157532, type: 3}
+  startingDeck:
+  - {fileID: 11400000, guid: 9568e0c45e80fd34a817039964f72c5e, type: 2}
+  - {fileID: 11400000, guid: 9568e0c45e80fd34a817039964f72c5e, type: 2}
+  - {fileID: 11400000, guid: 9568e0c45e80fd34a817039964f72c5e, type: 2}
+  - {fileID: 11400000, guid: 9568e0c45e80fd34a817039964f72c5e, type: 2}
+  - {fileID: 11400000, guid: 9568e0c45e80fd34a817039964f72c5e, type: 2}
+  - {fileID: 11400000, guid: 9568e0c45e80fd34a817039964f72c5e, type: 2}
+  - {fileID: 11400000, guid: 9568e0c45e80fd34a817039964f72c5e, type: 2}
+  - {fileID: 11400000, guid: 9568e0c45e80fd34a817039964f72c5e, type: 2}
+  - {fileID: 11400000, guid: 9568e0c45e80fd34a817039964f72c5e, type: 2}
+  - {fileID: 11400000, guid: 9568e0c45e80fd34a817039964f72c5e, type: 2}

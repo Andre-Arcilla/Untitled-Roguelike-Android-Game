@@ -5,10 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class ClassManagerScript : MonoBehaviour
 {
-    public SpriteRenderer sprite;
-    public List<GameObject> classes = new List<GameObject>();
+    public ClassDataSO test;
+    public List<ClassDataSO> classes = new List<ClassDataSO>();
     private int selectedClass = 0;
     public GameObject playerClass;
+
+    private void Start()
+    {
+        test = classes[selectedClass];
+        playerClass = Instantiate(classes[selectedClass].classSprite, transform.position, Quaternion.identity);
+        playerClass.transform.localScale = new Vector3(4, 4, 0);
+        playerClass.transform.position = new Vector3(0, 0.6f, 0);
+    }
 
     public void NextBtn()
     {
@@ -22,13 +30,14 @@ public class ClassManagerScript : MonoBehaviour
         Destroy(playerClass);
 
         // Instantiate the new class prefab
-        playerClass = Instantiate(classes[selectedClass], transform.position, Quaternion.identity);
+        playerClass = Instantiate(classes[selectedClass].classSprite, transform.position, Quaternion.identity);
 
         // Set the scale of the new prefab (X = 4, Y = 4, Z = 4)
         playerClass.transform.localScale = new Vector3(4, 4, 0);
 
         // Set the position of the new prefab (X = 0, Y = 0.6, Z = 0)
         playerClass.transform.position = new Vector3(0, 0.6f, 0);
+        test = classes[selectedClass];
     }
 
     public void PrevBtn()
@@ -43,13 +52,14 @@ public class ClassManagerScript : MonoBehaviour
         Destroy(playerClass);
 
         // Instantiate the new class prefab
-        playerClass = Instantiate(classes[selectedClass], transform.position, Quaternion.identity);
+        playerClass = Instantiate(classes[selectedClass].classSprite, transform.position, Quaternion.identity);
 
         // Set the scale of the new prefab (X = 4, Y = 4, Z = 4)
         playerClass.transform.localScale = new Vector3(4, 4, 0);
 
         // Set the position of the new prefab (X = 0, Y = 0.6, Z = 0)
         playerClass.transform.position = new Vector3(0, 0.6f, 0);
+        test = classes[selectedClass];
     }
 
     public void Create()

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0021b148f8b84b24abffd692e8235604, type: 3}
+  m_Name: sdaa
+  m_EditorClassIdentifier: 
+  playerName: sdaa
+  level: 1
+  gender: Male
+  raceName: Dwarf
+  allocatedHP: 10
+  allocatedEN: 0
+  allocatedPWR: 0
+  allocatedSPD: 0
+  classes:
+  - 
+  - 
+  - 
+  headGear: {fileID: 0}
+  chestArmor: {fileID: 0}
+  legwear: {fileID: 0}
+  gloves: {fileID: 0}
+  boots: {fileID: 0}
+  mainHand: {fileID: 11400000, guid: 60dd0f2ba3f739e4ba9f9f2c8c4415a7, type: 2}
+  offHand: {fileID: 0}
+  accessory1: {fileID: 0}
+  accessory2: {fileID: 0}
+  accessory3: {fileID: 0}

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6fff08e89b814e41a13ed34ca4c80e3, type: 3}
+  m_Name: EarthMageData
+  m_EditorClassIdentifier: 
+  className: Earth Mage
+  gender: 0
+  spriteMale: {fileID: 4681758890207869389, guid: 37cc0f0309be5ed418f07bef1f1864a5, type: 3}
+  spriteFemale: {fileID: 3944877961001108608, guid: 166d20d7b13e21e489c0c5e5d854e1a6, type: 3}
+  startingDeck:
+  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
+  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
+  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
+  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
+  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
+  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
+  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
+  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
+  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
+  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}

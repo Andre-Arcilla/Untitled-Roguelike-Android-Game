@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92637e06d0901e04dab9e5b9bcede53f, type: 3}
   m_Name: AdoldiaData
   m_EditorClassIdentifier: 
-  RaceName: Adoldia
+  raceName: Adoldia
   description: beast race
   HP: 20
   EN: 15

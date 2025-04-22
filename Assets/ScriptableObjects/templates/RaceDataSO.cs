@@ -1,27 +1,31 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "NewRace", menuName = "RaceData")]
 public class RaceDataSO : ScriptableObject
 {
-    [Header("Basic Info")]
-    public string RaceName;
+    [Header("Race Information")]
+    [Tooltip("Name of the race")]
+    [FormerlySerializedAs("RaceName")]
+    public string raceName;
+
+    [Tooltip("Short description or lore about the race")]
     public string description;
 
-    [Header("Stats")]
-
+    [Header("Base Stats")]
+    [Tooltip("Base health points of this race. 1 point equals 5 HP")]
     [Range(1, 99)]
-    [Tooltip("hit points of the unit")]
     public int HP = 1;
 
+    [Tooltip("Base energy used for playing cards; regenerates each turn")]
     [Range(1, 99)]
-    [Tooltip("energy to use cards, recovers each turn")]
     public int EN = 1;
 
+    [Tooltip("Power modifier for card effectiveness; 10 is a 1x multiplier")]
     [Range(1, 99)]
-    [Tooltip("modifier that determines a card's strength, 10 is 1x modifier (card damage/power * PWR)")]
     public int PWR = 1;
 
+    [Tooltip("Determines turn order speed; higher goes first")]
     [Range(1, 99)]
-    [Tooltip("determines who goes first in a turn")]
     public int SPD = 1;
 }

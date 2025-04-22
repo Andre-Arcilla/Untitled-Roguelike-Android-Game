@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2465897446a18da45a9305915ab04044, type: 3}
+  m_Name: Town2Data
+  m_EditorClassIdentifier: 
+  townName: Town 2
+  sceneAsset: {fileID: 102900000, guid: fa3a5c4bb675e3748ae6bfbed31f7f5c, type: 3}
+  sceneName: Town 2
+  labyrinthCleared: 0
+  connectedTowns:
+  - {fileID: 11400000, guid: a12e403b6132aea40bc428b7e77358f2, type: 2}
+  - {fileID: 11400000, guid: e2bf3c9d7f6c6804784c202e271ea61c, type: 2}
+  - {fileID: 11400000, guid: 0d39de8578677dd40989ac795a020c51, type: 2}
+  - {fileID: 11400000, guid: 7eb25aabfb8028d468d0602e8cd0fe8f, type: 2}

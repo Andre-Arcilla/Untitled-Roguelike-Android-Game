@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5bac162723814d46a1b4baf5c225f84, type: 3}
-  m_Name: ArrowCard
+  m_Script: {fileID: 11500000, guid: a1ab6c123f970484881fd0b2a2b39d4b, type: 3}
+  m_Name: BasicEnemyData
   m_EditorClassIdentifier: 
-  cardName: Arrow
-  description: arrow
-  target: 1
-  cost: 2
-  power: 2
-  cardSprite: {fileID: 21300000, guid: 8d0de72b22fc7e14a8c9a731583be72e, type: 3}
+  enemyName: Basic Enemy
+  HP: 10
+  PWR: 10
+  SPD: 10

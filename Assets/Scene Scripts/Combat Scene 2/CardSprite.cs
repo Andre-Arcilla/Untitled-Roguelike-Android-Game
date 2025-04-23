@@ -1,18 +1,20 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class CardSprite : MonoBehaviour
 {
-    [SerializeField] private string cardName;
+    [Header("Card Display")]
+    [SerializeField] private string cardName; //removeable
     [SerializeField] private TMP_Text cardMana;
     [SerializeField] private SpriteRenderer sprite;
-    [SerializeField] private GameObject wrapper;
+    [SerializeField] private int HP; //removeable
 
-    private Vector3 offset; // To store the offset for dragging
-    private Vector3 originalPosition; // To store the original position when dragging starts
-
+    //holds the data of this instance of the card
     public Card card {  get; private set; }
 
     public void Setup(Card card)
@@ -21,40 +23,69 @@ public class CardSprite : MonoBehaviour
         cardName = card.cardName;
         cardMana.text = card.mana.ToString();
         sprite.sprite = card.sprite;
-    }
-    private void OnMouseDown()
-    {
-        // Hide the wrapper when the card is clicked and show the hover preview
-        wrapper.SetActive(false);
-        Vector3 pos = new(transform.position.x, transform.position.y + 1, transform.position.z);
-
-        CardSpriteHover.Instance.Show(card, pos);
-
-        // Store the original position and calculate the offset for dragging
-        originalPosition = transform.position;
-        offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        CharacterInfo characterInfo = GetComponentInParent<CharacterInfo>();
+        //HP = characterInfo.stats.totalHP;
     }
 
-    private void OnMouseDrag()
+    private void OnMouseEnter()
     {
-        // Follow the cursor while dragging
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + offset;
-        mousePosition.z = originalPosition.z; // Keep the z position fixed
-        transform.position = mousePosition;
-
-        // Update the hover preview position so it follows the card
-        Vector3 hoverPos = new(transform.position.x, transform.position.y + 1, transform.position.z);
-
-        CardSpriteHover.Instance.Show(card, hoverPos);
+        CardSpriteHover.Instance.Show(card);
     }
 
-    private void OnMouseUp()
+    private void OnMouseExit()
     {
-        // Restore the wrapper and hide the hover preview when the drag ends
-        wrapper.SetActive(true);
         CardSpriteHover.Instance.Hide();
-
-        // Return the card to its original position
-        transform.position = originalPosition;
     }
+
+    //drag and drop ===============================================================================================
+    [Header("Card Position")]
+    private Vector3 originalPosition; // Store the original position
+    private Quaternion originalRotation; // Store the original rotation
+    private Vector3 originalScale; // Store the original rotation
+    [SerializeField] private float returnAnimationDelay = 0.15f;
+
+    void OnMouseDown()
+    {
+        //stops the cursor from changing the hovered card 
+        CardSpriteHover.Instance.Drag(true);
+
+        // Store the original position and rotation
+        originalPosition = transform.position;
+        originalRotation = transform.rotation;
+        originalScale = transform.localScale;
+        GetComponent<SortingGroup>().sortingOrder = 1;
+    }
+
+    void OnMouseDrag()
+    {
+        // Update the object's position as the mouse is dragged
+        Vector3 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePosition = new Vector3(mouse.x, mouse.y, transform.position.z);
+        transform.DOMove(mousePosition, 0.15f);
+        transform.DORotateQuaternion(Quaternion.identity, 0.15f);
+        transform.DOScale(Vector3.one * 0.5f, 0.15f);
+    }
+
+    void OnMouseUp()
+    {
+        CardSpriteDrag.Instance.CheckIfInDropZone(this);
+
+        //stops the cursor from changing the hovered card 
+        CardSpriteHover.Instance.Drag(false);
+
+        //disable the collider to avoid catching the card mid animation
+        BoxCollider2D collider = GetComponent<BoxCollider2D>();
+        collider.enabled = false;
+
+        // Return the object to its original position and rotation
+        var seq = DOTween.Sequence();
+        seq.Append(transform.DOMove(originalPosition, returnAnimationDelay));
+        seq.Join(transform.DORotateQuaternion(originalRotation, returnAnimationDelay));
+        seq.Join(transform.DOScale(originalScale, returnAnimationDelay));
+        seq.OnComplete(() => collider.enabled = true);
+
+        GetComponent<SortingGroup>().sortingOrder = 0;
+    }
+
+    //stats and actions ===========================================================================================
 }

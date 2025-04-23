@@ -1,22 +1,37 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "NewCard", menuName = "CardData")]
 public class CardDataSO : ScriptableObject
 {
     [Header("Card Information")]
-    [Tooltip("The name of the card")]
+    [Tooltip("Name of the card")]
     public string cardName;
 
-    [Tooltip("Flavor text")]
+    [Tooltip("Flavor text or description of the card")]
     [TextArea]
     public string description;
 
-    public Sprite cardSprite;
+    [Tooltip("Who this card targets when played")]
+    public Target target;
 
     [Header("Gameplay Stats")]
-    [Tooltip("The cost to play this card (e.g., energy points required)")]
-    public int cost;
+    [Tooltip("Cost to play this card (e.g., energy points required)")]
+    [Range(0, 99)]
+    public int cost = 0;
 
     [Tooltip("The power of the card, affecting damage or effect strength")]
-    public int power;
+    [Range(0, 99)]
+    public int power = 0;
+
+    [Header("Sprite")]
+    [Tooltip("Artwork or image representing the card")]
+    public Sprite cardSprite;
+}
+
+public enum Target
+{
+    Ally,
+    Enemy,
+    Card
 }

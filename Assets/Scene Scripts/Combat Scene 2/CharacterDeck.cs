@@ -6,87 +6,150 @@ using UnityEngine;
 
 public class CharacterDeck : MonoBehaviour
 {
-    [SerializeField] private List<CardDataSO> deck; //remove serializefield
-    [SerializeField] private List<CardDataSO> hand; //remove serializefield
-    [SerializeField] private List<CardDataSO> discard; //remove serializefield
+    [SerializeField] private List<CardDataSO> deckList;
+    [SerializeField] private List<GameObject> deck;
+    [SerializeField] private List<GameObject> hand;
+    [SerializeField] private List<GameObject> discard;
     [SerializeField] private CardHolder cardHolder;
-    [SerializeField] private GameObject cardParent;
-    [SerializeField] private int handSize;
-    [SerializeField] private Transform discardPos;
-    [SerializeField] private Transform deckPos;
+    [SerializeField] private GameObject handParent; // Hand Parent for drawn cards
+    [SerializeField] private GameObject deckParent; // Deck Parent for all cards
+    [SerializeField] private GameObject discardParent; // Discard Parent for discarded cards
+    [SerializeField] private int handSize; // Max size of hand
+    [SerializeField] private Transform discardPos; // Discard position for animation
+    [SerializeField] private Transform deckPos; // Deck position for animation
 
-
+    // Set the deck with shuffled card data
     public void SetDeck(List<CardDataSO> _deck)
     {
-        deck = new List<CardDataSO>(_deck);
-        Shuffle(deck);
+        deckList = new List<CardDataSO>(_deck); // Assign the provided deck data
+        deck.Clear(); // Clear the deck list to prepare for new cards
+        GenerateCards(); // Generate new cards from the deck data
         DrawAction();
     }
 
+    public void ShuffleCardsToDeck()
+    {
+        Shuffle(deck);
+
+        // Move all cards to the discard parent first
+        foreach (GameObject card in deck)
+        {
+            card.transform.SetParent(discardParent.transform, false); // Move the cards to the discard parent
+        }
+
+        // Now move all cards back to the deck parent
+        foreach (GameObject card in deck)
+        {
+            card.transform.SetParent(deckParent.transform, false); // Move the cards back to the deck parent
+        }
+    }
+
+    // Generate cards and instantiate them in the deck
     public void GenerateCards()
     {
         StartCoroutine(GenerateCardsCoroutine());
     }
 
+    // Coroutine to generate the cards and instantiate them
     private IEnumerator GenerateCardsCoroutine()
     {
-        foreach (CardDataSO cardData in hand)
+        for (int i = 0; i < deckList.Count; i++)
         {
-            Card card = new Card(cardData);
-            CardSprite cardSprite = CardSpriteGenerator.Instance.GenerateCardSprite(card, deckPos.position, Quaternion.identity, cardParent.transform);
-            yield return cardHolder.AddCard(cardSprite); // Wait if AddCard is a coroutine
+            CardDataSO cardData = deckList[i]; // Get the card data at the current index
+            Card card = new Card(cardData); // Create a Card object from the card data
+            CardSprite cardSprite = CardSpriteGenerator.Instance.GenerateCardSprite(card, deckPos.position, Quaternion.identity, deckParent.transform);
+
+            // Set the card's name based on its index in the original deck (deckList)
+            cardSprite.name = "Card_" + i.ToString(); // Name format: "Card_0", "Card_1", ...
+            deck.Add(cardSprite.gameObject); // Add the new card GameObject to the deck list
         }
+        ShuffleCardsToDeck();
+        yield return null;
     }
 
     public void DrawAction()
     {
-        if (hand.Count == handSize)
-        {
-            Debug.Log("Hand is full, not drawing cards");
-            return;
-        }
+        List<CardSprite> newlyDrawnSprites = new();
 
-        if (deck.Count < handSize)
+        while (hand.Count < handSize)
         {
-            Debug.Log("insufficient cards, shuffling discard back to deck");
-            Shuffle(discard);
-            
-            foreach (CardDataSO card in discard)
+            // Reshuffle if deck is empty
+            if (deck.Count == 0 && discard.Count > 0)
             {
-                deck.Add(card);
+                Shuffle(discard);
+
+                foreach (GameObject card in new List<GameObject>(discard))
+                {
+                    deck.Add(card);
+                    card.transform.SetParent(deckParent.transform, false);
+                }
+
+                discard.Clear();
+                Debug.Log("Deck reshuffled from discard");
             }
 
-            discard.Clear();
+            if (deck.Count == 0)
+            {
+                Debug.LogWarning("No more cards to draw.");
+                break;
+            }
 
-            Debug.Log("deck replenished");
-        }
-
-        for (int i = 0; i < handSize; i++)
-        {
-            hand.Add(deck[0]);
+            // Draw card from deck
+            GameObject drawnCard = deck[0];
             deck.RemoveAt(0);
+            hand.Add(drawnCard);
+            drawnCard.transform.SetParent(handParent.transform, false);
+
+            // Get the card sprite and queue it for visual addition
+            CardSprite cardSprite = drawnCard.GetComponent<CardSprite>();
+            if (cardSprite == null)
+            {
+                Debug.LogError("CardSprite is NULL on: " + drawnCard.name);
+            }
+            newlyDrawnSprites.Add(cardSprite);
         }
 
-        GenerateCards();
-        Debug.Log("cards drawn");
+        // Add all new card visuals at once
+        Debug.Log("Starting AddCards with count: " + newlyDrawnSprites.Count);
+
+        StartCoroutine(cardHolder.AddCards(deckPos, newlyDrawnSprites));
+
+        Debug.Log("Cards drawn");
     }
 
     public void DiscardAction()
     {
+        if (hand.Count == 0) return;
 
-        StartCoroutine(cardHolder.DiscardCardsToPile(discardPos));
+        // Prepare card sprites for animation
+        List<CardSprite> cardSprites = new List<CardSprite>();
+        List<GameObject> cardsToDiscard = new List<GameObject>(hand); // Create a copy
 
-        // Add card data to discard pile
-        foreach (var card in hand)
+        foreach (GameObject cardObj in cardsToDiscard)
         {
-            discard.Add(card);
+            if (cardObj.TryGetComponent(out CardSprite sprite))
+            {
+                cardSprites.Add(sprite);
+            }
         }
 
-        hand.Clear();
-
-        Debug.Log("cards discarded");
+        // Start animation coroutine
+        StartCoroutine(RunDiscardProcess(cardSprites, cardsToDiscard));
     }
 
+    private IEnumerator RunDiscardProcess(List<CardSprite> cardSprites, List<GameObject> cardsToDiscard)
+    {
+        // Start discard animation
+        yield return cardHolder.DiscardCardsToPile(discardPos);
+
+        // After animation completes, update parent and lists
+        foreach (GameObject card in cardsToDiscard)
+        {
+            card.transform.SetParent(discardParent.transform, false);
+            discard.Add(card);
+            hand.Remove(card); // Safely remove from hand
+        }
+    }
 
     void Shuffle<T>(List<T> list)
     {

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7396c2671c13bae429884ee3cc072936, type: 3}
+  m_Name: RaceDatabase
+  m_EditorClassIdentifier: 
+  allRaces:
+  - {fileID: 11400000, guid: 4b0b54899e51c1c48a11fd56e14b411a, type: 2}
+  - {fileID: 11400000, guid: 0f12102ade536a641b2c864cda8cf84c, type: 2}
+  - {fileID: 11400000, guid: 40a1135cb5535374f84ebdac94c769bf, type: 2}
+  - {fileID: 11400000, guid: a5e8c370f45748242a8eddf92f2fa338, type: 2}
+  - {fileID: 11400000, guid: dea29ee9ac58d8c45b61ffe4d2d8f21d, type: 2}
+  - {fileID: 11400000, guid: 1c3738e0871a2a5478794eb641c91194, type: 2}
+  - {fileID: 11400000, guid: 8a68d348dfbac8e43bc53a46046c98cd, type: 2}
+  - {fileID: 11400000, guid: 642e1980e860a5f46bf483a2a0251e1e, type: 2}

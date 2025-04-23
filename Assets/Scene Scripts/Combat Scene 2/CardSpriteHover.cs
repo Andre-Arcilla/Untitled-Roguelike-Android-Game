@@ -19,18 +19,28 @@ public class CardSpriteHover : MonoBehaviour
         Instance = this;
     }
 
-    [SerializeField] private CardSprite hoverSprite;
+    [SerializeField] private CardSprite selectedCard;
+    [SerializeField] private bool dragging;
 
-    public void Show(Card card, Vector3 position)
+    public void Show(Card card)
     {
-        hoverSprite.gameObject.SetActive(true);
-        hoverSprite.Setup(card);
-        hoverSprite.transform.position = position;
+        if (dragging == false)
+        {
+            selectedCard.gameObject.SetActive(true);
+            selectedCard.Setup(card);
+        }
     }
 
     public void Hide()
     {
-        hoverSprite.gameObject?.SetActive(false);
-        hoverSprite.transform.position = Vector3.zero;
+        if (dragging == false)
+        {
+            selectedCard.gameObject?.SetActive(false);
+        }
+    }
+
+    public void Drag(bool isDragging)
+    {
+        dragging = isDragging;
     }
 }

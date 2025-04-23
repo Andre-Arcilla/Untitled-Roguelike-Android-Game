@@ -134,7 +134,7 @@ MonoBehaviour:
   cardName: 
   cardMana: {fileID: 7870754403025407100}
   sprite: {fileID: 305470688041824189}
-  wrapper: {fileID: 7719954617779525723}
+  returnAnimationDelay: 0.15
 --- !u!210 &3376033768440628520
 SortingGroup:
   m_ObjectHideFlags: 0

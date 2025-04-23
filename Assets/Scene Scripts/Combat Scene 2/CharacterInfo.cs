@@ -6,11 +6,23 @@ public class CharacterInfo : MonoBehaviour
 {
     [SerializeField] private GameObject spriteHolder;
     [SerializeField] private GameObject sprite;
-    [SerializeField] private CharacterData characterData; //remove serializefield
-    [SerializeField] private List<CardDataSO> deck; //remove serializefield
     [SerializeField] private ClassDatabase classDatabase;
+    [SerializeField] private RaceDatabase raceDatabase;
     [SerializeField] private CharacterDeck characterDeck;
-    [SerializeField] private bool useSaveFile;
+    [SerializeField] private bool useSaveFile; //temp
+    [SerializeField] public CharacterData characterData; //remove serializefield
+    [SerializeField] public Stats stats; //remove serializefield
+    [SerializeField] private List<CardDataSO> deck; //remove serializefield
+    [SerializeField] public int currentMana; //remove serializefield
+
+    [System.Serializable]
+    public class Stats
+    {
+        public int totalHP;
+        public int totalEN;
+        public int totalPWR;
+        public int totalSPD;
+    }
 
     private void Start()
     {
@@ -19,9 +31,26 @@ public class CharacterInfo : MonoBehaviour
             characterData = PlayerDataHolder.Instance.playerData;
         }
 
+        GenerateCharacterStats();
         GenerateCharacterDeck();
         GenerateCharacterSprite();
         characterDeck.SetDeck(deck);
+    }
+
+    public void setMana()
+    {
+        currentMana = stats.totalEN / 5;
+    }
+
+    private void GenerateCharacterStats()
+    {
+        RaceDataSO selectedRace = raceDatabase.allRaces.Find(r => r.raceName == characterData.basicInfo.raceName);
+        stats.totalHP = selectedRace.HP + characterData.allocatedStats.allocatedHP;
+        stats.totalEN = selectedRace.EN + characterData.allocatedStats.allocatedEN;
+        stats.totalPWR = selectedRace.PWR + characterData.allocatedStats.allocatedPWR;
+        stats.totalSPD = selectedRace.SPD + characterData.allocatedStats.allocatedSPD;
+
+        setMana();
     }
 
     private void GenerateCharacterSprite()

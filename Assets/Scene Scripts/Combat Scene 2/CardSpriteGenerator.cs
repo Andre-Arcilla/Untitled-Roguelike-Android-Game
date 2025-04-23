@@ -26,7 +26,6 @@ public class CardSpriteGenerator : MonoBehaviour
     {
         CardSprite cardSprite = Instantiate(cardPrefab, position, rotation, parent);
         cardSprite.transform.localScale = Vector3.zero;
-        cardSprite.transform.DOScale(Vector3.one, 0.15f);
         cardSprite.Setup(card);
         return cardSprite;
     }

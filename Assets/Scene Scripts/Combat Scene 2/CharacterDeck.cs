@@ -57,11 +57,11 @@ public class CharacterDeck : MonoBehaviour
         {
             CardDataSO cardData = deckList[i]; // Get the card data at the current index
             Card card = new Card(cardData); // Create a Card object from the card data
-            CardSprite cardSprite = CardSpriteGenerator.Instance.GenerateCardSprite(card, deckPos.position, Quaternion.identity, deckParent.transform);
+            CardInformation cardInfo = CardSpriteGenerator.Instance.GenerateCardSprite(card, deckPos.position, Quaternion.identity, deckParent.transform);
 
             // Set the card's name based on its index in the original deck (deckList)
-            cardSprite.name = "Card_" + i.ToString(); // Name format: "Card_0", "Card_1", ...
-            deck.Add(cardSprite.gameObject); // Add the new card GameObject to the deck list
+            cardInfo.name = "Card_" + i.ToString(); // Name format: "Card_0", "Card_1", ...
+            deck.Add(cardInfo.gameObject); // Add the new card GameObject to the deck list
         }
         ShuffleCardsToDeck();
         yield return null;
@@ -69,7 +69,7 @@ public class CharacterDeck : MonoBehaviour
 
     public void DrawAction()
     {
-        List<CardSprite> newlyDrawnSprites = new();
+        List<CardInformation> newlyDrawnSprites = new();
 
         while (hand.Count < handSize)
         {
@@ -101,7 +101,7 @@ public class CharacterDeck : MonoBehaviour
             drawnCard.transform.SetParent(handParent.transform, false);
 
             // Get the card sprite and queue it for visual addition
-            CardSprite cardSprite = drawnCard.GetComponent<CardSprite>();
+            CardInformation cardSprite = drawnCard.GetComponent<CardInformation>();
             if (cardSprite == null)
             {
                 Debug.LogError("CardSprite is NULL on: " + drawnCard.name);
@@ -122,12 +122,12 @@ public class CharacterDeck : MonoBehaviour
         if (hand.Count == 0) return;
 
         // Prepare card sprites for animation
-        List<CardSprite> cardSprites = new List<CardSprite>();
+        List<CardInformation> cardSprites = new List<CardInformation>();
         List<GameObject> cardsToDiscard = new List<GameObject>(hand); // Create a copy
 
         foreach (GameObject cardObj in cardsToDiscard)
         {
-            if (cardObj.TryGetComponent(out CardSprite sprite))
+            if (cardObj.TryGetComponent(out CardInformation sprite))
             {
                 cardSprites.Add(sprite);
             }
@@ -137,7 +137,7 @@ public class CharacterDeck : MonoBehaviour
         StartCoroutine(RunDiscardProcess(cardSprites, cardsToDiscard));
     }
 
-    private IEnumerator RunDiscardProcess(List<CardSprite> cardSprites, List<GameObject> cardsToDiscard)
+    private IEnumerator RunDiscardProcess(List<CardInformation> cardSprites, List<GameObject> cardsToDiscard)
     {
         // Start discard animation
         yield return cardHolder.DiscardCardsToPile(discardPos);

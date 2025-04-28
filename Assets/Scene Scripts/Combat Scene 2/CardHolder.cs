@@ -9,9 +9,9 @@ public class CardHolder : MonoBehaviour
     [SerializeField] SplineContainer splineContainer;
     [SerializeField, Range(1f, 50f)] public float cardsPerSpline = 10f;
 
-    private readonly List<CardSprite> cards = new();
+    private readonly List<CardInformation> cards = new();
 
-    public IEnumerator AddCards(Transform drawTarget, List<CardSprite> newCards)
+    public IEnumerator AddCards(Transform drawTarget, List<CardInformation> newCards)
     {
         cards.AddRange(newCards);
         yield return UpdateCardPosition(drawTarget, 0.15f);
@@ -64,7 +64,7 @@ public class CardHolder : MonoBehaviour
         if (cards.Count == 0) yield break;
 
         float delay = 0f;
-        var cardsCopy = new List<CardSprite>(cards); // Create a safe copy
+        var cardsCopy = new List<CardInformation>(cards); // Create a safe copy
 
         // Disable all colliders first
         foreach (var card in cardsCopy)

@@ -6,13 +6,12 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
-public class CardSprite : MonoBehaviour
+public class CardInformation : MonoBehaviour
 {
     [Header("Card Display")]
     [SerializeField] private string cardName; //removeable
     [SerializeField] private TMP_Text cardMana;
     [SerializeField] private SpriteRenderer sprite;
-    [SerializeField] private int HP; //removeable
 
     //holds the data of this instance of the card
     public Card card {  get; private set; }
@@ -29,12 +28,12 @@ public class CardSprite : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        CardSpriteHover.Instance.Show(card);
+        CardShowInfo.Instance.Show(card);
     }
 
     private void OnMouseExit()
     {
-        CardSpriteHover.Instance.Hide();
+        CardShowInfo.Instance.Hide();
     }
 
     //drag and drop ===============================================================================================
@@ -43,11 +42,26 @@ public class CardSprite : MonoBehaviour
     private Quaternion originalRotation; // Store the original rotation
     private Vector3 originalScale; // Store the original rotation
     [SerializeField] private float returnAnimationDelay = 0.15f;
+    [SerializeField] public bool isSelected = false;
+    [SerializeField] public bool isDragging = false;
+
+    public void NewPos(float newPos)
+    {
+        originalPosition.y += newPos;
+    }
 
     void OnMouseDown()
     {
+        if (isSelected == true)
+        {
+            TargetingSystem.Instance.DeselectCard(this);
+            return;
+        }
+
+        isDragging = true;
+
         //stops the cursor from changing the hovered card 
-        CardSpriteHover.Instance.Drag(true);
+        CardShowInfo.Instance.Drag(true);
 
         // Store the original position and rotation
         originalPosition = transform.position;
@@ -58,6 +72,16 @@ public class CardSprite : MonoBehaviour
 
     void OnMouseDrag()
     {
+        if (isDragging == false)
+        {
+            return;
+        }
+
+        if (isSelected == true)
+        {
+            return;
+        }
+
         // Update the object's position as the mouse is dragged
         Vector3 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 mousePosition = new Vector3(mouse.x, mouse.y, transform.position.z);
@@ -68,10 +92,17 @@ public class CardSprite : MonoBehaviour
 
     void OnMouseUp()
     {
-        CardSpriteDrag.Instance.CheckIfInDropZone(this);
+        if (isSelected == true)
+        {
+            return;
+        }
+
+        isDragging = false;
+
+        TargetingSystem.Instance.AttemptPlayCard(this, transform.position);
 
         //stops the cursor from changing the hovered card 
-        CardSpriteHover.Instance.Drag(false);
+        CardShowInfo.Instance.Drag(false);
 
         //disable the collider to avoid catching the card mid animation
         BoxCollider2D collider = GetComponent<BoxCollider2D>();

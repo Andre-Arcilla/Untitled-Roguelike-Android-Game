@@ -20,11 +20,11 @@ public class CardSpriteGenerator : MonoBehaviour
         Instance = this;
     }
 
-    [SerializeField] private CardSprite cardPrefab;
+    [SerializeField] private CardInformation cardPrefab;
 
-    public CardSprite GenerateCardSprite(Card card, Vector3 position, Quaternion rotation, Transform parent)
+    public CardInformation GenerateCardSprite(Card card, Vector3 position, Quaternion rotation, Transform parent)
     {
-        CardSprite cardSprite = Instantiate(cardPrefab, position, rotation, parent);
+        CardInformation cardSprite = Instantiate(cardPrefab, position, rotation, parent);
         cardSprite.transform.localScale = Vector3.zero;
         cardSprite.Setup(card);
         return cardSprite;

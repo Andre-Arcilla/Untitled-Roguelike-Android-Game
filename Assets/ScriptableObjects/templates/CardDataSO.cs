@@ -32,6 +32,5 @@ public class CardDataSO : ScriptableObject
 public enum Target
 {
     Ally,
-    Enemy,
-    Card
+    Enemy
 }

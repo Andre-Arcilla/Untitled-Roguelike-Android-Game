@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CardSpriteHover : MonoBehaviour
+public class CardShowInfo : MonoBehaviour
 {
-    public static CardSpriteHover Instance { get; private set; }
+    public static CardShowInfo Instance { get; private set; }
 
     private void Awake()
     {
@@ -19,7 +19,7 @@ public class CardSpriteHover : MonoBehaviour
         Instance = this;
     }
 
-    [SerializeField] private CardSprite selectedCard;
+    [SerializeField] private CardInformation selectedCard;
     [SerializeField] private bool dragging;
 
     public void Show(Card card)

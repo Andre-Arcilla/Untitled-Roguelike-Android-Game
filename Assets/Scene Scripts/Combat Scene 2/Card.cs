@@ -8,6 +8,8 @@ public class Card
 
     public string description => data.description;
 
+    public Target target => data.target;
+
     public Sprite sprite => data.cardSprite;
 
     public int mana {  get; private set; }

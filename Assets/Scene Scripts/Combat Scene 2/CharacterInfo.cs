@@ -10,10 +10,10 @@ public class CharacterInfo : MonoBehaviour
     [SerializeField] private RaceDatabase raceDatabase;
     [SerializeField] private CharacterDeck characterDeck;
     [SerializeField] private bool useSaveFile; //temp
-    [SerializeField] public CharacterData characterData; //remove serializefield
-    [SerializeField] public Stats stats; //remove serializefield
-    [SerializeField] private List<CardDataSO> deck; //remove serializefield
-    [SerializeField] public int currentMana; //remove serializefield
+    [SerializeField] public CharacterData characterData;
+    [SerializeField] public Stats stats;
+    [SerializeField] private List<CardDataSO> deck;
+    [SerializeField] public int currentMana;
 
     [System.Serializable]
     public class Stats

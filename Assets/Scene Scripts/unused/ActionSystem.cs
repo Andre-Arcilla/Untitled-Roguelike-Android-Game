@@ -19,10 +19,35 @@ public class ActionSystem : MonoBehaviour
         Instance = this;
     }
 
-    [SerializeField] private List<CardSprite> cards = new List<CardSprite>();
+    [SerializeField] private List<Action> actions = new List<Action>();
 
-    public void AddCardToList(CardSprite card)
+    [System.Serializable]
+    public struct Action
     {
-        cards.Add(card);
+        public CardInformation card;
+        public Targetable target;
+
+        public Action(CardInformation card, Targetable target)
+        {
+            this.card = card;
+            this.target = target;
+        }
     }
+
+    public void AddCard(CardInformation card, Targetable target)
+    {
+        actions.Add(new Action(card, target));
+    }
+
+    public void RemoveCard(CardInformation card)
+    {
+        int index = actions.FindIndex(a => a.card == card);
+        if (index != -1)
+        {
+            actions.RemoveAt(index);
+        }
+    }
+
+    //do all actions after ending turn
+    //add enemy actions alongside player actions
 }

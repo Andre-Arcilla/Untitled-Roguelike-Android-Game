@@ -24,19 +24,21 @@ public class ActionSystem : MonoBehaviour
     [System.Serializable]
     public struct Action
     {
+        public Targetable sender;
         public CardInformation card;
         public Targetable target;
 
-        public Action(CardInformation card, Targetable target)
+        public Action(Targetable sender, CardInformation card, Targetable target)
         {
+            this.sender = sender;
             this.card = card;
             this.target = target;
         }
     }
 
-    public void AddCard(CardInformation card, Targetable target)
+    public void AddCard(Targetable sender, CardInformation card, Targetable target)
     {
-        actions.Add(new Action(card, target));
+        actions.Add(new Action(sender, card, target));
     }
 
     public void RemoveCard(CardInformation card)
@@ -46,6 +48,27 @@ public class ActionSystem : MonoBehaviour
         {
             actions.RemoveAt(index);
         }
+    }
+
+    public void EndTurn()
+    {
+        SortActions();
+    }
+
+    private void SortActions()
+    {
+        actions.Sort((a, b) =>
+        {
+            // Handle null cases gracefully
+            if (a.card == null || b.card == null) return 0;
+
+            var aCharSPD = a.card.GetComponentInParent<CharacterInfo>().stats.totalSPD;
+            var bCharSPD = b.card.GetComponentInParent<CharacterInfo>().stats.totalSPD;
+
+            if (aCharSPD == null || bCharSPD == null) return 0;
+
+            return bCharSPD.CompareTo(aCharSPD); // Descending
+        });
     }
 
     //do all actions after ending turn

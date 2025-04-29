@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -8,10 +8,11 @@ public class CharacterData
     public class BasicInfo
     {
         [Header("Basic Info")]
-        public string playerName;
+        public string characterName;
         public int level;
         public string gender;
-        public string raceName; // Contains base stats
+        public string raceName;
+        //public Target faction;
     }
     public BasicInfo basicInfo = new BasicInfo();
 

@@ -27,8 +27,8 @@ public class TargetingSystem : MonoBehaviour
     }
 
     [Header("Team Configuration")]
-    [SerializeField] private TeamContainer allies;
-    [SerializeField] private TeamContainer enemies;
+    [SerializeField] public TeamContainer allies;
+    [SerializeField] public TeamContainer enemies;
 
     private bool TryGetValidTarget(Vector2 cardPosition, CardInformation card, out Targetable validTarget)
     {
@@ -41,7 +41,12 @@ public class TargetingSystem : MonoBehaviour
         // Find closest valid target
         foreach (Targetable target in potentialTargets)
         {
-            if (!target.IsActive) continue;
+            if (target == null) continue;
+            if (!target.IsActive)
+            {
+                Debug.Log("unit is dead");
+                continue;
+            }
 
             // Check if the card's position overlaps the target's collider
             if (target.targetCollider != null && target.targetCollider.OverlapPoint(cardPosition))
@@ -72,13 +77,15 @@ public class TargetingSystem : MonoBehaviour
 
     public void AttemptPlayCard(CardInformation card, Vector2 cardPosition)
     {
+        Targetable sender = card.GetComponentInParent<Targetable>();
+
         if (TryGetValidTarget(cardPosition, card, out Targetable target) &&
             card.GetComponentInParent<CharacterInfo>().currentMana >= card.card.mana)
         {
             card.isSelected = true;
             card.NewPos(0.5f);
             card.GetComponentInParent<CharacterInfo>().currentMana -= card.card.mana;
-            ActionSystem.Instance.AddCard(card, target);
+            ActionSystem.Instance.AddCard(sender, card, target);
         }
     }
 

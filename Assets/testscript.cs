@@ -29,14 +29,4 @@ public class testscript : MonoBehaviour
     {
         SceneManager.LoadScene("Town Selection");
     }
-
-    public void ShowDataTest()
-    {
-        Debug.Log(playerData.playerData.basicInfo.playerName);
-    }
-
-    public void SaveData()
-    {
-        playerData.SavePlayerInfo();
-    }
 }

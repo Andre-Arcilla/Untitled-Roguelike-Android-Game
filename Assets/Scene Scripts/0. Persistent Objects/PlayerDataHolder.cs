@@ -1,15 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
-using UnityEditor.U2D.Animation;
 using UnityEngine;
 
 public class PlayerDataHolder : MonoBehaviour
 {
     public static PlayerDataHolder Instance;
-
-    public CharacterData playerData;
 
     private void Awake()
     {
@@ -20,32 +16,46 @@ public class PlayerDataHolder : MonoBehaviour
         }
 
         Instance = this;
-        LoadCharacterFromJson();
+        LoadPartyFromJson();
     }
 
-    private void LoadCharacterFromJson()
+    public List<CharacterData> partyMembers = new List<CharacterData>(); // 1 party, up to 4 members
+
+    private void LoadPartyFromJson()
     {
-        string jsonFilePath = Path.Combine(Application.persistentDataPath, "Character1Data.json");
+        string jsonFilePath = Path.Combine(Application.persistentDataPath, "PartyData.json");
 
         if (!File.Exists(jsonFilePath))
         {
-            Debug.LogError("JSON file not found at: " + jsonFilePath);
+            Debug.LogError("Party JSON file not found at: " + jsonFilePath);
             return;
         }
 
         string json = File.ReadAllText(jsonFilePath);
-        playerData = JsonUtility.FromJson<CharacterData>(json);
 
-        Debug.Log("Data loaded from JSON: " + playerData.basicInfo.playerName);
+        PartyDataWrapper wrapper = JsonUtility.FromJson<PartyDataWrapper>(json);
+
+        partyMembers = wrapper.members;
+
+        Debug.Log("Party loaded with " + partyMembers.Count + " members.");
     }
 
-    public void SavePlayerInfo()
+    public void SavePartyInfo()
     {
-        string saveFile = JsonUtility.ToJson(playerData, true);
-        string path = Path.Combine(Application.persistentDataPath, "Character1Data.json");
+        PartyDataWrapper wrapper = new PartyDataWrapper();
+        wrapper.members = partyMembers;
+
+        string saveFile = JsonUtility.ToJson(wrapper, true);
+        string path = Path.Combine(Application.persistentDataPath, "PartyData.json");
+
         File.WriteAllText(path, saveFile);
 
-        Debug.Log("Player data saved to: " + path);
+        Debug.Log("Party saved to: " + path);
+    }
+
+    [System.Serializable]
+    private class PartyDataWrapper
+    {
+        public List<CharacterData> members = new List<CharacterData>();
     }
 }
-

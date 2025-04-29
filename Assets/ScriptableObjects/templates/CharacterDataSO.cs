@@ -8,10 +8,11 @@ public class CharacterDataSO : ScriptableObject
     public class BasicInfo
     {
         [Header("Basic Info")]
-        public string playerName;
+        public string characterName;
         public int level;
         public string gender;
-        public string raceName; // Contains base stats
+        public string raceName;
+        //public Target faction;
     }
     public BasicInfo basicInfo = new BasicInfo();
 
@@ -63,4 +64,5 @@ public class CharacterDataSO : ScriptableObject
         [Tooltip("Third accessory (e.g., bracelet, charm)")]
         public string accessory3;
     }
+    public Equipment equipment = new Equipment();
 }

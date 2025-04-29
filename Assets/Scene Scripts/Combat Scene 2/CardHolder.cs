@@ -50,7 +50,6 @@ public class CardHolder : MonoBehaviour
                 .Join(cards[i].transform.DOScale(Vector3.one, duration).SetEase(Ease.InOutQuad))
                 .OnComplete(() => {
                     if (collider != null) collider.enabled = true;
-                    Debug.Log($"Card {i} animations complete, collider enabled");
                 });
 
             delay += 0.1f;

@@ -197,29 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a2fd4453d0bde04ba4e0ad94b572efb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData:
-    basicInfo:
-      playerName: 
-      level: 0
-      gender: 
-      raceName: 
-    allocatedStats:
-      allocatedHP: 0
-      allocatedEN: 0
-      allocatedPWR: 0
-      allocatedSPD: 0
-    classes: []
-    equipment:
-      headGear: 
-      chestArmor: 
-      legwear: 
-      gloves: 
-      boots: 
-      mainHand: 
-      offHand: 
-      accessory1: 
-      accessory2: 
-      accessory3: 
+  partyMembers: []
 --- !u!4 &1425264276
 Transform:
   m_ObjectHideFlags: 0

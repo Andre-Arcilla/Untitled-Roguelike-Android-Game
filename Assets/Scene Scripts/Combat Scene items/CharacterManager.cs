@@ -6,20 +6,18 @@ public class CharacterManager : MonoBehaviour
 {
     public static CharacterManager Instance;
 
-    // Start is called before the first frame update
-    void Awake()
+    private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+
+        Instance = this;
     }
 
-    [SerializeField] private List<GameObject> characterList;
+    [SerializeField] public List<GameObject> characterList;
     private List<GameObject> allCardViews = new List<GameObject>();
 
     private void Start()

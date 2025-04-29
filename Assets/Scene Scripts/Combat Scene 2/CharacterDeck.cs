@@ -69,6 +69,11 @@ public class CharacterDeck : MonoBehaviour
 
     public void DrawAction()
     {
+        if (hand.Count == handSize)
+        {
+            return;
+        }
+
         List<CardInformation> newlyDrawnSprites = new();
 
         while (hand.Count < handSize)
@@ -109,12 +114,7 @@ public class CharacterDeck : MonoBehaviour
             newlyDrawnSprites.Add(cardSprite);
         }
 
-        // Add all new card visuals at once
-        Debug.Log("Starting AddCards with count: " + newlyDrawnSprites.Count);
-
         StartCoroutine(cardHolder.AddCards(deckPos, newlyDrawnSprites));
-
-        Debug.Log("Cards drawn");
     }
 
     public void DiscardAction()

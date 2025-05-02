@@ -6,7 +6,7 @@ public class Targetable : MonoBehaviour
 {
     [Header("Target Settings")]
     public Collider2D targetCollider;
-    public Target team;
+    public Team team;
     public bool IsActive = true;
 
     [Header("Visual Feedback")]
@@ -31,4 +31,10 @@ public class Targetable : MonoBehaviour
     {
         IsActive = active;
     }
+}
+
+public enum Team
+{
+    Player,
+    Enemy
 }

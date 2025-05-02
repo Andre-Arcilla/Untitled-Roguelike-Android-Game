@@ -26,9 +26,9 @@ public class ActionSystem : MonoBehaviour
     {
         public Targetable sender;
         public CardInformation card;
-        public Targetable target;
+        public GameObject target;
 
-        public Action(Targetable sender, CardInformation card, Targetable target)
+        public Action(Targetable sender, CardInformation card, GameObject target)
         {
             this.sender = sender;
             this.card = card;
@@ -36,9 +36,9 @@ public class ActionSystem : MonoBehaviour
         }
     }
 
-    public void AddCard(Targetable sender, CardInformation card, Targetable target)
+    public void AddCard(Targetable sender, CardInformation card, GameObject target)
     {
-        actions.Add(new Action(sender, card, target));
+        actions.Add(new (sender, card, target));
     }
 
     public void RemoveCard(CardInformation card)
@@ -69,6 +69,11 @@ public class ActionSystem : MonoBehaviour
 
             return bCharSPD.CompareTo(aCharSPD); // Descending
         });
+    }
+
+    public void TriggerAction(Targetable sender, CardInformation card)
+    {
+        Debug.Log("sender: " + sender.GetComponent<CharacterInfo>().characterData.basicInfo.characterName + "; card: " + card.card.cardName);
     }
 
     //do all actions after ending turn

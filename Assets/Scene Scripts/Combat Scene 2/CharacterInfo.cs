@@ -14,7 +14,8 @@ public class CharacterInfo : MonoBehaviour
     [SerializeField] public CharacterData characterData;
     [SerializeField] public Stats stats;
     [SerializeField] private List<CardDataSO> deck;
-    [SerializeField] public int currentMana;
+    [SerializeField] public int currentEN;
+    [SerializeField] public int currentHP;
 
     [System.Serializable]
     public class Stats
@@ -35,9 +36,10 @@ public class CharacterInfo : MonoBehaviour
         characterDeck.SetDeck(deck);
     }
 
-    public void setMana()
+    public void SetResources()
     {
-        currentMana = stats.totalEN / 5;
+        currentEN = stats.totalEN / 5;
+        currentHP = stats.totalHP / 2;
     }
 
     private void GenerateCharacterStats()
@@ -49,7 +51,7 @@ public class CharacterInfo : MonoBehaviour
         stats.totalPWR = selectedRace.PWR + characterData.allocatedStats.allocatedPWR;
         stats.totalSPD = selectedRace.SPD + characterData.allocatedStats.allocatedSPD;
 
-        setMana();
+        SetResources();
     }
 
     private void GenerateCharacterSprite()
@@ -59,7 +61,7 @@ public class CharacterInfo : MonoBehaviour
         string targetClassName = characterData.classes[0]; // First class
         string playerGender = characterData.basicInfo.gender.ToLower();
 
-        if (gameObject.GetComponent<Targetable>().team == Target.Ally)
+        if (gameObject.GetComponent<Targetable>().team == Team.Player)
         {
             ClassDataSO selectedClass = classDatabase.allClasses.Find(c => c.className == targetClassName);
 
@@ -76,7 +78,7 @@ public class CharacterInfo : MonoBehaviour
                 sprite = Instantiate(selectedClass.spriteFemale, position, Quaternion.identity, spriteHolder.transform);
             }
         }
-        else if (gameObject.GetComponent<Targetable>().team == Target.Enemy)
+        else if (gameObject.GetComponent<Targetable>().team == Team.Enemy)
         {
             ClassDataSO enemyClass = enemyClassDatabase.allClasses.Find(c => c.className == targetClassName);
 
@@ -93,7 +95,7 @@ public class CharacterInfo : MonoBehaviour
         {
             ClassDataSO selectedClass = null;
 
-            if (gameObject.GetComponent<Targetable>().team == Target.Ally)
+            if (gameObject.GetComponent<Targetable>().team == Team.Player)
             {
                 selectedClass = classDatabase.allClasses.Find(c => c.className == targetClassName);
 
@@ -103,7 +105,7 @@ public class CharacterInfo : MonoBehaviour
                     continue;
                 }
             }
-            else if (gameObject.GetComponent<Targetable>().team == Target.Enemy)
+            else if (gameObject.GetComponent<Targetable>().team == Team.Enemy)
             {
                 selectedClass = enemyClassDatabase.allClasses.Find(c => c.className == targetClassName);
 

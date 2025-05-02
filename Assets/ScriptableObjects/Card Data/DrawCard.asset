@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5bac162723814d46a1b4baf5c225f84, type: 3}
-  m_Name: FlashCard
+  m_Name: DrawCard
   m_EditorClassIdentifier: 
-  cardName: Heal
-  description: flash
-  target: 1
+  cardName: Draw
+  description: draw 2 cards
+  target: 6
   cost: 2
-  power: 1
-  cardSprite: {fileID: 21300000, guid: 9a4332104cea7644b8fc4a7eed0a24a9, type: 3}
+  power: 0
+  cardSprite: {fileID: 21300000, guid: cb40c208d5b074a4bb7f7c920110b52b, type: 3}

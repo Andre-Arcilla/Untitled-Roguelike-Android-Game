@@ -29,62 +29,58 @@ public class TargetingSystem : MonoBehaviour
     [Header("Team Configuration")]
     [SerializeField] public TeamContainer allies;
     [SerializeField] public TeamContainer enemies;
+    [SerializeField] public GameObject center;
 
-    private bool TryGetValidTarget(Vector2 cardPosition, CardInformation card, out Targetable validTarget)
+    private bool TryGetValidTarget(Vector2 cardPosition, CardInformation card, out GameObject validTarget)
     {
         validTarget = null;
-        if (card == null) return false;
+        if (card == null)
+            return false;
 
-        // Get all potential targets based on card type
-        List<Targetable> potentialTargets = GetEligibleTargets(card.card.target);
+        // Get all potential targets based on the card's target type
+        List<GameObject> potentialTargets = TargetSelector.Instance.GetTargets(card, card.GetComponentInParent<Targetable>());
 
-        // Find closest valid target
-        foreach (Targetable target in potentialTargets)
+        if (potentialTargets == null || potentialTargets.Count == 0)
+            return false;
+
+        // Find the closest valid target under the card's position
+        foreach (GameObject targetObj in potentialTargets)
         {
-            if (target == null) continue;
-            if (!target.IsActive)
-            {
-                Debug.Log("unit is dead");
-                continue;
-            }
+            if (targetObj == null) continue;
 
-            // Check if the card's position overlaps the target's collider
-            if (target.targetCollider != null && target.targetCollider.OverlapPoint(cardPosition))
+            Collider2D targetCollider = targetObj.GetComponentInChildren<Collider2D>();
+            if (targetCollider != null && targetCollider.OverlapPoint(cardPosition))
             {
-                validTarget = target;
+                validTarget = targetObj;
                 return true;
             }
         }
 
-        if (validTarget != null)
-        {
-            return true;
-        }
         return false;
     }
 
-    private List<Targetable> GetEligibleTargets(Target cardTarget)
-    {
-        if (cardTarget == Target.Ally)
-        {
-            return allies.members;
-        }
-        else
-        {
-            return enemies.members;
-        }
-    }
 
     public void AttemptPlayCard(CardInformation card, Vector2 cardPosition)
     {
         Targetable sender = card.GetComponentInParent<Targetable>();
 
-        if (TryGetValidTarget(cardPosition, card, out Targetable target) &&
-            card.GetComponentInParent<CharacterInfo>().currentMana >= card.card.mana)
+        if (!TryGetValidTarget(cardPosition, card, out GameObject target)) return;
+
+        CharacterInfo info = card.GetComponentInParent<CharacterInfo>();
+        if (info.currentEN < card.card.mana) return;
+
+        // Pay the cost
+        card.isSelected = true;
+        card.NewPos(0.5f);
+        info.currentEN -= card.card.mana;
+
+        // Check if this is an instant card
+        if (card.card.target == Target.Trigger)
         {
-            card.isSelected = true;
-            card.NewPos(0.5f);
-            card.GetComponentInParent<CharacterInfo>().currentMana -= card.card.mana;
+            ActionSystem.Instance.TriggerAction(sender, card);
+        }
+        else
+        {
             ActionSystem.Instance.AddCard(sender, card, target);
         }
     }
@@ -93,7 +89,7 @@ public class TargetingSystem : MonoBehaviour
     {
         card.isSelected = false;
         card.NewPos(-0.5f);
-        card.GetComponentInParent<CharacterInfo>().currentMana += card.card.mana;
+        card.GetComponentInParent<CharacterInfo>().currentEN += card.card.mana;
         ActionSystem.Instance.RemoveCard(card);
     }
 }

@@ -7,9 +7,9 @@ using UnityEngine;
 public class CharacterDeck : MonoBehaviour
 {
     [SerializeField] private List<CardDataSO> deckList;
-    [SerializeField] private List<GameObject> deck;
-    [SerializeField] private List<GameObject> hand;
-    [SerializeField] private List<GameObject> discard;
+    [SerializeField] public List<GameObject> deck;
+    [SerializeField] public List<GameObject> hand;
+    [SerializeField] public List<GameObject> discard;
     [SerializeField] private CardHolder cardHolder;
     [SerializeField] private GameObject handParent; // Hand Parent for drawn cards
     [SerializeField] private GameObject deckParent; // Deck Parent for all cards
@@ -21,6 +21,8 @@ public class CharacterDeck : MonoBehaviour
     // Set the deck with shuffled card data
     public void SetDeck(List<CardDataSO> _deck)
     {
+        transform.Find("Card View").gameObject.SetActive(false);
+
         deckList = new List<CardDataSO>(_deck); // Assign the provided deck data
         deck.Clear(); // Clear the deck list to prepare for new cards
         GenerateCards(); // Generate new cards from the deck data
@@ -60,7 +62,7 @@ public class CharacterDeck : MonoBehaviour
             CardInformation cardInfo = CardSpriteGenerator.Instance.GenerateCardSprite(card, deckPos.position, Quaternion.identity, deckParent.transform);
 
             // Set the card's name based on its index in the original deck (deckList)
-            cardInfo.name = "Card_" + i.ToString(); // Name format: "Card_0", "Card_1", ...
+            cardInfo.name = "Card_" + i.ToString() + " (" + card.cardName.ToString() + ")"; // Name format: "Card_0", "Card_1", ...
             deck.Add(cardInfo.gameObject); // Add the new card GameObject to the deck list
         }
         ShuffleCardsToDeck();

@@ -18,9 +18,9 @@ public class CharacterManager : MonoBehaviour
     }
 
     [SerializeField] public List<GameObject> characterList;
-    private List<GameObject> allCardViews = new List<GameObject>();
+    [SerializeField] private List<GameObject> allCardViews;
 
-    private void Start()
+    public void SetCardViews()
     {
         foreach (var character in characterList)
         {
@@ -30,9 +30,10 @@ public class CharacterManager : MonoBehaviour
             {
                 GameObject cardView = cardViewTransform.gameObject;
                 allCardViews.Add(cardView);
-                cardView.SetActive(false); // optional: hide all at start
             }
         }
+
+        allCardViews[0].SetActive(true);
     }
 
     public void DisplayCardView(GameObject targetView)

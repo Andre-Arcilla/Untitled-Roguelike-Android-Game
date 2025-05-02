@@ -27,6 +27,7 @@ public class CharacterGenerator : MonoBehaviour
     {
         GenerateParty();
         GenerateEnemy();
+        CharacterManager.Instance.SetCardViews();
     }
 
     public void ChangeEnemies()
@@ -41,6 +42,7 @@ public class CharacterGenerator : MonoBehaviour
         }
 
         TargetingSystem.Instance.enemies.members.Clear();
+        EnemyActionsManager.Instance.enemyList.Clear();
         GenerateEnemy();
     }
 
@@ -49,13 +51,12 @@ public class CharacterGenerator : MonoBehaviour
     {
         List<CharacterData> partyMembers = PlayerDataHolder.Instance.partyMembers;
 
-        // Predefined positions for up to 4 party members
         Vector2[] positions = new Vector2[]
         {
-            new Vector2(-0.75f, 0f),  // A
-            new Vector2(-2.25f, 0f),  // B
-            new Vector2(-1.5f, 0.5f), // C
-            new Vector2(-3.0f, 0.5f)  // D
+            new Vector2(-0.75f, 0f),
+            new Vector2(-2.25f, 0f),
+            new Vector2(-1.5f, 0.5f),
+            new Vector2(-3.0f, 0.5f)
         };
 
         for (int i = 0; i < partyMembers.Count && i < positions.Length; i++)
@@ -68,7 +69,7 @@ public class CharacterGenerator : MonoBehaviour
 
             CharacterInfo info = characterObj.GetComponent<CharacterInfo>();
             info.characterData = partyMembers[i];
-            info.gameObject.GetComponent<Targetable>().team = Target.Ally;
+            info.gameObject.GetComponent<Targetable>().team = Team.Player;
 
             TargetingSystem.Instance.allies.members.Add(info.gameObject.GetComponent<Targetable>());
             CharacterManager.Instance.characterList.Add(info.gameObject);
@@ -81,14 +82,15 @@ public class CharacterGenerator : MonoBehaviour
 
     private void GenerateEnemy()
     {
-        int count = Random.Range(1, 5); // 1 to 4 enemies
+        int count = Random.Range(1, 5);
 
-        Vector2[] positions = new Vector2[] {
-        new Vector2(0.75f, 0f),
-        new Vector2(2.25f, 0f),
-        new Vector2(1.5f, 0.5f),
-        new Vector2(3.0f, 0.5f)
-    };
+        Vector2[] positions = new Vector2[] 
+        {
+            new Vector2(0.75f, 0f),
+            new Vector2(2.25f, 0f),
+            new Vector2(1.5f, 0.5f),
+            new Vector2(3.0f, 0.5f)
+        };
 
         for (int i = 0; i < count && i < positions.Length; i++)
         {
@@ -97,16 +99,17 @@ public class CharacterGenerator : MonoBehaviour
 
             GameObject characterObj = Instantiate(prefab);
             characterObj.transform.SetParent(enemyParent.transform, false);
-            characterObj.transform.Find("Card View").gameObject.SetActive(false);
+            //characterObj.transform.Find("Card View").gameObject.SetActive(false);
 
             GameObject childObj = characterObj.transform.Find("Character Sprite").gameObject;
             childObj.transform.localPosition = new Vector3(positions[i].x, positions[i].y, childObj.transform.localPosition.z);
 
             CharacterInfo info = characterObj.GetComponent<CharacterInfo>();
             info.characterData = randomEnemy;
-            info.gameObject.GetComponent<Targetable>().team = Target.Enemy;
+            info.gameObject.GetComponent<Targetable>().team = Team.Enemy;
 
             TargetingSystem.Instance.enemies.members.Add(info.gameObject.GetComponent<Targetable>());
+            EnemyActionsManager.Instance.AddEnemyDeck(info);
 
             info.Initialize();
         }

@@ -434,8 +434,8 @@ RectTransform:
   m_Children:
   - {fileID: 2136955044}
   - {fileID: 88376743}
-  - {fileID: 581248648}
   - {fileID: 737080523}
+  - {fileID: 581248648}
   - {fileID: 1184156807}
   m_Father: {fileID: 1711668875}
   m_RootOrder: 0
@@ -586,7 +586,7 @@ RectTransform:
   m_Children:
   - {fileID: 1066163675}
   m_Father: {fileID: 431733513}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -788,7 +788,7 @@ RectTransform:
   m_Children:
   - {fileID: 2072096383}
   m_Father: {fileID: 431733513}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -839,9 +839,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CharacterDeck, Assembly-CSharp
-        m_MethodName: DiscardAction
+      - m_Target: {fileID: 1346056464}
+        m_TargetAssemblyTypeName: ActionSystem, Assembly-CSharp
+        m_MethodName: EndTurn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1360,7 +1360,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 508606766}
         m_TargetAssemblyTypeName: EnemyActionsManager, Assembly-CSharp
-        m_MethodName: EnemyAction
+        m_MethodName: SetEnemyAction
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -15,6 +15,15 @@ MonoBehaviour:
   cardName: Slash
   description: slash
   target: 0
+  singleUse: 0
   cost: 2
-  power: 3
+  power: 5
+  effects:
+  - rid: 58940497806229514
   cardSprite: {fileID: 21300000, guid: d52075262db8e814cb48324890837d86, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 58940497806229514
+      type: {class: DamageEffect, ns: , asm: Assembly-CSharp}
+      data: 

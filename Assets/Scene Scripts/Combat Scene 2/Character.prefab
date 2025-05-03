@@ -399,7 +399,6 @@ MonoBehaviour:
       level: 0
       gender: 
       raceName: 
-      faction: 0
     allocatedStats:
       allocatedHP: 0
       allocatedEN: 0
@@ -423,7 +422,8 @@ MonoBehaviour:
     totalPWR: 0
     totalSPD: 0
   deck: []
-  currentMana: 0
+  currentEN: 0
+  currentHP: 0
 --- !u!114 &221609753237173030
 MonoBehaviour:
   m_ObjectHideFlags: 0

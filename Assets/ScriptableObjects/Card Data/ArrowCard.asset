@@ -15,6 +15,15 @@ MonoBehaviour:
   cardName: Arrow
   description: arrow
   target: 0
+  singleUse: 0
   cost: 2
-  power: 2
+  power: 3
+  effects:
+  - rid: 58940497806229506
   cardSprite: {fileID: 21300000, guid: 8d0de72b22fc7e14a8c9a731583be72e, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 58940497806229506
+      type: {class: DamageEffect, ns: , asm: Assembly-CSharp}
+      data: 

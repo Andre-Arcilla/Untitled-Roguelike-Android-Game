@@ -13,6 +13,7 @@ public class CardHolder : MonoBehaviour
 
     public IEnumerator AddCards(Transform drawTarget, List<CardInformation> newCards)
     {
+        cards.Clear();
         cards.AddRange(newCards);
         yield return UpdateCardPosition(drawTarget, 0.15f);
     }

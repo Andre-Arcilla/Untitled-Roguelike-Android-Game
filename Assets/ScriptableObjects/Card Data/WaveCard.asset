@@ -15,6 +15,21 @@ MonoBehaviour:
   cardName: Wave
   description: wave
   target: 5
-  cost: 2
-  power: 2
+  singleUse: 0
+  cost: 5
+  power: 1
+  effects:
+  - rid: 58940497806229523
+  - rid: 58940497806229524
   cardSprite: {fileID: 21300000, guid: 106fb924650c93f459d1aacf11c529fa, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 58940497806229523
+      type: {class: CardEnDownEffect, ns: , asm: Assembly-CSharp}
+      data:
+        change: 1
+    - rid: 58940497806229524
+      type: {class: CardPwrUpEffect, ns: , asm: Assembly-CSharp}
+      data:
+        change: 0

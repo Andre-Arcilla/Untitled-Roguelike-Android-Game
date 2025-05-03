@@ -1,4 +1,5 @@
 using DG.Tweening;
+using SerializeReferenceEditor;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,8 +9,13 @@ using UnityEngine.UIElements;
 
 public class CardInformation : MonoBehaviour
 {
-    [Header("Card Display")]
-    [SerializeField] private string cardName; //removeable
+    [Header("Card Display")] //temp
+    [SerializeField] private string cardName; //temp
+    [SerializeField] private int mana; //temp
+    [SerializeField] private int power; //temp
+    [SerializeReference, SR] private List<ICardEffect> effects = new List<ICardEffect>(); //temp
+
+    [Header("References")]
     [SerializeField] private TMP_Text cardMana;
     [SerializeField] private SpriteRenderer sprite;
 
@@ -20,10 +26,27 @@ public class CardInformation : MonoBehaviour
     {
         this.card = card;
         cardName = card.cardName;
+        mana = card.mana;
+        power = card.power;
+        effects.Clear();
+        effects.AddRange(card.effects);
+
         cardMana.text = card.mana.ToString();
         sprite.sprite = card.sprite;
-        CharacterInfo characterInfo = GetComponentInParent<CharacterInfo>();
-        //HP = characterInfo.stats.totalHP;
+    }
+
+    public void UpdateCard()
+    {
+        Debug.Log(card.power);
+        Debug.Log(card.mana);
+        cardName = card.cardName;
+        mana = card.mana;
+        power = card.power;
+        effects.Clear();
+        effects.AddRange(card.effects);
+
+        cardMana.text = card.mana.ToString();
+        sprite.sprite = card.sprite;
     }
 
     private void OnMouseEnter()
@@ -38,12 +61,12 @@ public class CardInformation : MonoBehaviour
 
     //drag and drop ===============================================================================================
     [Header("Card Position")]
-    private Vector3 originalPosition; // Store the original position
-    private Quaternion originalRotation; // Store the original rotation
-    private Vector3 originalScale; // Store the original rotation
     [SerializeField] private float returnAnimationDelay = 0.15f;
     [SerializeField] public bool isSelected = false;
     [SerializeField] public bool isDragging = false;
+    private Vector3 originalPosition; // Store the original position
+    private Quaternion originalRotation; // Store the original rotation
+    private Vector3 originalScale; // Store the original rotation
 
     public void NewPos(float newPos)
     {

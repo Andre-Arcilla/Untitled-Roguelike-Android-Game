@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class CharacterInfo : MonoBehaviour
 {
+    [Header("Character Resources")]
+    [SerializeField] public int currentHP;
+    [SerializeField] public int currentEN;
+    [SerializeField] public int maxHP;
+    [SerializeField] public int barrier;
+
+    [Header("Character Information")]
     [SerializeField] private GameObject spriteHolder;
     [SerializeField] private GameObject sprite;
     [SerializeField] private ClassDatabase classDatabase;
@@ -14,8 +21,6 @@ public class CharacterInfo : MonoBehaviour
     [SerializeField] public CharacterData characterData;
     [SerializeField] public Stats stats;
     [SerializeField] private List<CardDataSO> deck;
-    [SerializeField] public int currentEN;
-    [SerializeField] public int currentHP;
 
     [System.Serializable]
     public class Stats
@@ -39,7 +44,8 @@ public class CharacterInfo : MonoBehaviour
     public void SetResources()
     {
         currentEN = stats.totalEN / 5;
-        currentHP = stats.totalHP / 2;
+        maxHP = stats.totalHP / 2;
+        currentHP = maxHP;
     }
 
     private void GenerateCharacterStats()

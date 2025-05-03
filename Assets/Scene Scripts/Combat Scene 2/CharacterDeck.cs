@@ -153,6 +153,11 @@ public class CharacterDeck : MonoBehaviour
         }
     }
 
+    public void DrawCards(int amount)
+    {
+
+    }
+
     void Shuffle<T>(List<T> list)
     {
         System.Random random = new System.Random();

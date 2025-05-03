@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class ActionSystem : MonoBehaviour
 {
@@ -53,6 +54,7 @@ public class ActionSystem : MonoBehaviour
     public void EndTurn()
     {
         SortActions();
+        DoActions();
     }
 
     private void SortActions()
@@ -69,6 +71,17 @@ public class ActionSystem : MonoBehaviour
 
             return bCharSPD.CompareTo(aCharSPD); // Descending
         });
+    }
+
+    private void DoActions()
+    {
+        foreach (Action action in actions)
+        {
+            foreach (ICardEffect effect in action.card.card.effects)
+            {
+                effect.Execute(action.sender, action.card, action.target);
+            }
+        }
     }
 
     public void TriggerAction(Targetable sender, CardInformation card)

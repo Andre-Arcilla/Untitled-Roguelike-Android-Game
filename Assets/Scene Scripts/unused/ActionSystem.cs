@@ -39,6 +39,7 @@ public class ActionSystem : MonoBehaviour
 
     public void AddCard(Targetable sender, CardInformation card, GameObject target)
     {
+        Debug.Log(card.card.cardName + ", " + card.card.mana);
         actions.Add(new (sender, card, target));
     }
 
@@ -86,6 +87,9 @@ public class ActionSystem : MonoBehaviour
 
     public void TriggerAction(Targetable sender, CardInformation card)
     {
+        sender.GetComponent<CharacterDeck>().StartPlayCard(card);
+        sender.GetComponent<CharacterDeck>().DrawCard(3);
+        sender.GetComponent<CharacterDeck>().EndPlayCard(card);
         Debug.Log("sender: " + sender.GetComponent<CharacterInfo>().characterData.basicInfo.characterName + "; card: " + card.card.cardName);
     }
 

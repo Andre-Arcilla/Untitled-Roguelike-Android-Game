@@ -751,7 +751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c347197be83d5a74386546bb25ff10ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 221609753237173051, guid: 1e70f5e30f4bb854787ccb53875f5ed5, type: 3}
+  prefab: {fileID: 6868185846342539736, guid: 1e70f5e30f4bb854787ccb53875f5ed5, type: 3}
   allyParent: {fileID: 347922853}
   enemyParent: {fileID: 1162710429}
   enemyDatabase: {fileID: 11400000, guid: 41baa9df91d57a34c8ea534d0484c9e9, type: 2}

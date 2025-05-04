@@ -70,8 +70,6 @@ public class TargetingSystem : MonoBehaviour
         if (info.currentEN < card.card.mana) return;
 
         // Pay the cost
-        card.isSelected = true;
-        card.NewPos(0.5f);
         info.currentEN -= card.card.mana;
 
         // Check if this is an instant card
@@ -81,6 +79,8 @@ public class TargetingSystem : MonoBehaviour
         }
         else
         {
+            card.isSelected = true;
+            card.NewPos(0.5f);
             ActionSystem.Instance.AddCard(sender, card, target);
         }
     }

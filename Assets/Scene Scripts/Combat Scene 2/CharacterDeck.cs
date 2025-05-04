@@ -10,11 +10,14 @@ public class CharacterDeck : MonoBehaviour
     [SerializeField] public List<GameObject> deck;
     [SerializeField] public List<GameObject> hand;
     [SerializeField] public List<GameObject> discard;
+    [SerializeField] public List<GameObject> playing;
     [SerializeField] private CardHolder cardHolder;
-    [SerializeField] private GameObject handParent; // Hand Parent for drawn cards
     [SerializeField] private GameObject deckParent; // Deck Parent for all cards
+    [SerializeField] private GameObject handParent; // Hand Parent for drawn cards
     [SerializeField] private GameObject discardParent; // Discard Parent for discarded cards
-    [SerializeField] private int handSize; // Max size of hand
+    [SerializeField] private GameObject playParent; // play Parent for cards in play
+    [SerializeField] private int handSize; // Size of hand
+    [SerializeField] private int maxHandSize; // Max size of hand
     [SerializeField] private Transform discardPos; // Discard position for animation
     [SerializeField] private Transform deckPos; // Deck position for animation
 
@@ -76,8 +79,6 @@ public class CharacterDeck : MonoBehaviour
             return;
         }
 
-        List<CardInformation> newlyDrawnSprites = new();
-
         while (hand.Count < handSize)
         {
             // Reshuffle if deck is empty
@@ -101,24 +102,27 @@ public class CharacterDeck : MonoBehaviour
                 break;
             }
 
-            // Draw card from deck
             GameObject drawnCard = deck[0];
-            deck.RemoveAt(0);
-            hand.Add(drawnCard);
-            drawnCard.transform.SetParent(handParent.transform, false);
 
-            // Get the card sprite and queue it for visual addition
-            CardInformation cardSprite = drawnCard.GetComponent<CardInformation>();
-            if (cardSprite == null)
+            if (hand.Count < maxHandSize)
             {
-                Debug.LogError("CardSprite is NULL on: " + drawnCard.name);
+                // Draw card from deck to hand
+                deck.RemoveAt(0);
+                hand.Add(drawnCard);
+                drawnCard.transform.SetParent(handParent.transform, false);
             }
-            newlyDrawnSprites.Add(cardSprite);
+            else if (hand.Count >= maxHandSize)
+            {
+                // Draw card from deck to discard
+                deck.RemoveAt(0);
+                discard.Add(drawnCard);
+                drawnCard.transform.SetParent(discardParent.transform, false);
+            }
         }
 
-        StartCoroutine(cardHolder.AddCards(deckPos, newlyDrawnSprites));
+        cardHolder.DrawHandAnimation();
     }
-
+    /*
     public void DiscardAction()
     {
         if (hand.Count == 0) return;
@@ -151,11 +155,87 @@ public class CharacterDeck : MonoBehaviour
             discard.Add(card);
             hand.Remove(card); // Safely remove from hand
         }
+    }*/
+
+    public void DiscardCard(CardInformation card)
+    {
+        hand.Remove(card.gameObject);
+        discard.Add(card.gameObject);
+
+        card.gameObject.transform.SetParent(discardParent.transform, false);
+        cardHolder.DrawHandAnimation();
+        CardShowInfo.Instance.Hide();
     }
 
-    public void DrawCards(int amount)
+    //call this when drawing cards
+    public void DrawCard(int amount)
     {
+        CardShowInfo.Instance.Hide();
+        StartCoroutine(DrawCardCoroutine(amount));
+    }
 
+    private IEnumerator DrawCardCoroutine(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            // Reshuffle if deck is empty
+            if (deck.Count == 0 && discard.Count > 0)
+            {
+                Shuffle(discard);
+
+                foreach (GameObject card in new List<GameObject>(discard))
+                {
+                    deck.Add(card);
+                    card.transform.SetParent(deckParent.transform, false);
+                }
+
+                discard.Clear();
+                Debug.Log("Deck reshuffled from discard");
+            }
+
+            if (deck.Count == 0)
+            {
+                Debug.LogWarning("No more cards to draw.");
+                break;
+            }
+
+            GameObject drawnCard = deck[0];
+
+            if (hand.Count < maxHandSize)
+            {
+                // Draw card from deck to hand
+                deck.RemoveAt(0);
+                hand.Add(drawnCard);
+                drawnCard.transform.SetParent(playParent.transform, false);
+                yield return StartCoroutine(cardHolder.DrawCardAnimation(drawnCard.GetComponent<CardInformation>()));
+            }
+            else if (hand.Count >= maxHandSize)
+            {
+                // Draw card from deck to discard
+                deck.RemoveAt(0);
+                discard.Add(drawnCard);
+                drawnCard.transform.SetParent(playParent.transform, false);
+                yield return StartCoroutine(cardHolder.DrawCardAnimation(drawnCard.GetComponent<CardInformation>(), discardParent));
+            }
+        }
+    }
+
+    public void StartPlayCard(CardInformation card)
+    {
+        hand.Remove(card.gameObject);
+        playing.Add(card.gameObject);
+
+        card.gameObject.transform.SetParent(playParent.transform, false);
+        CardShowInfo.Instance.Hide();
+    }
+
+    public void EndPlayCard(CardInformation card)
+    {
+        playing.Remove(card.gameObject);
+        discard.Add(card.gameObject);
+
+        card.gameObject.transform.SetParent(discardParent.transform, false);
+        CardShowInfo.Instance.Hide();
     }
 
     void Shuffle<T>(List<T> list)

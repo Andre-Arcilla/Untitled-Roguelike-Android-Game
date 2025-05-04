@@ -1,102 +1,141 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Splines.Examples;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Splines;
 
 public class CardHolder : MonoBehaviour
 {
-    [SerializeField] SplineContainer splineContainer;
-    [SerializeField, Range(1f, 50f)] public float cardsPerSpline = 10f;
+    [SerializeField] private SplineContainer splineContainer;
+    [SerializeField] private GameObject spawnPoint;
+    [SerializeField] private GameObject handParent;
+    [SerializeField] private GameObject playParent;
 
-    private readonly List<CardInformation> cards = new();
-
-    public IEnumerator AddCards(Transform drawTarget, List<CardInformation> newCards)
+    public void DrawHandAnimation()
     {
-        cards.Clear();
-        cards.AddRange(newCards);
-        yield return UpdateCardPosition(drawTarget, 0.15f);
-    }
+        int childCount = handParent.transform.childCount;
+        if (childCount <= 0) return;
 
-    private IEnumerator UpdateCardPosition(Transform drawTarget, float duration)
-    {
-        if (cards.Count == 0) yield break;
-
-        float cardSpacing = 1f / cardsPerSpline;
-        float firstCardPos = 0.5f - (cards.Count - 1) * cardSpacing / 2;
+        float cardSpacing = 1f / childCount;
+        float firstCardPos = 0.5f - (childCount - 1) * cardSpacing / 2;
         Spline spline = splineContainer.Spline;
-        float delay = 0f;
 
-        for (int i = 0; i < cards.Count; i++)
+        // Main sequence to hold all animations in order
+        var mainSequence = DOTween.Sequence();
+
+        for (int i = 0; i < childCount; i++)
         {
-            if (cards[i] == null) continue;
+            Transform child = handParent.transform.GetChild(i);
+            BoxCollider2D collider = child.GetComponent<BoxCollider2D>();
+            if (collider != null) collider.enabled = false;
 
-            float p = firstCardPos + i * cardSpacing;
+            child.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, handParent.transform.position.z);
+
+            float p = firstCardPos + (i * cardSpacing);
             Vector3 splinePosition = spline.EvaluatePosition(p);
             Vector3 forward = spline.EvaluateTangent(p);
             Vector3 up = spline.EvaluateUpVector(p);
-            Quaternion rotation = Quaternion.LookRotation(-up, Vector3.Cross(-up, forward).normalized);
-            Vector3 targetPos = new(drawTarget.position.x, drawTarget.position.y);
+            Quaternion rotation = Quaternion.LookRotation(up, Vector3.Cross(up, forward).normalized);
 
-            cards[i].transform.position = targetPos;
-            BoxCollider2D collider = cards[i].gameObject.GetComponent<BoxCollider2D>();
-            if (collider != null) collider.enabled = false; // Disable at start
+            // Create a sub-sequence for this card
+            var cardSequence = DOTween.Sequence();
+            cardSequence.Append(child.transform.DOLocalMove(splinePosition + ((i * 0.2f) * Vector3.back), 0.25f));
+            cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, 0.25f));
+            cardSequence.Join(child.transform.DOScale(1, 0.25f));
 
-            // Create a sequence for all animations
-            Sequence cardSequence = DOTween.Sequence();
-            cardSequence
-                .SetDelay(delay)
-                .Append(cards[i].transform.DOMove(splinePosition + transform.position + 0.01f * i * Vector3.back, duration).SetEase(Ease.InOutQuad))
-                .Join(cards[i].transform.DORotate(rotation.eulerAngles, duration).SetEase(Ease.InOutQuad))
-                .Join(cards[i].transform.DOScale(Vector3.one, duration).SetEase(Ease.InOutQuad))
-                .OnComplete(() => {
-                    if (collider != null) collider.enabled = true;
-                });
+            // Enable collider after animation completes
+            if (collider != null)
+            {
+                cardSequence.OnComplete(() => collider.enabled = true);
+            }
 
-            delay += 0.1f;
+            // Append this card's animation to the main sequence with a short delay between cards
+            mainSequence.Append(cardSequence);
         }
-
-        yield return new WaitForSeconds(duration);
     }
 
-    public IEnumerator DiscardCardsToPile(Transform discardTarget, float duration = 0.15f)
+    public void DisplayCard()
     {
-        if (cards.Count == 0) yield break;
+        playParent.transform.GetChild(0);
+    }
 
+    public IEnumerator DrawCardAnimation(CardInformation card)
+    {
+        CardShowInfo.Instance.Hide();
+        GameObject cardObj = card.gameObject;
+        Vector3 startZonePos = new Vector3(playParent.transform.position.x, playParent.transform.position.y, cardObj.transform.position.z);
+        cardObj.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, handParent.transform.position.z);
+
+        yield return SortCards();
+
+        cardObj.transform.DOLocalMove(Vector2.zero, 0.25f);
+        cardObj.transform.DOScale(Vector3.one, 0.25f);
+
+        yield return new WaitForSeconds(0.5f);
+
+        cardObj.transform.SetParent(handParent.transform, true);
+        yield return SortCards();
+    }
+
+    public IEnumerator DrawCardAnimation(CardInformation card, GameObject parent)
+    {
+        CardShowInfo.Instance.Hide();
+        GameObject cardObj = card.gameObject;
+        Vector3 startZonePos = new Vector3(playParent.transform.position.x, playParent.transform.position.y, cardObj.transform.position.z);
+        Vector3 dropZonePos = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, cardObj.transform.position.z);
+        cardObj.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, handParent.transform.position.z);
+
+        yield return SortCards();
+
+        cardObj.transform.DOLocalMove(Vector2.zero, 0.25f);
+        cardObj.transform.DOScale(Vector3.one, 0.25f);
+
+        yield return new WaitForSeconds(0.5f);
+
+        var seq = DOTween.Sequence();
+        seq.Join(cardObj.transform.DOLocalMove(dropZonePos, 0.25f));
+        seq.Join(cardObj.transform.DOScale(Vector3.zero, 0.25f));
+
+        yield return seq.WaitForCompletion();
+
+        cardObj.transform.SetParent(parent.transform, true);
+    }
+
+    private IEnumerator SortCards()
+    {
+        int childCount = handParent.transform.childCount;
+        if (childCount <= 0) yield return null;
+
+        float cardSpacing = 1f / childCount;
+        float firstCardPos = 0.5f - (childCount - 1) * cardSpacing / 2;
+        Spline spline = splineContainer.Spline;
         float delay = 0f;
-        var cardsCopy = new List<CardInformation>(cards); // Create a safe copy
 
-        // Disable all colliders first
-        foreach (var card in cardsCopy)
+        for (int i = 0; i < childCount; i++)
         {
-            if (card != null && card.TryGetComponent<BoxCollider2D>(out var collider))
-                collider.enabled = false;
-        }
+            Transform child = handParent.transform.GetChild(i);
+            BoxCollider2D collider = child.GetComponent<BoxCollider2D>();
+            if (collider != null) collider.enabled = false;
 
-        // Animate each card
-        for (int i = cardsCopy.Count - 1; i >= 0; i--)
-        {
-            if (cardsCopy[i] == null) continue;
+            float p = firstCardPos + (i * cardSpacing);
+            Vector3 splinePosition = spline.EvaluatePosition(p);
+            Vector3 forward = spline.EvaluateTangent(p);
+            Vector3 up = spline.EvaluateUpVector(p);
+            Quaternion rotation = Quaternion.LookRotation(up, Vector3.Cross(up, forward).normalized);
 
-            int index = i; // Capture current index for closure
-            Vector3 targetPos = discardTarget.position;
-
-            Sequence s = DOTween.Sequence()
-                .SetDelay(delay)
-                .Append(cardsCopy[index].transform.DOMove(targetPos, duration))
-                .Join(cardsCopy[index].transform.DORotate(Vector3.zero, duration))
-                .Join(cardsCopy[index].transform.DOScale(Vector3.zero, duration))
-                .OnComplete(() => {
-                    // Safely re-enable collider on the actual card (not from list)
-                    if (cardsCopy[index] != null && cardsCopy[index].TryGetComponent<BoxCollider2D>(out var col))
-                        col.enabled = true;
-                });
+            // Create a sub-sequence for this card
+            var cardSequence = DOTween.Sequence();
+            cardSequence.SetDelay(delay);
+            cardSequence.Append(child.transform.DOLocalMove(splinePosition + ((i * 0.2f) * Vector3.back), 0.25f));
+            cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, 0.25f));
+            cardSequence.Join(child.transform.DOScale(1, 0.25f));
+            cardSequence.OnComplete(() => collider.enabled = true);
 
             delay += 0.1f;
         }
 
-        // Wait for animations then clear
-        yield return new WaitForSeconds(duration + delay);
-        cards.Clear(); // Now safe to clear
+        yield return new WaitForSeconds(delay);
     }
 }

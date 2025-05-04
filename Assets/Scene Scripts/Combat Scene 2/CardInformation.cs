@@ -64,7 +64,8 @@ public class CardInformation : MonoBehaviour
     [SerializeField] private float returnAnimationDelay = 0.15f;
     [SerializeField] public bool isSelected = false;
     [SerializeField] public bool isDragging = false;
-    private Vector3 originalPosition; // Store the original position
+    [SerializeField] public bool isDeselecting = false;
+    [SerializeField] private Vector3 originalPosition; // Store the original position
     private Quaternion originalRotation; // Store the original rotation
     private Vector3 originalScale; // Store the original rotation
 
@@ -75,9 +76,16 @@ public class CardInformation : MonoBehaviour
 
     void OnMouseDown()
     {
+        // Store the original position and rotation
+        originalPosition = transform.position;
+        originalRotation = transform.rotation;
+        originalScale = transform.localScale;
+        GetComponent<SortingGroup>().sortingOrder = 1;
+
         if (isSelected == true)
         {
             TargetingSystem.Instance.DeselectCard(this);
+            isDeselecting = true;
             return;
         }
 
@@ -85,12 +93,6 @@ public class CardInformation : MonoBehaviour
 
         //stops the cursor from changing the hovered card 
         CardShowInfo.Instance.Drag(true);
-
-        // Store the original position and rotation
-        originalPosition = transform.position;
-        originalRotation = transform.rotation;
-        originalScale = transform.localScale;
-        GetComponent<SortingGroup>().sortingOrder = 1;
     }
 
     void OnMouseDrag()
@@ -120,9 +122,14 @@ public class CardInformation : MonoBehaviour
             return;
         }
 
-        isDragging = false;
+        if (isDeselecting != true)
+        {
+            TargetingSystem.Instance.AttemptPlayCard(this, transform.position);
+        }
 
-        TargetingSystem.Instance.AttemptPlayCard(this, transform.position);
+
+        isDragging = false;
+        isDeselecting = false;
 
         //stops the cursor from changing the hovered card 
         CardShowInfo.Instance.Drag(false);

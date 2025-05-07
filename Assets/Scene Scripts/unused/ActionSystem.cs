@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -56,6 +57,7 @@ public class ActionSystem : MonoBehaviour
     {
         SortActions();
         DoActions();
+        DoStatusEffects();
     }
 
     private void SortActions()
@@ -85,11 +87,34 @@ public class ActionSystem : MonoBehaviour
         }
     }
 
+    private void DoStatusEffects()
+    {
+        List<Targetable> characters = new List<Targetable>();
+        characters.AddRange(TargetingSystem.Instance.allies.members);
+        characters.AddRange(TargetingSystem.Instance.enemies.members);
+
+        List<CharacterInfo> infoList = characters
+            .Select(c => c.GetComponent<CharacterInfo>())
+            .ToList();
+
+        foreach (CharacterInfo character in infoList)
+        {
+            character.OnTurnStart();
+        }
+
+        foreach (CharacterInfo character in infoList)
+        {
+            character.OnTurnEnd();
+        }
+    }
+
     public void TriggerAction(Targetable sender, CardInformation card)
     {
-        sender.GetComponent<CharacterDeck>().StartPlayCard(card);
-        sender.GetComponent<CharacterDeck>().DrawCard(3);
-        sender.GetComponent<CharacterDeck>().EndPlayCard(card);
+        foreach (ICardEffect effect in card.card.effects)
+        {
+            effect.Execute(sender, card, null);
+        }
+
         Debug.Log("sender: " + sender.GetComponent<CharacterInfo>().characterData.basicInfo.characterName + "; card: " + card.card.cardName);
     }
 

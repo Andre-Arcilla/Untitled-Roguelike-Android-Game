@@ -67,6 +67,7 @@ public class TargetingSystem : MonoBehaviour
         if (!TryGetValidTarget(cardPosition, card, out GameObject target)) return;
 
         CharacterInfo info = card.GetComponentInParent<CharacterInfo>();
+        CharacterDeck deck = card.GetComponentInParent<CharacterDeck>();
         if (info.currentEN < card.card.mana) return;
 
         // Pay the cost
@@ -75,6 +76,7 @@ public class TargetingSystem : MonoBehaviour
         // Check if this is an instant card
         if (card.card.target == Target.Trigger)
         {
+            card.isUsing = true;
             ActionSystem.Instance.TriggerAction(sender, card);
         }
         else
@@ -91,5 +93,6 @@ public class TargetingSystem : MonoBehaviour
         card.NewPos(-0.5f);
         card.GetComponentInParent<CharacterInfo>().currentEN += card.card.mana;
         ActionSystem.Instance.RemoveCard(card);
+        CharacterDeck deck = card.GetComponentInParent<CharacterDeck>();
     }
 }

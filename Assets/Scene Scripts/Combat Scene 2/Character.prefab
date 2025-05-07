@@ -220,6 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   splineContainer: {fileID: 4076701268247897898}
   spawnPoint: {fileID: 3787792568571896098}
+  despawnPoint: {fileID: 3787792568571896098}
   handParent: {fileID: 6085580888313190472}
   playParent: {fileID: 6412065338789664441}
 --- !u!1 &5838126829343219995
@@ -309,7 +310,7 @@ Transform:
   m_GameObject: {fileID: 6412065338789664441}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 753638957491929162}
@@ -406,6 +407,7 @@ MonoBehaviour:
   characterDeck: {fileID: 1906858228604015044}
   useSaveFile: 1
   characterData:
+    isAlive: 0
     basicInfo:
       characterName: 
       level: 0
@@ -434,6 +436,10 @@ MonoBehaviour:
     totalPWR: 0
     totalSPD: 0
   deck: []
+  activeEffects: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &1906858228604015044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,8 +464,8 @@ MonoBehaviour:
   playParent: {fileID: 6412065338789664441}
   handSize: 5
   maxHandSize: 10
-  discardPos: {fileID: 7816072226628672068}
-  deckPos: {fileID: 7816072226628672068}
+  discardPos: {fileID: 887335379477665867}
+  deckPos: {fileID: 887335379477665867}
 --- !u!114 &4282496803064220248
 MonoBehaviour:
   m_ObjectHideFlags: 0

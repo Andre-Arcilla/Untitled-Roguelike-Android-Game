@@ -1,25 +1,17 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageEffect : ICardEffect
+public class GainEffect : ICardEffect
 {
     public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj)
     {
         CharacterInfo sender = senderObj.GetComponent<CharacterInfo>();
         CharacterInfo target = targetObj.GetComponent<CharacterInfo>();
 
-        int damage = Calculate(card.card.power, sender.stats.totalPWR);
+        int gain = Calculate(card.card.power, sender.stats.totalPWR);
 
-        bool damageNegated = target.TriggerOnHitEffects(sender);
-
-        if (!damageNegated)
-        {
-            target.currentHP -= damage;
-        }
-
-        if (target.currentHP <= 0)
-        {
-            target.gameObject.SetActive(false);
-        }
+        target.currentEN += gain;
     }
 
     private int Calculate(int cardPower, int characterPower)

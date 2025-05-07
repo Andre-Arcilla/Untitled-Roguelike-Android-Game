@@ -14,7 +14,6 @@ public class CharacterDataSO : ScriptableObject
         public string raceName;
         //public Target faction;
     }
-    public BasicInfo basicInfo = new BasicInfo();
 
     [System.Serializable]
     public class AllocatedStats
@@ -25,10 +24,6 @@ public class CharacterDataSO : ScriptableObject
         public int allocatedPWR;
         public int allocatedSPD;
     }
-    public AllocatedStats allocatedStats = new AllocatedStats();
-
-    [Header("Classes")]
-    public List<string> classes = new List<string>(); // Contains cards
 
     [System.Serializable]
     public class Equipment
@@ -64,5 +59,10 @@ public class CharacterDataSO : ScriptableObject
         [Tooltip("Third accessory (e.g., bracelet, charm)")]
         public string accessory3;
     }
+
+    public bool isAlive;
+    public BasicInfo basicInfo = new BasicInfo();
+    public AllocatedStats allocatedStats = new AllocatedStats();
+    public List<string> classes = new List<string>();
     public Equipment equipment = new Equipment();
 }

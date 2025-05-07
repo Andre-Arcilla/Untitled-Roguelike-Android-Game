@@ -26,7 +26,7 @@ public class TargetSelector : MonoBehaviour
         }
         else if (card.card.target == Target.Ally || card.card.target == Target.AllAllies)
         {
-            return AllyTarget(sender);
+            return AllyTarget(sender, card);
         }
         else if (card.card.target == Target.Self)
         {
@@ -70,22 +70,32 @@ public class TargetSelector : MonoBehaviour
         }
     }
 
-    private List<GameObject> AllyTarget(Targetable sender)
+    private List<GameObject> AllyTarget(Targetable sender, CardInformation card)
     {
+        bool isRevive = card.card.effects.Any(e => e is ReviveEffect);
+
         if (sender.team == Team.Player)
         {
-            //is player character
-            List<Targetable> targets = TargetingSystem.Instance.allies.members
-                .Where(t => t.GetComponent<CharacterInfo>().currentHP > 0)
+            var targets = TargetingSystem.Instance.allies.members
+                .Where(t =>
+                {
+                    var hp = t.GetComponent<CharacterInfo>().currentHP;
+                    return isRevive || hp > 0;
+                })
                 .ToList();
+
             return targets.ConvertAll(t => t.gameObject);
         }
         else if (sender.team == Team.Enemy)
         {
-            //is enemy character
-            List<Targetable> targets = TargetingSystem.Instance.enemies.members
-                .Where(t => t.GetComponent<CharacterInfo>().currentHP > 0)
+            var targets = TargetingSystem.Instance.enemies.members
+                .Where(t =>
+                {
+                    var hp = t.GetComponent<CharacterInfo>().currentHP;
+                    return isRevive || hp > 0;
+                })
                 .ToList();
+
             return targets.ConvertAll(t => t.gameObject);
         }
         else
@@ -93,6 +103,7 @@ public class TargetSelector : MonoBehaviour
             return null;
         }
     }
+
 
     private List<GameObject> SelfTarget(Targetable sender)
     {

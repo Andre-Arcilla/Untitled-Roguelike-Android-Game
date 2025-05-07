@@ -1,3 +1,5 @@
+using SerializeReferenceEditor;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +23,8 @@ public class CharacterInfo : MonoBehaviour
     [SerializeField] public CharacterData characterData;
     [SerializeField] public Stats stats;
     [SerializeField] private List<CardDataSO> deck;
+    [SerializeReference, SR] public List<IStatusEffect> activeEffects = new List<IStatusEffect>();
+
 
     [System.Serializable]
     public class Stats
@@ -125,6 +129,97 @@ public class CharacterInfo : MonoBehaviour
                 // Merge the current class's deck into the character's deck
                 deck.AddRange(selectedClass.startingDeck);
         }
+    }
+
+    public void ApplyStatusEffect(IStatusEffect newEffect)
+    {
+        foreach (var effect in activeEffects)
+        {
+            if (effect.Name == newEffect.Name)
+            {
+                effect.Duration += newEffect.Duration;
+                Debug.Log($"{effect.Name} effect duration extended by {newEffect.Duration} turns.");
+                return;
+            }
+        }
+
+        newEffect.OnApply(this);
+        activeEffects.Add(newEffect);
+    }
+
+    public void OnTurnStart()
+    {
+        var expiredEffects = new List<IStatusEffect>();
+
+        foreach (var effect in activeEffects)
+        {
+            effect.OnTurnStart();
+
+            if (effect.IsExpired)
+                expiredEffects.Add(effect);
+        }
+
+        foreach (var expired in expiredEffects)
+        {
+            expired.OnRemove();
+            activeEffects.Remove(expired);
+        }
+    }
+
+    public void OnTurnEnd()
+    {
+        var expiredThisRound = new List<IStatusEffect>();
+
+        foreach (var effect in activeEffects)
+        {
+            if (effect.IsShortTerm)
+                expiredThisRound.Add(effect);
+        }
+
+        foreach (var effect in expiredThisRound)
+        {
+            effect.OnRemove();
+            activeEffects.Remove(effect);
+        }
+    }
+
+    public bool TriggerOnHitEffects(CharacterInfo attacker)
+    {
+        bool damageNegated = false;
+        List<IStatusEffect> toRemove = new();
+
+        foreach (var effect in activeEffects)
+        {
+            if (effect is CounterStatusEffect counter)
+            {
+                counter.OnTrigger(attacker);
+                if (counter.NegatesDamage)
+                {
+                    damageNegated = true;
+                }
+                if (counter.ExpiresOnHit)
+                {
+                    toRemove.Add(effect);
+                }
+            }
+            else if (effect is DodgeStatusEffect dodge)
+            {
+                dodge.OnTrigger(attacker);
+                damageNegated = true;
+                if (dodge.ExpiresOnHit)
+                {
+                    toRemove.Add(effect);
+                }
+            }
+        }
+
+        foreach (var effect in toRemove)
+        {
+            effect.OnRemove();
+            activeEffects.Remove(effect);
+        }
+
+        return damageNegated;
     }
 }
 

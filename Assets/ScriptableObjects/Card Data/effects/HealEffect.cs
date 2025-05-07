@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HealEffect : ICardEffect
@@ -9,9 +7,12 @@ public class HealEffect : ICardEffect
         CharacterInfo sender = senderObj.GetComponent<CharacterInfo>();
         CharacterInfo target = targetObj.GetComponent<CharacterInfo>();
 
-        int heal = CalculateDamage(card.card.power, sender.stats.totalPWR);
+        int heal = Calculate(card.card.power, sender.stats.totalPWR);
 
-        target.currentHP += heal;
+        if (target.currentHP > 0)
+        {
+            target.currentHP += heal;
+        }
 
         if (target.currentHP > target.maxHP)
         {
@@ -19,7 +20,7 @@ public class HealEffect : ICardEffect
         }
     }
 
-    private int CalculateDamage(int cardPower, int characterPower)
+    private int Calculate(int cardPower, int characterPower)
     {
         float result = cardPower * (characterPower / 20f);
         return Mathf.FloorToInt(result);

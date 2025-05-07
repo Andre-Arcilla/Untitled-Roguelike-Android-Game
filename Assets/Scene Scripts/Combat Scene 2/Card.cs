@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Card
@@ -18,11 +19,13 @@ public class Card
 
     private readonly CardDataSO data;
 
-    public Card(CardDataSO cardData)
+    public Card(CardDataSO cardData, CharacterInfo owner)
     {
         data = cardData;
-        mana = cardData.cost;
-        power = cardData.power;
+
+        bool hasCharge = data.effects.Any(e => e is ChargeDamageEffect);
+        mana = hasCharge ? owner.currentEN : data.cost;
+        power = data.power;
     }
 
     public void ChangeMana(int amount, Change change)

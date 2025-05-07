@@ -29,10 +29,10 @@ public class CharacterDeck : MonoBehaviour
         deckList = new List<CardDataSO>(_deck); // Assign the provided deck data
         deck.Clear(); // Clear the deck list to prepare for new cards
         GenerateCards(); // Generate new cards from the deck data
-        DrawAction();
+        StartCoroutine(DrawHandAction());
     }
 
-    public void ShuffleCardsToDeck()
+    private void ShuffleCardsToDeck()
     {
         Shuffle(deck);
 
@@ -50,7 +50,7 @@ public class CharacterDeck : MonoBehaviour
     }
 
     // Generate cards and instantiate them in the deck
-    public void GenerateCards()
+    private void GenerateCards()
     {
         StartCoroutine(GenerateCardsCoroutine());
     }
@@ -60,8 +60,9 @@ public class CharacterDeck : MonoBehaviour
     {
         for (int i = 0; i < deckList.Count; i++)
         {
+            CharacterInfo owner = gameObject.GetComponent<CharacterInfo>();
             CardDataSO cardData = deckList[i]; // Get the card data at the current index
-            Card card = new Card(cardData); // Create a Card object from the card data
+            Card card = new Card(cardData, owner); // Create a Card object from the card data
             CardInformation cardInfo = CardSpriteGenerator.Instance.GenerateCardSprite(card, deckPos.position, Quaternion.identity, deckParent.transform);
 
             // Set the card's name based on its index in the original deck (deckList)
@@ -72,11 +73,25 @@ public class CharacterDeck : MonoBehaviour
         yield return null;
     }
 
-    public void DrawAction()
+    //method to call discard/draw coroutine
+    public void DiscardDrawAction()
+    {
+        StartCoroutine(DiscardDrawCoroutine());
+    }
+
+    //coroutine method to wait for discard before draw
+    private IEnumerator DiscardDrawCoroutine()
+    {
+        yield return StartCoroutine(DiscardHandAction());
+        yield return StartCoroutine(DrawHandAction());
+    }
+
+    //draw cards then animate
+    private IEnumerator DrawHandAction()
     {
         if (hand.Count == handSize)
         {
-            return;
+            yield return null;
         }
 
         while (hand.Count < handSize)
@@ -98,64 +113,44 @@ public class CharacterDeck : MonoBehaviour
 
             if (deck.Count == 0)
             {
-                Debug.LogWarning("No more cards to draw.");
                 break;
             }
 
-            GameObject drawnCard = deck[0];
+            GameObject currentCard = deck[0];
 
             if (hand.Count < maxHandSize)
             {
                 // Draw card from deck to hand
-                deck.RemoveAt(0);
-                hand.Add(drawnCard);
-                drawnCard.transform.SetParent(handParent.transform, false);
+                deck.Remove(currentCard);
+                hand.Add(currentCard);
+                currentCard.transform.SetParent(handParent.transform, false);
             }
             else if (hand.Count >= maxHandSize)
             {
                 // Draw card from deck to discard
-                deck.RemoveAt(0);
-                discard.Add(drawnCard);
-                drawnCard.transform.SetParent(discardParent.transform, false);
+                deck.Remove(currentCard);
+                discard.Add(currentCard);
+                currentCard.transform.SetParent(discardParent.transform, false);
             }
         }
 
-        cardHolder.DrawHandAnimation();
-    }
-    /*
-    public void DiscardAction()
-    {
-        if (hand.Count == 0) return;
-
-        // Prepare card sprites for animation
-        List<CardInformation> cardSprites = new List<CardInformation>();
-        List<GameObject> cardsToDiscard = new List<GameObject>(hand); // Create a copy
-
-        foreach (GameObject cardObj in cardsToDiscard)
-        {
-            if (cardObj.TryGetComponent(out CardInformation sprite))
-            {
-                cardSprites.Add(sprite);
-            }
-        }
-
-        // Start animation coroutine
-        StartCoroutine(RunDiscardProcess(cardSprites, cardsToDiscard));
+        yield return StartCoroutine(cardHolder.DrawHandAnimation());
     }
 
-    private IEnumerator RunDiscardProcess(List<CardInformation> cardSprites, List<GameObject> cardsToDiscard)
+    //animate then discard cards
+    private IEnumerator DiscardHandAction()
     {
-        // Start discard animation
-        yield return cardHolder.DiscardCardsToPile(discardPos);
+        yield return StartCoroutine(cardHolder.DiscardHandAnimation());
 
-        // After animation completes, update parent and lists
-        foreach (GameObject card in cardsToDiscard)
+        while (hand.Count > 0)
         {
-            card.transform.SetParent(discardParent.transform, false);
-            discard.Add(card);
-            hand.Remove(card); // Safely remove from hand
+            GameObject currentCard = hand[0];
+
+            hand.Remove(currentCard);
+            discard.Add(currentCard);
+            currentCard.transform.SetParent(discardParent.transform, false);
         }
-    }*/
+    }
 
     public void DiscardCard(CardInformation card)
     {
@@ -164,18 +159,28 @@ public class CharacterDeck : MonoBehaviour
 
         card.gameObject.transform.SetParent(discardParent.transform, false);
         cardHolder.DrawHandAnimation();
-        CardShowInfo.Instance.Hide();
     }
 
-    //call this when drawing cards
-    public void DrawCard(int amount)
+    //draw card effect method to draw x amount of cards
+    public void DrawCard(int amount, CardInformation card)
     {
-        CardShowInfo.Instance.Hide();
-        StartCoroutine(DrawCardCoroutine(amount));
+        StartCoroutine(DrawCardCoroutine(amount, card));
     }
 
-    private IEnumerator DrawCardCoroutine(int amount)
+    //draw card effect draw coroutine
+    private IEnumerator DrawCardCoroutine(int amount, CardInformation card)
     {
+        foreach (GameObject cardObj in hand)
+        {
+            cardObj.GetComponent<Collider2D>().enabled = false;
+        }
+
+        yield return StartCoroutine(StartPlayCard(card));
+
+        yield return new WaitForSeconds(0.2f);
+
+        yield return StartCoroutine(EndPlayCard(card));
+
         for (int i = 0; i < amount; i++)
         {
             // Reshuffle if deck is empty
@@ -183,10 +188,10 @@ public class CharacterDeck : MonoBehaviour
             {
                 Shuffle(discard);
 
-                foreach (GameObject card in new List<GameObject>(discard))
+                foreach (GameObject cardObj in new List<GameObject>(discard))
                 {
-                    deck.Add(card);
-                    card.transform.SetParent(deckParent.transform, false);
+                    deck.Add(cardObj);
+                    cardObj.transform.SetParent(deckParent.transform, false);
                 }
 
                 discard.Clear();
@@ -200,6 +205,7 @@ public class CharacterDeck : MonoBehaviour
             }
 
             GameObject drawnCard = deck[0];
+            drawnCard.GetComponent<Collider2D>().enabled = false;
 
             if (hand.Count < maxHandSize)
             {
@@ -218,24 +224,49 @@ public class CharacterDeck : MonoBehaviour
                 yield return StartCoroutine(cardHolder.DrawCardAnimation(drawnCard.GetComponent<CardInformation>(), discardParent));
             }
         }
+
+        foreach (GameObject cardObj in hand)
+        {
+            cardObj.GetComponent<Collider2D>().enabled = true;
+        }
     }
 
-    public void StartPlayCard(CardInformation card)
+    //method to add card to playing field
+    private IEnumerator StartPlayCard(CardInformation card)
     {
+        Vector2 dropZone = new Vector2(playParent.transform.localPosition.x, playParent.transform.localPosition.y);
+
+        var sequence = DOTween.Sequence();
+        sequence.Append(card.transform.DOMove(dropZone, 0.25f));
+        sequence.Join(card.transform.DOLocalRotate(Vector2.zero, 0.25f));
+        sequence.Join(card.transform.DOScale(Vector3.one, 0.25f));
+
+        yield return sequence.WaitForCompletion();
+
         hand.Remove(card.gameObject);
         playing.Add(card.gameObject);
 
         card.gameObject.transform.SetParent(playParent.transform, false);
-        CardShowInfo.Instance.Hide();
+        card.transform.position = dropZone;
     }
 
-    public void EndPlayCard(CardInformation card)
+    //method to remove card from playing field
+    private IEnumerator EndPlayCard(CardInformation card)
     {
+        Vector2 dropZone = new Vector2(discardPos.position.x, discardPos.position.y);
+
+        var sequence = DOTween.Sequence();
+        sequence.Append(card.transform.DOMove(dropZone, 0.25f));
+        sequence.Join(card.transform.DOScale(Vector3.zero, 0.25f));
+
+        yield return sequence.WaitForCompletion();
+
         playing.Remove(card.gameObject);
         discard.Add(card.gameObject);
 
         card.gameObject.transform.SetParent(discardParent.transform, false);
-        CardShowInfo.Instance.Hide();
+        card.isDragging = false;
+        card.isUsing = false;
     }
 
     void Shuffle<T>(List<T> list)

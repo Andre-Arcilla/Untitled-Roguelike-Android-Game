@@ -37,8 +37,6 @@ public class CardInformation : MonoBehaviour
 
     public void UpdateCard()
     {
-        Debug.Log(card.power);
-        Debug.Log(card.mana);
         cardName = card.cardName;
         mana = card.mana;
         power = card.power;
@@ -65,6 +63,7 @@ public class CardInformation : MonoBehaviour
     [SerializeField] public bool isSelected = false;
     [SerializeField] public bool isDragging = false;
     [SerializeField] public bool isDeselecting = false;
+    [SerializeField] public bool isUsing = false;
     [SerializeField] private Vector3 originalPosition; // Store the original position
     private Quaternion originalRotation; // Store the original rotation
     private Vector3 originalScale; // Store the original rotation
@@ -125,6 +124,12 @@ public class CardInformation : MonoBehaviour
         if (isDeselecting != true)
         {
             TargetingSystem.Instance.AttemptPlayCard(this, transform.position);
+        }
+
+        if (isUsing == true)
+        {
+            CardShowInfo.Instance.Drag(false);
+            return;
         }
 
 

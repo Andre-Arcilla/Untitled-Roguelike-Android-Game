@@ -51,6 +51,7 @@ public class CharacterGenerator : MonoBehaviour
     {
         List<CharacterData> partyMembers = PlayerDataHolder.Instance.partyMembers;
 
+        int positionIndex = 0;
         Vector2[] positions = new Vector2[]
         {
             new Vector2(-0.75f, 0f),
@@ -65,16 +66,23 @@ public class CharacterGenerator : MonoBehaviour
             characterObj.transform.SetParent(allyParent.transform, false);
 
             GameObject childObj = characterObj.transform.Find("Character Sprite").gameObject;
-            childObj.transform.localPosition = new Vector3(positions[i].x, positions[i].y, childObj.transform.localPosition.z);
+            childObj.transform.localPosition = new Vector3(positions[positionIndex].x, positions[positionIndex].y, childObj.transform.localPosition.z);
 
             CharacterInfo info = characterObj.GetComponent<CharacterInfo>();
             info.characterData = partyMembers[i];
+
+            if (info.characterData.isAlive == false)
+            {
+                Destroy(characterObj);
+                continue;
+            }
+
             info.gameObject.GetComponent<Targetable>().team = Team.Player;
 
             TargetingSystem.Instance.allies.members.Add(info.gameObject.GetComponent<Targetable>());
             CharacterManager.Instance.characterList.Add(info.gameObject);
-
             info.Initialize();
+            positionIndex++;
         }
 
         Debug.Log("Generated " + partyMembers.Count + " party members.");

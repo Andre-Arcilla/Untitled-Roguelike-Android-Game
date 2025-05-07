@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CardPwrUpEffect : ICardEffect
 {
+    //enum, increase or decrease
     [SerializeField] private Change change;
     public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj)
     {

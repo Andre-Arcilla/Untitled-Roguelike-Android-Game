@@ -1,20 +1,20 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageEffect : ICardEffect
+public class ChargeDamageEffect : ICardEffect
 {
+    [SerializeField] private int multiplier;
+
     public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj)
     {
         CharacterInfo sender = senderObj.GetComponent<CharacterInfo>();
         CharacterInfo target = targetObj.GetComponent<CharacterInfo>();
 
-        int damage = Calculate(card.card.power, sender.stats.totalPWR);
+        int cardPower = card.card.mana * multiplier;
+        int damage = Calculate(cardPower, sender.stats.totalPWR);
 
-        bool damageNegated = target.TriggerOnHitEffects(sender);
-
-        if (!damageNegated)
-        {
-            target.currentHP -= damage;
-        }
+        target.currentHP -= damage;
 
         if (target.currentHP <= 0)
         {

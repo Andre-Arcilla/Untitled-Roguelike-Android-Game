@@ -1,24 +1,24 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageEffect : ICardEffect
+public class ReviveEffect : ICardEffect
 {
     public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj)
     {
         CharacterInfo sender = senderObj.GetComponent<CharacterInfo>();
         CharacterInfo target = targetObj.GetComponent<CharacterInfo>();
 
-        int damage = Calculate(card.card.power, sender.stats.totalPWR);
-
-        bool damageNegated = target.TriggerOnHitEffects(sender);
-
-        if (!damageNegated)
-        {
-            target.currentHP -= damage;
-        }
+        int revive = Calculate(card.card.power, sender.stats.totalPWR);
 
         if (target.currentHP <= 0)
         {
-            target.gameObject.SetActive(false);
+            target.currentHP += revive;
+        }
+
+        if (target.currentHP > target.maxHP)
+        {
+            target.currentHP = target.maxHP;
         }
     }
 

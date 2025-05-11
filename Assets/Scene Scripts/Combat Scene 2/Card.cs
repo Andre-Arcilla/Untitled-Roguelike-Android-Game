@@ -14,6 +14,8 @@ public class Card
     public Sprite sprite => data.cardSprite;
     public List<ICardEffect> effects => data.effects;
 
+    public bool isInstantUse => data.isInstantUse;
+
     public int mana {  get; private set; }
     public int power {  get; private set; }
 

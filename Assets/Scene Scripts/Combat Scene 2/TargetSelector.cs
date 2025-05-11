@@ -36,7 +36,7 @@ public class TargetSelector : MonoBehaviour
         {
             return CardTarget(sender, card);
         }
-        else if (card.card.target == Target.Trigger)
+        else if (card.card.target == Target.Draw)
         {
             return TriggerTarget(sender);
         }
@@ -116,8 +116,6 @@ public class TargetSelector : MonoBehaviour
 
         List<GameObject> allCards = new List<GameObject>();
         allCards.AddRange(deck.hand);
-        allCards.AddRange(deck.deck);
-        allCards.AddRange(deck.discard);
         allCards = allCards
             .Where(cardObj => cardObj != null
                 && cardObj.GetComponent<CardInformation>() != currentCard

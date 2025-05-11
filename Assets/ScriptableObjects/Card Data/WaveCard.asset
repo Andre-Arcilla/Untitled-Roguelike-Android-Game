@@ -15,7 +15,7 @@ MonoBehaviour:
   cardName: Wave
   description: wave
   target: 5
-  singleUse: 1
+  isInstantUse: 1
   cost: 5
   power: 1
   effects:

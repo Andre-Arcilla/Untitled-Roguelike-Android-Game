@@ -45,6 +45,11 @@ public class EnemyActionsManager : MonoBehaviour
     {
         foreach (EnemyDeck enemyChar in enemyList)
         {
+            if (enemyChar.enemy.currentHP <= 0)
+            { 
+                continue; 
+            }
+
             Targetable sender = enemyChar.enemy.GetComponent<Targetable>();
 
             //pick a random card

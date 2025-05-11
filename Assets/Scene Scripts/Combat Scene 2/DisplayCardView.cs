@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +7,11 @@ public class DisplayCardView : MonoBehaviour
 
     private void OnMouseDown()
     {
-        //call a method in CharacterManager and send cardView
-        CharacterManager.Instance.DisplayCardView(cardView);
-    }
+        Transform parentTransform = transform.parent;
 
+        if (CharacterManager.Instance.characterList.Contains(parentTransform.gameObject))
+        {
+            CharacterManager.Instance.DisplayCardView(cardView);
+        }
+    }
 }

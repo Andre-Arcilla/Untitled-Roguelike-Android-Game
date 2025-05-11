@@ -7,7 +7,6 @@ public class Targetable : MonoBehaviour
     [Header("Target Settings")]
     public Collider2D targetCollider;
     public Team team;
-    public bool IsActive = true;
 
     [Header("Visual Feedback")]
     [SerializeField] private GameObject highlightEffect;
@@ -25,11 +24,6 @@ public class Targetable : MonoBehaviour
     {
         if (highlightEffect != null)
             highlightEffect.SetActive(active);
-    }
-
-    public void SetActive(bool active)
-    {
-        IsActive = active;
     }
 }
 

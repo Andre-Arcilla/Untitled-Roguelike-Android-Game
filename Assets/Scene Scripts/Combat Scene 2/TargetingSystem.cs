@@ -74,10 +74,15 @@ public class TargetingSystem : MonoBehaviour
         info.currentEN -= card.card.mana;
 
         // Check if this is an instant card
-        if (card.card.target == Target.Trigger)
+        if (card.card.target == Target.Draw)
         {
             card.isUsing = true;
             ActionSystem.Instance.TriggerAction(sender, card);
+        }
+        else if (card.card.isInstantUse == true)
+        {
+            card.isUsing = true;
+            StartCoroutine(ActionSystem.Instance.TriggerAction(sender, card, target));
         }
         else
         {

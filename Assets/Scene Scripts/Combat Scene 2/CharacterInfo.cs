@@ -9,8 +9,9 @@ public class CharacterInfo : MonoBehaviour
     [Header("Character Resources")]
     [SerializeField] public int currentHP;
     [SerializeField] public int currentEN;
-    [SerializeField] public int maxHP;
     [SerializeField] public int barrier;
+    [SerializeField] public int maxHP;
+    [SerializeField] public int maxEN;
 
     [Header("Character Information")]
     [SerializeField] private GameObject spriteHolder;
@@ -19,7 +20,6 @@ public class CharacterInfo : MonoBehaviour
     [SerializeField] private ClassDatabase enemyClassDatabase;
     [SerializeField] private RaceDatabase raceDatabase;
     [SerializeField] private CharacterDeck characterDeck;
-    [SerializeField] private bool useSaveFile; //temp
     [SerializeField] public CharacterData characterData;
     [SerializeField] public Stats stats;
     [SerializeField] private List<CardDataSO> deck;
@@ -47,9 +47,16 @@ public class CharacterInfo : MonoBehaviour
 
     public void SetResources()
     {
-        currentEN = stats.totalEN / 5;
-        maxHP = stats.totalHP / 2;
+        maxEN = stats.totalEN / 5;
+        maxHP = Mathf.FloorToInt(stats.totalHP / 1.5f);
         currentHP = maxHP;
+        currentEN = maxEN;
+    }
+
+    public void EndTurnRestoreMana()
+    {
+        maxEN += 2;
+        currentEN = maxEN;
     }
 
     private void GenerateCharacterStats()

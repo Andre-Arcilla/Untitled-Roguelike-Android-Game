@@ -43,4 +43,27 @@ public class CharacterManager : MonoBehaviour
             cardView.SetActive(cardView == targetView);
         }
     }
+
+    public void DisplayCardView(CharacterInfo characterInfo)
+    {
+        Transform cardViewTransform = characterInfo.transform.Find("Card View");
+        if (cardViewTransform == null) return;
+
+        GameObject targetView = cardViewTransform.gameObject;
+
+        foreach (var cardView in allCardViews)
+        {
+            cardView.SetActive(cardView == targetView);
+        }
+    }
+
+    public void ResetCardView()
+    {
+        foreach (var cardView in allCardViews)
+        {
+            cardView.SetActive(false);
+        }
+
+        allCardViews[0].SetActive(true);
+    }
 }

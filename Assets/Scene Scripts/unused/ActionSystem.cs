@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -55,11 +56,30 @@ public class ActionSystem : MonoBehaviour
 
     public void EndTurn()
     {
-        SortActions();
-        DoActions();
-        DoStatusEffects();
+        StartCoroutine(EndTurnCoroutine());
     }
 
+    private IEnumerator EndTurnCoroutine()
+    {
+        EnemyActionsManager.Instance.SetEnemyAction();
+        Debug.Log("----------ENEMY ACTION SET----------");
+        SortActions();
+        Debug.Log("----------ACTIONS SORTED----------");
+        yield return DoActions();
+        Debug.Log("----------ACTIONS DONE----------");
+        DoStatusEffects();
+        Debug.Log("----------STATUS EFFECTS TRIGGERED----------");
+        CheckForGroupDefeat();
+        Debug.Log("----------DEATHS CHECKED----------");
+        DiscardAndDrawAllDecks();
+        Debug.Log("----------DECKS REDRAWN----------");
+        //CharacterManager.Instance.ResetCardView();
+
+        actions.Clear();
+        EndTurnRestoreMana();
+    }
+
+    //sorts all action by sender's speed stat
     private void SortActions()
     {
         actions.Sort((a, b) =>
@@ -76,17 +96,61 @@ public class ActionSystem : MonoBehaviour
         });
     }
 
-    private void DoActions()
+    //does all action from fastest to slowest sender
+    private IEnumerator DoActions()
     {
         foreach (Action action in actions)
         {
+            CharacterInfo senderInfo = action.sender.GetComponent<CharacterInfo>();
+            CharacterInfo targetInfo = action.target.GetComponent<CharacterInfo>();
+
+            CharacterDeck senderDeck = senderInfo.GetComponent<CharacterDeck>();
+
+            if (senderInfo == null || targetInfo == null)
+            {
+                string senderName = action.sender != null ? action.sender.name : "NULL sender";
+                string targetName = action.target != null ? action.target.name : "NULL target";
+
+                Debug.LogWarning($"CharacterInfo missing! Sender: {senderName}, Target: {targetName}");
+
+                continue;
+            }
+
+            if (senderInfo.currentHP <= 0 || targetInfo.currentHP <= 0)
+            {
+                continue;
+            }
+
+            if (TargetingSystem.Instance.allies.members.Contains(action.sender))
+            {
+                yield return new WaitForSeconds(0.1f);
+                CharacterManager.Instance.DisplayCardView(senderInfo);
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            yield return StartCoroutine(senderDeck.StartPlayCard(action.card));
+
             foreach (ICardEffect effect in action.card.card.effects)
             {
                 effect.Execute(action.sender, action.card, action.target);
             }
+
+            //do an animation where it crashes to the enemy unit -------------------------------------
+            yield return new WaitForSeconds(0.1f);
+
+            yield return senderDeck.EndPlayCard(action.card);
+
+            if (targetInfo.currentHP <= 0)
+            {
+                targetInfo.currentHP = 0;
+                targetInfo.gameObject.SetActive(false);
+            }
+
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
+    //apply all status effects
     private void DoStatusEffects()
     {
         List<Targetable> characters = new List<Targetable>();
@@ -108,16 +172,101 @@ public class ActionSystem : MonoBehaviour
         }
     }
 
+    //check if either group is dead
+    private void CheckForGroupDefeat()
+    {
+        bool allAlliesDead = true;
+        bool allEnemiesDead = true;
+
+        foreach (Targetable ally in TargetingSystem.Instance.allies.members)
+        {
+            CharacterInfo info = ally.GetComponent<CharacterInfo>();
+            if (info.currentHP > 0)
+            {
+                allAlliesDead = false;
+                break;
+            }
+        }
+
+        foreach (Targetable enemy in TargetingSystem.Instance.enemies.members)
+        {
+            CharacterInfo info = enemy.GetComponent<CharacterInfo>();
+            if (info.currentHP > 0)
+            {
+                allEnemiesDead = false;
+                break;
+            }
+        }
+
+        if (allAlliesDead == true)
+        {
+            Debug.Log("All allies are dead. Defeat.");
+            CombatSystem.Instance.CombatCompleteLose();
+        }
+        else if (allEnemiesDead == true)
+        {
+            Debug.Log("All enemies are dead. Victory!");
+            CombatSystem.Instance.GenerateNewEnemyGroup();
+        }
+    }
+
+    //do instant action cards with no target (e.g. draw cards)
     public void TriggerAction(Targetable sender, CardInformation card)
     {
         foreach (ICardEffect effect in card.card.effects)
         {
             effect.Execute(sender, card, null);
         }
-
-        Debug.Log("sender: " + sender.GetComponent<CharacterInfo>().characterData.basicInfo.characterName + "; card: " + card.card.cardName);
     }
 
-    //do all actions after ending turn
-    //add enemy actions alongside player actions
+    //do instant action cards with target (e.g. buff cards)
+    public IEnumerator TriggerAction(Targetable sender, CardInformation card, GameObject target)
+    {
+        CharacterDeck senderDeck = sender.GetComponent<CharacterDeck>();
+
+        yield return StartCoroutine(senderDeck.StartPlayCard(card));
+
+        foreach (ICardEffect effect in card.card.effects)
+        {
+            effect.Execute(sender, card, target);
+        }
+        yield return new WaitForSeconds(0.1f);
+
+        yield return senderDeck.EndPlayCard(card);
+    }
+
+    //discards and draws all living units' decks
+    private void DiscardAndDrawAllDecks()
+    {
+        List<Targetable> characters = new List<Targetable>();
+        characters.AddRange(TargetingSystem.Instance.allies.members);
+        characters.AddRange(TargetingSystem.Instance.enemies.members);
+
+        List<CharacterDeck> deckList = characters
+            .Select(c => c.GetComponent<CharacterDeck>())
+            .ToList();
+
+        foreach (CharacterDeck deck in deckList)
+        {
+            StartCoroutine(deck.DiscardDrawCoroutine());
+        }
+    }
+
+    //reset all living units' manas
+    private void EndTurnRestoreMana()
+    {
+        List<Targetable> characters = new List<Targetable>();
+        characters.AddRange(TargetingSystem.Instance.allies.members);
+        characters.AddRange(TargetingSystem.Instance.enemies.members);
+
+        List<CharacterInfo> infoList = characters
+            .Select(c => c.GetComponent<CharacterInfo>())
+            .Where(info => info.currentHP > 0)
+            .ToList();
+
+        foreach (CharacterInfo character in infoList)
+        {
+            character.EndTurnRestoreMana();
+        }
+    }
 }

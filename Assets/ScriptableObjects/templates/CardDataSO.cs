@@ -16,8 +16,8 @@ public class CardDataSO : ScriptableObject
     [Tooltip("Who this card targets when played")]
     public Target target;
 
-    [Tooltip("Determines if this card is discarded or consumed on use")]
-    public bool singleUse;
+    [Tooltip("If this card is used upon declaration or not")]
+    public bool isInstantUse;
 
     [Tooltip("Cost to play this card (e.g., energy points required)")]
     [Range(0, 99)]
@@ -44,5 +44,5 @@ public enum Target
     AllEnemies,
     AllAllies,
     Card,
-    Trigger
+    Draw
 }

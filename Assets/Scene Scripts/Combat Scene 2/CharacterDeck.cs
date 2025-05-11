@@ -73,17 +73,11 @@ public class CharacterDeck : MonoBehaviour
         yield return null;
     }
 
-    //method to call discard/draw coroutine
-    public void DiscardDrawAction()
-    {
-        StartCoroutine(DiscardDrawCoroutine());
-    }
-
     //coroutine method to wait for discard before draw
-    private IEnumerator DiscardDrawCoroutine()
+    public IEnumerator DiscardDrawCoroutine()
     {
-        yield return StartCoroutine(DiscardHandAction());
-        yield return StartCoroutine(DrawHandAction());
+        yield return DiscardHandAction();
+        yield return DrawHandAction();
     }
 
     //draw cards then animate
@@ -134,13 +128,13 @@ public class CharacterDeck : MonoBehaviour
             }
         }
 
-        yield return StartCoroutine(cardHolder.DrawHandAnimation());
+        yield return cardHolder.DrawHandAnimation();
     }
 
     //animate then discard cards
     private IEnumerator DiscardHandAction()
     {
-        yield return StartCoroutine(cardHolder.DiscardHandAnimation());
+        yield return cardHolder.DiscardHandAnimation();
 
         while (hand.Count > 0)
         {
@@ -225,6 +219,8 @@ public class CharacterDeck : MonoBehaviour
             }
         }
 
+        yield return cardHolder.SelectedCardsPosition();
+
         foreach (GameObject cardObj in hand)
         {
             cardObj.GetComponent<Collider2D>().enabled = true;
@@ -232,14 +228,14 @@ public class CharacterDeck : MonoBehaviour
     }
 
     //method to add card to playing field
-    private IEnumerator StartPlayCard(CardInformation card)
+    public IEnumerator StartPlayCard(CardInformation card)
     {
         Vector2 dropZone = new Vector2(playParent.transform.localPosition.x, playParent.transform.localPosition.y);
 
         var sequence = DOTween.Sequence();
-        sequence.Append(card.transform.DOMove(dropZone, 0.25f));
-        sequence.Join(card.transform.DOLocalRotate(Vector2.zero, 0.25f));
-        sequence.Join(card.transform.DOScale(Vector3.one, 0.25f));
+        sequence.Append(card.transform.DOMove(dropZone, 0.1f));
+        sequence.Join(card.transform.DOLocalRotate(Vector2.zero, 0.1f));
+        sequence.Join(card.transform.DOScale(Vector3.one, 0.1f));
 
         yield return sequence.WaitForCompletion();
 
@@ -251,13 +247,13 @@ public class CharacterDeck : MonoBehaviour
     }
 
     //method to remove card from playing field
-    private IEnumerator EndPlayCard(CardInformation card)
+    public IEnumerator EndPlayCard(CardInformation card)
     {
         Vector2 dropZone = new Vector2(discardPos.position.x, discardPos.position.y);
 
         var sequence = DOTween.Sequence();
-        sequence.Append(card.transform.DOMove(dropZone, 0.25f));
-        sequence.Join(card.transform.DOScale(Vector3.zero, 0.25f));
+        sequence.Append(card.transform.DOMove(dropZone, 0.1f));
+        sequence.Join(card.transform.DOScale(Vector3.zero, 0.1f));
 
         yield return sequence.WaitForCompletion();
 
@@ -267,6 +263,8 @@ public class CharacterDeck : MonoBehaviour
         card.gameObject.transform.SetParent(discardParent.transform, false);
         card.isDragging = false;
         card.isUsing = false;
+
+        yield return cardHolder.SortCards();
     }
 
     void Shuffle<T>(List<T> list)

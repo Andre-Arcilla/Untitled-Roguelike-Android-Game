@@ -15,7 +15,7 @@ MonoBehaviour:
   cardName: Draw
   description: draw 2 cards
   target: 6
-  singleUse: 0
+  isInstantUse: 1
   cost: 2
   power: 2
   effects:

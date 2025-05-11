@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WaveCard
   m_EditorClassIdentifier: 
   cardName: Wave
-  description: wave
+  description: Lower a card's COST and Improve it's POWER
   target: 5
   isInstantUse: 1
   cost: 5

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: SlashCard
   m_EditorClassIdentifier: 
   cardName: Slash
-  description: slash
+  description: Deal X damage
   target: 0
-  singleUse: 0
+  isInstantUse: 0
   cost: 2
   power: 5
   effects:

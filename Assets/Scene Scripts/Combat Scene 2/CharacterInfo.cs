@@ -61,7 +61,6 @@ public class CharacterInfo : MonoBehaviour
 
     private void GenerateCharacterStats()
     {
-        Debug.Log(gameObject.name);
         RaceDataSO selectedRace = raceDatabase.allRaces.Find(r => r.raceName == characterData.basicInfo.raceName);
         stats.totalHP = selectedRace.HP + characterData.allocatedStats.allocatedHP;
         stats.totalEN = selectedRace.EN + characterData.allocatedStats.allocatedEN;

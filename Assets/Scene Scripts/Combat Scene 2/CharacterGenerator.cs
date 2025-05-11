@@ -121,8 +121,6 @@ public class CharacterGenerator : MonoBehaviour
 
             info.Initialize();
         }
-
-        Debug.Log("Generated " + count + " enemies.");
     }
 
     private CharacterData ConvertSOToCharacterData(CharacterDataSO so)

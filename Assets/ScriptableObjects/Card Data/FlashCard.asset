@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: FlashCard
   m_EditorClassIdentifier: 
   cardName: Flash
-  description: Heal
+  description: Heal X HP
   target: 0
-  singleUse: 0
+  isInstantUse: 0
   cost: 2
   power: 2
   effects:

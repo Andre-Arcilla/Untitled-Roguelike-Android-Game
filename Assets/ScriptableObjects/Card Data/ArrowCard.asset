@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: ArrowCard
   m_EditorClassIdentifier: 
   cardName: Arrow
-  description: arrow
+  description: Deal X damage
   target: 0
-  singleUse: 0
+  isInstantUse: 0
   cost: 2
   power: 3
   effects:

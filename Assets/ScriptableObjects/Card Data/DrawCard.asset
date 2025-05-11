@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: DrawCard
   m_EditorClassIdentifier: 
   cardName: Draw
-  description: draw 2 cards
+  description: Draw X cards
   target: 6
   isInstantUse: 1
   cost: 2
-  power: 2
+  power: 3
   effects:
   - rid: 58940561773297671
   cardSprite: {fileID: 21300000, guid: cb40c208d5b074a4bb7f7c920110b52b, type: 3}
@@ -26,5 +26,4 @@ MonoBehaviour:
     RefIds:
     - rid: 58940561773297671
       type: {class: DrawCardEffect, ns: , asm: Assembly-CSharp}
-      data:
-        amount: 2
+      data: 

@@ -16,7 +16,9 @@ public class CardInformation : MonoBehaviour
     [SerializeReference, SR] private List<ICardEffect> effects = new List<ICardEffect>(); //temp
 
     [Header("References")]
-    [SerializeField] private TMP_Text cardMana;
+    [SerializeField] private TMP_Text cardManaTxt;
+    [SerializeField] private TMP_Text cardNameTxt;
+    [SerializeField] private TMP_Text cardDescTxt;
     [SerializeField] private SpriteRenderer sprite;
 
     //holds the data of this instance of the card
@@ -31,8 +33,10 @@ public class CardInformation : MonoBehaviour
         effects.Clear();
         effects.AddRange(card.effects);
 
-        cardMana.text = card.mana.ToString();
-        sprite.sprite = card.sprite;
+        cardManaTxt.text = card.mana.ToString();
+        cardNameTxt.text = card.cardName.ToString();
+        cardDescTxt.text = card.description.Replace("X", card.power.ToString());
+        ReplaceSprite(sprite, card.sprite);
     }
 
     public void UpdateCard()
@@ -43,18 +47,34 @@ public class CardInformation : MonoBehaviour
         effects.Clear();
         effects.AddRange(card.effects);
 
-        cardMana.text = card.mana.ToString();
-        sprite.sprite = card.sprite;
+        cardManaTxt.text = card.mana.ToString();
+        cardNameTxt.text = card.cardName.ToString();
+        cardDescTxt.text = card.description.Replace("X", card.power.ToString());
+
     }
 
-    private void OnMouseEnter()
+    void ReplaceSprite(SpriteRenderer renderer, Sprite newSprite)
     {
-        CardShowInfo.Instance.Show(card);
-    }
+        Sprite oldSprite = renderer.sprite;
 
-    private void OnMouseExit()
-    {
-        CardShowInfo.Instance.Hide();
+        if (oldSprite == null || newSprite == null)
+            return;
+
+        Vector2 oldSize = oldSprite.bounds.size;
+        Vector2 newSize = newSprite.bounds.size;
+
+        // Calculate scale ratios for both axes
+        float xRatio = oldSize.x / newSize.x;
+        float yRatio = oldSize.y / newSize.y;
+
+        // Choose the smaller ratio to ensure the new sprite fits within old bounds
+        float scaleRatio = Mathf.Min(xRatio, yRatio);
+
+        // Apply uniform scale
+        renderer.transform.localScale *= scaleRatio;
+
+        // Assign new sprite
+        renderer.sprite = newSprite;
     }
 
     //drag and drop ===============================================================================================
@@ -151,6 +171,16 @@ public class CardInformation : MonoBehaviour
         seq.OnComplete(() => collider.enabled = true);
 
         GetComponent<SortingGroup>().sortingOrder = 0;
+    }
+
+    private void OnMouseEnter()
+    {
+        CardShowInfo.Instance.Show(card);
+    }
+
+    private void OnMouseExit()
+    {
+        CardShowInfo.Instance.Hide();
     }
 
     //stats and actions ===========================================================================================

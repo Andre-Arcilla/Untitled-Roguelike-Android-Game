@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "NewClass", menuName = "ClassData")]
 public class ClassDataSO : ScriptableObject
@@ -16,6 +17,8 @@ public class ClassDataSO : ScriptableObject
 
     public GameObject spriteMale;
     public GameObject spriteFemale;
+    public Sprite imageMale;
+    public Sprite imageFemale;
 
     [Header("Starting Cards")]
     [Tooltip("List of starting deck cards for the class")]

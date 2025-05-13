@@ -21,7 +21,7 @@ public class CharacterGenerator : MonoBehaviour
     [SerializeField] private GameObject prefab;
     [SerializeField] private GameObject allyParent;
     [SerializeField] private GameObject enemyParent;
-    [SerializeField] private EnemyDatabase enemyDatabase; // Your new enemy SO database
+    [SerializeField] private EnemyDatabase enemyDatabase;
 
     private void Start()
     {

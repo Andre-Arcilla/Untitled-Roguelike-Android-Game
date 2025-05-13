@@ -41,7 +41,6 @@ public class ActionSystem : MonoBehaviour
 
     public void AddCard(Targetable sender, CardInformation card, GameObject target)
     {
-        Debug.Log(card.card.cardName + ", " + card.card.mana);
         actions.Add(new (sender, card, target));
     }
 

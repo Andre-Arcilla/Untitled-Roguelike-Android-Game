@@ -12,7 +12,6 @@ public class CharacterDataSO : ScriptableObject
         public int level;
         public string gender;
         public string raceName;
-        //public Target faction;
     }
 
     [System.Serializable]

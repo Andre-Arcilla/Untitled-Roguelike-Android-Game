@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Splines.Examples;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class CharacterDeck : MonoBehaviour
 {
@@ -66,7 +67,7 @@ public class CharacterDeck : MonoBehaviour
             CardInformation cardInfo = CardSpriteGenerator.Instance.GenerateCardSprite(card, deckPos.position, Quaternion.identity, deckParent.transform);
 
             // Set the card's name based on its index in the original deck (deckList)
-            cardInfo.name = "Card_" + i.ToString() + " (" + card.cardName.ToString() + ")"; // Name format: "Card_0", "Card_1", ...
+            cardInfo.name = "Card_" + i.ToString() + " (" + card.cardName.ToString() + ")"; // Name format: "Card_0 (slash)", "Card_1 (arrow)", ...
             deck.Add(cardInfo.gameObject); // Add the new card GameObject to the deck list
         }
         ShuffleCardsToDeck();
@@ -97,12 +98,19 @@ public class CharacterDeck : MonoBehaviour
 
                 foreach (GameObject card in new List<GameObject>(discard))
                 {
+                    CardInformation cardInfo = card.GetComponent<CardInformation>();
+
+                    cardInfo.isSelected = false;
+                    cardInfo.isDragging = false;
+                    cardInfo.isDeselecting = false;
+                    cardInfo.isUsing = false;
+                    card.GetComponent<SortingGroup>().sortingOrder = 0;
+
                     deck.Add(card);
                     card.transform.SetParent(deckParent.transform, false);
                 }
 
                 discard.Clear();
-                Debug.Log("Deck reshuffled from discard");
             }
 
             if (deck.Count == 0)
@@ -233,9 +241,10 @@ public class CharacterDeck : MonoBehaviour
         Vector2 dropZone = new Vector2(playParent.transform.localPosition.x, playParent.transform.localPosition.y);
 
         var sequence = DOTween.Sequence();
-        sequence.Append(card.transform.DOMove(dropZone, 0.1f));
-        sequence.Join(card.transform.DOLocalRotate(Vector2.zero, 0.1f));
-        sequence.Join(card.transform.DOScale(Vector3.one, 0.1f));
+        sequence.Append(card.transform.DOMove(dropZone, 0.15f));
+        sequence.Join(card.transform.DOLocalRotate(Vector2.zero, 0.15f));
+        sequence.Join(card.transform.DOScale(Vector3.one, 0.15f));
+        sequence.SetLink(gameObject).SetAutoKill(true);
 
         yield return sequence.WaitForCompletion();
 
@@ -252,8 +261,9 @@ public class CharacterDeck : MonoBehaviour
         Vector2 dropZone = new Vector2(discardPos.position.x, discardPos.position.y);
 
         var sequence = DOTween.Sequence();
-        sequence.Append(card.transform.DOMove(dropZone, 0.1f));
-        sequence.Join(card.transform.DOScale(Vector3.zero, 0.1f));
+        sequence.Append(card.transform.DOMove(dropZone, 0.15f));
+        sequence.Join(card.transform.DOScale(Vector3.zero, 0.15f));
+        sequence.SetLink(gameObject).SetAutoKill(true);
 
         yield return sequence.WaitForCompletion();
 
@@ -265,6 +275,7 @@ public class CharacterDeck : MonoBehaviour
         card.isUsing = false;
 
         yield return cardHolder.SortCards();
+        yield return cardHolder.SelectedCardsPosition();
     }
 
     void Shuffle<T>(List<T> list)

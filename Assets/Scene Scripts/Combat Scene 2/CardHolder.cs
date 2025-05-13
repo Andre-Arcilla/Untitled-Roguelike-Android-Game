@@ -27,6 +27,7 @@ public class CardHolder : MonoBehaviour
 
         // Main sequence to hold all animations in order
         var mainSequence = DOTween.Sequence();
+        mainSequence.SetLink(gameObject).SetAutoKill(true);
 
         for (int i = 0; i < childCount; i++)
         {
@@ -49,6 +50,7 @@ public class CardHolder : MonoBehaviour
             cardSequence.Append(child.transform.DOLocalMove(splinePosition + ((i * 0.2f) * Vector3.back), 0.1f));
             cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, 0.1f));
             cardSequence.Join(child.transform.DOScale(1, 0.1f));
+            cardSequence.SetLink(gameObject).SetAutoKill(true);
 
             // Enable collider after animation completes
             if (collider != null)
@@ -71,6 +73,7 @@ public class CardHolder : MonoBehaviour
 
         // Main sequence to hold all animations in order
         var mainSequence = DOTween.Sequence();
+        mainSequence.SetLink(gameObject).SetAutoKill(true);
 
         //animate cards moving from hand to discard
         for (int i = childCount; i > 0; i--)
@@ -80,6 +83,7 @@ public class CardHolder : MonoBehaviour
             var cardSequence = DOTween.Sequence();
             cardSequence.Append(child.transform.DOMove(despawnPos, 0.1f));
             cardSequence.Join(child.transform.DOScale(Vector3.zero, 0.1f));
+            cardSequence.SetLink(gameObject).SetAutoKill(true);
 
             // Append this card's animation to the main sequence with a short delay between cards
             mainSequence.Append(cardSequence);
@@ -97,8 +101,11 @@ public class CardHolder : MonoBehaviour
 
         yield return SortCards();
 
-        cardObj.transform.DOLocalMove(Vector2.zero, 0.1f);
-        cardObj.transform.DOScale(Vector3.one, 0.1f);
+        var sequence = DOTween.Sequence();
+        sequence.Append(cardObj.transform.DOLocalMove(Vector2.zero, 0.1f));
+        sequence.Join(cardObj.transform.DOScale(Vector3.one, 0.1f));
+        sequence.SetLink(gameObject).SetAutoKill(true);
+        yield return sequence.WaitForCompletion();
 
         yield return new WaitForSeconds(0.1f);
 
@@ -116,16 +123,19 @@ public class CardHolder : MonoBehaviour
 
         yield return SortCards();
 
-        cardObj.transform.DOLocalMove(Vector2.zero, 0.1f);
-        cardObj.transform.DOScale(Vector3.one, 0.1f);
+        var sequenceA = DOTween.Sequence();
+        sequenceA.Append(cardObj.transform.DOLocalMove(Vector2.zero, 0.1f));
+        sequenceA.Join(cardObj.transform.DOScale(Vector3.one, 0.1f));
+        sequenceA.SetLink(gameObject).SetAutoKill(true);
+        yield return sequenceA.WaitForCompletion();
 
         yield return new WaitForSeconds(0.1f);
 
-        var seq = DOTween.Sequence();
-        seq.Join(cardObj.transform.DOLocalMove(dropZonePos, 0.1f));
-        seq.Join(cardObj.transform.DOScale(Vector3.zero, 0.1f));
-
-        yield return seq.WaitForCompletion();
+        var sequenceB = DOTween.Sequence();
+        sequenceB.Join(cardObj.transform.DOLocalMove(dropZonePos, 0.1f));
+        sequenceB.Join(cardObj.transform.DOScale(Vector3.zero, 0.1f));
+        sequenceB.SetLink(gameObject).SetAutoKill(true);
+        yield return sequenceB.WaitForCompletion();
 
         cardObj.transform.SetParent(parent.transform, true);
     }
@@ -158,6 +168,7 @@ public class CardHolder : MonoBehaviour
             cardSequence.Append(child.transform.DOLocalMove(splinePosition + ((i * 0.2f) * Vector3.back), 0.1f));
             cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, 0.1f));
             cardSequence.Join(child.transform.DOScale(1, 0.1f));
+            cardSequence.SetLink(gameObject).SetAutoKill(true);
 
             CardInformation card = child.GetComponent<CardInformation>();
 
@@ -174,7 +185,7 @@ public class CardHolder : MonoBehaviour
             CardInformation card = child.GetComponent<CardInformation>();
             if (card != null && card.isSelected == true)
             {
-                yield return child.DOMove(child.position + new Vector3(0, 0.5f, 0), 0.1f).WaitForCompletion();
+                yield return child.DOMove(child.position + new Vector3(0, 0.5f, 0), 0.1f).SetLink(gameObject).SetAutoKill(true).WaitForCompletion();
             }
         }
     }

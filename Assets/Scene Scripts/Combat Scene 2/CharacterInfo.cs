@@ -25,7 +25,6 @@ public class CharacterInfo : MonoBehaviour
     [SerializeField] private List<CardDataSO> deck;
     [SerializeReference, SR] public List<IStatusEffect> activeEffects = new List<IStatusEffect>();
 
-
     [System.Serializable]
     public class Stats
     {
@@ -72,9 +71,7 @@ public class CharacterInfo : MonoBehaviour
 
     private void GenerateCharacterSprite()
     {
-        Debug.Log("sprite get for " + characterData.basicInfo.characterName);
-
-        string targetClassName = characterData.classes[0]; // First class
+        string targetClassName = characterData.classes[0];
         string playerGender = characterData.basicInfo.gender.ToLower();
 
         if (gameObject.GetComponent<Targetable>().team == Team.Player)
@@ -93,6 +90,7 @@ public class CharacterInfo : MonoBehaviour
                 Destroy(sprite);
                 sprite = Instantiate(selectedClass.spriteFemale, position, Quaternion.identity, spriteHolder.transform);
             }
+            sprite.AddComponent<DisplayCardView>();
         }
         else if (gameObject.GetComponent<Targetable>().team == Team.Enemy)
         {
@@ -103,6 +101,8 @@ public class CharacterInfo : MonoBehaviour
             sprite = Instantiate(enemyClass.spriteMale, position, Quaternion.identity, spriteHolder.transform);
             sprite.transform.localRotation = Quaternion.Euler(0, 180, 0);
         }
+        sprite.AddComponent<PolygonCollider2D>();
+        gameObject.GetComponent<Targetable>().targetCollider = sprite.GetComponent<Collider2D>();
     }
 
     private void GenerateCharacterDeck()
@@ -132,8 +132,8 @@ public class CharacterInfo : MonoBehaviour
                 }
             }
 
-                // Merge the current class's deck into the character's deck
-                deck.AddRange(selectedClass.startingDeck);
+            // Merge the current class's deck into the character's deck
+            deck.AddRange(selectedClass.startingDeck);
         }
     }
 

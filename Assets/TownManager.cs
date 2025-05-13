@@ -1,9 +1,9 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TownManager : MonoBehaviour
 {
     public static TownManager Instance;
-    public TownDataSO currentTown;
 
     private void Awake()
     {
@@ -15,4 +15,8 @@ public class TownManager : MonoBehaviour
 
         Instance = this;
     }
+
+    [SerializeField] public TownDataSO townFrom;
+    [SerializeField] public TownDataSO townTo;
+    [SerializeField] public int waves;
 }

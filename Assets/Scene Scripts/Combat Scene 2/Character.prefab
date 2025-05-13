@@ -30,7 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 887335379477665867}
+  m_Father: {fileID: 3380446280892355431}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1371306328052100876
@@ -106,7 +106,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!1 &3787792568571896098
+--- !u!1 &4738295694272716097
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,9 +114,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 887335379477665867}
-  - component: {fileID: 4129460678646428193}
-  - component: {fileID: 5719789288002370282}
+  - component: {fileID: 3380446280892355431}
   m_Layer: 0
   m_Name: Character Sprite
   m_TagString: Untagged
@@ -124,13 +122,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &887335379477665867
+--- !u!4 &3380446280892355431
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3787792568571896098}
+  m_GameObject: {fileID: 4738295694272716097}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -140,35 +138,6 @@ Transform:
   m_Father: {fileID: 7816072226628672068}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &4129460678646428193
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3787792568571896098}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.8, y: 0.8}
-  m_Direction: 0
---- !u!114 &5719789288002370282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3787792568571896098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2201a4327805537469e7b46754052836, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardView: {fileID: 5663350315139266507}
 --- !u!1 &5663350315139266507
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,8 +188,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   splineContainer: {fileID: 4076701268247897898}
-  spawnPoint: {fileID: 3787792568571896098}
-  despawnPoint: {fileID: 3787792568571896098}
+  spawnPoint: {fileID: 4738295694272716097}
+  despawnPoint: {fileID: 4738295694272716097}
   handParent: {fileID: 6085580888313190472}
   playParent: {fileID: 6412065338789664441}
 --- !u!1 &5838126829343219995
@@ -378,7 +347,7 @@ Transform:
   m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 887335379477665867}
+  - {fileID: 3380446280892355431}
   - {fileID: 753638957491929162}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -397,15 +366,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHP: 0
   currentEN: 0
-  maxHP: 0
   barrier: 0
-  spriteHolder: {fileID: 3787792568571896098}
+  maxHP: 0
+  maxEN: 0
+  spriteHolder: {fileID: 4738295694272716097}
   sprite: {fileID: 3648546599825959234}
   classDatabase: {fileID: 11400000, guid: 079756c96ff5c61459f2b5d3cde6bb23, type: 2}
   enemyClassDatabase: {fileID: 11400000, guid: d41b80b74e9c821459f62460cb2edb82, type: 2}
   raceDatabase: {fileID: 11400000, guid: 5fe67e59516e4804c9748cebd6d79e09, type: 2}
   characterDeck: {fileID: 1906858228604015044}
-  useSaveFile: 1
   characterData:
     isAlive: 0
     basicInfo:
@@ -464,8 +433,8 @@ MonoBehaviour:
   playParent: {fileID: 6412065338789664441}
   handSize: 5
   maxHandSize: 10
-  discardPos: {fileID: 887335379477665867}
-  deckPos: {fileID: 887335379477665867}
+  discardPos: {fileID: 3380446280892355431}
+  deckPos: {fileID: 3380446280892355431}
 --- !u!114 &4282496803064220248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -480,7 +449,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetCollider: {fileID: 0}
   team: 0
-  IsActive: 1
   highlightEffect: {fileID: 0}
 --- !u!1 &8665795149401602068
 GameObject:

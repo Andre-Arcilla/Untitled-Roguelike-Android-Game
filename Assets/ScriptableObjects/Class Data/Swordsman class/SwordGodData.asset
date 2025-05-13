@@ -16,6 +16,8 @@ MonoBehaviour:
   gender: 0
   spriteMale: {fileID: 895508148675619221, guid: 971ace9d9e00d2e40ad7aa478a157532, type: 3}
   spriteFemale: {fileID: 1875184633070888105, guid: ae5aa078c0e2a8f4d903ece9e65f6581, type: 3}
+  imageMale: {fileID: 1278063066, guid: bb404adf7b449c6459de5fad783e0d12, type: 3}
+  imageFemale: {fileID: -1076082216, guid: 592ef0683a81ada4196460f125a93fcd, type: 3}
   startingDeck:
   - {fileID: 11400000, guid: 9568e0c45e80fd34a817039964f72c5e, type: 2}
   - {fileID: 11400000, guid: 9568e0c45e80fd34a817039964f72c5e, type: 2}

@@ -19,11 +19,11 @@ MonoBehaviour:
   cost: 2
   power: 3
   effects:
-  - rid: 58940561773297671
+  - rid: 58940731909996545
   cardSprite: {fileID: 21300000, guid: cb40c208d5b074a4bb7f7c920110b52b, type: 3}
   references:
     version: 2
     RefIds:
-    - rid: 58940561773297671
+    - rid: 58940731909996545
       type: {class: DrawCardEffect, ns: , asm: Assembly-CSharp}
       data: 

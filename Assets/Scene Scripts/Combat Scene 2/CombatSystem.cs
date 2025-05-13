@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CombatSystem : MonoBehaviour
 {
@@ -14,18 +15,20 @@ public class CombatSystem : MonoBehaviour
         }
 
         Instance = this;
+        waves = TownManager.Instance.waves;
+        currentWave = 1;
     }
 
     //call a method if all enemies are dead
     //incremen current round
     //if current round is equal to rounds, stop and call another method
 
-    [SerializeField] private int rounds;
-    [SerializeField] private int currentRound = 0;
+    [SerializeField] private int waves;
+    [SerializeField] private int currentWave = 1;
 
     public void GenerateNewEnemyGroup()
     {
-        if (currentRound == rounds)
+        if (currentWave == waves)
         {
             CombatCompleteWin();
             return;
@@ -33,7 +36,7 @@ public class CombatSystem : MonoBehaviour
         else
         {
             CharacterGenerator.Instance.ChangeEnemies();
-            currentRound++;
+            currentWave++;
         }
     }
 
@@ -42,12 +45,16 @@ public class CombatSystem : MonoBehaviour
         Debug.Log("|-------------------|");
         Debug.Log("|  Combat complete  |");
         Debug.Log("|-------------------|");
+
+        SceneManager.LoadScene(TownManager.Instance.townTo.sceneName);
     }
 
     public void CombatCompleteLose()
     {
-        Debug.Log("|-------------------|");
-        Debug.Log("|  Combat complete  |");
-        Debug.Log("|-------------------|");
+        Debug.Log("|----------------------|");
+        Debug.Log("|  Your party is dead  |");
+        Debug.Log("|----------------------|");
+
+        SceneManager.LoadScene(TownManager.Instance.townFrom.sceneName);
     }
 }

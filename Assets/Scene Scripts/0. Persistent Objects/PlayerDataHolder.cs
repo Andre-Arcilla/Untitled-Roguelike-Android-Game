@@ -19,7 +19,13 @@ public class PlayerDataHolder : MonoBehaviour
         LoadPartyFromJson();
     }
 
-    public List<CharacterData> partyMembers = new List<CharacterData>(); // 1 party, up to 4 members
+    [System.Serializable]
+    private class PartyDataWrapper
+    {
+        public List<CharacterData> members = new List<CharacterData>();
+    }
+
+    public List<CharacterData> partyMembers = new List<CharacterData>();
 
     private void LoadPartyFromJson()
     {
@@ -51,11 +57,5 @@ public class PlayerDataHolder : MonoBehaviour
         File.WriteAllText(path, saveFile);
 
         Debug.Log("Party saved to: " + path);
-    }
-
-    [System.Serializable]
-    private class PartyDataWrapper
-    {
-        public List<CharacterData> members = new List<CharacterData>();
     }
 }

@@ -26,7 +26,11 @@ public class Card
         data = cardData;
 
         bool hasCharge = data.effects.Any(e => e is ChargeDamageEffect);
-        mana = hasCharge ? owner.currentEN : data.cost;
+        mana = data.cost;
+        if (hasCharge && owner != null)
+        {
+            mana = owner.currentEN;
+        }
         power = data.power;
     }
 

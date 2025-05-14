@@ -39,9 +39,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Town 7.unity
     guid: e2e1ece173003cf4f9a2830da4155afb
   - enabled: 1
-    path: Assets/Scenes/Combat Scene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
     path: Assets/Scenes/Combat scene 2.unity
     guid: b4b9ec4d08c7fcf40ba3854a990a6f12
   m_configObjects: {}

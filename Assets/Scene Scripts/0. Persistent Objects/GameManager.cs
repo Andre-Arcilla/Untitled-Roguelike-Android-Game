@@ -25,11 +25,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        //SceneManager.LoadScene("Town Selection");
-    }
-
     private void MarkPersistentObjects()
     {
         foreach (GameObject obj in persistentObjects)

@@ -20,12 +20,21 @@ public class PlayerDataHolder : MonoBehaviour
     }
 
     [System.Serializable]
+    public class EquipmentSaveData
+    {
+        public string equipmentName;
+    }
+
+    [System.Serializable]
     private class PartyDataWrapper
     {
         public List<CharacterData> members = new List<CharacterData>();
+        public List<EquipmentSaveData> inventory = new List<EquipmentSaveData>();
     }
 
     public List<CharacterData> partyMembers = new List<CharacterData>();
+    public List<EquipmentSaveData> inventoryItems = new List<EquipmentSaveData>();
+
 
     private void LoadPartyFromJson()
     {
@@ -42,20 +51,25 @@ public class PlayerDataHolder : MonoBehaviour
         PartyDataWrapper wrapper = JsonUtility.FromJson<PartyDataWrapper>(json);
 
         partyMembers = wrapper.members;
+        inventoryItems = wrapper.inventory ?? new List<EquipmentSaveData>();
 
-        Debug.Log("Party loaded with " + partyMembers.Count + " members.");
+        Debug.Log("Party loaded with " + partyMembers.Count + " members and " + inventoryItems.Count + " inventory items.");
     }
 
     public void SavePartyInfo()
     {
-        PartyDataWrapper wrapper = new PartyDataWrapper();
-        wrapper.members = partyMembers;
+        PartyDataWrapper wrapper = new PartyDataWrapper
+        {
+            members = partyMembers,
+            inventory = inventoryItems
+        };
 
         string saveFile = JsonUtility.ToJson(wrapper, true);
         string path = Path.Combine(Application.persistentDataPath, "PartyData.json");
 
         File.WriteAllText(path, saveFile);
 
-        Debug.Log("Party saved to: " + path);
+        Debug.Log("Party and inventory saved to: " + path);
     }
+
 }

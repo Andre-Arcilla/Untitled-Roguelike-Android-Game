@@ -1,36 +1,47 @@
+using System.Collections.Generic;
 using UnityEngine;
-using Unity.Collections;
 using UnityEngine.UI;
 
 public class CardDisplay : MonoBehaviour
 {
-    [SerializeField] private GameObject cardPrefab; // UI Image in your Canvas
     [SerializeField] private Transform cardParent;
-    [SerializeField] private ClassManager classManager;
     [SerializeField] private ClassDataSO selectedClass;
 
-    public void UpdateSelectedClass(ClassDataSO @class)
-    {
-        selectedClass = @class;
+    // Dictionary to hold cards and their counts
+    private Dictionary<CardDataSO, int> cardDictionary = new Dictionary<CardDataSO, int>();
 
-        // Optional: clear existing cards before generating new ones
+    public void UpdateSelectedClass(ClassDataSO _class)
+    {
+        selectedClass = _class;
+
+        // Clear previous cards and dictionary
         foreach (Transform child in cardParent)
         {
             Destroy(child.gameObject);
         }
+        cardDictionary.Clear();
 
-        // Generate cards from startingDeck
+        // Populate dictionary with card counts
         foreach (CardDataSO card in selectedClass.startingDeck)
         {
-            GameObject newCard = Instantiate(cardPrefab, cardParent);
+            if (cardDictionary.ContainsKey(card))
+                cardDictionary[card]++;
+            else
+                cardDictionary[card] = 1;
+        }
 
-            // Get the Image component from the prefab (or child if needed)
-            Image image = newCard.GetComponent<Image>();
+        GenerateCards();
+    }
+    private void GenerateCards()
+    {
+        foreach (var entry in cardDictionary)
+        {
+            CardDataSO cardData = entry.Key;
+            int count = entry.Value;
 
-            if (image != null && card.cardSprite != null)
-            {
-                image.sprite = card.cardSprite;
-            }
+            Card card = new Card(cardData, null);
+            InventoryCardInformation cardInfo = CardSpriteGenerator.Instance.GenerateCardSprite(card, cardParent, count);
+            cardInfo.name = $"Card_{card.cardName} (×{count})";
         }
     }
 }

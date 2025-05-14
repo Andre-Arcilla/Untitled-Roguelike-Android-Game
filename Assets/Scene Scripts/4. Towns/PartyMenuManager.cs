@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class PartyMenuManager : MonoBehaviour
 {
@@ -35,12 +36,18 @@ public class PartyMenuManager : MonoBehaviour
     }
 
     [Header("Character General Information")]
-    [SerializeField] private Image characterSprite;
-    [SerializeField] private TMP_Text characterName;
-    [SerializeField] private TMP_Text characterRace;
-    [SerializeField] private TMP_Text characterLevel;
-    [SerializeField] private TMP_Text characterEN;
-    [SerializeField] private TMP_Text characterHP;
+    [SerializeField] private Image charSpriteImage;
+    [SerializeField] private TMP_Text charNameTxt;
+    [SerializeField] private TMP_Text charRaceTxt;
+    [SerializeField] private TMP_Text charLevelTxt;
+    [SerializeField] private TMP_Text charENTxt;
+    [SerializeField] private TMP_Text charHPTxt;
+
+    [Header("Character Stats Panel")]
+    [SerializeField] private TMP_Text charHPStatTxt;
+    [SerializeField] private TMP_Text charENStatTxt;
+    [SerializeField] private TMP_Text charPWRStatTxt;
+    [SerializeField] private TMP_Text charSPDStatTxt;
 
     [Header("Character Buttons")]
     [SerializeField] private List<CharacterButton> buttonList = new List<CharacterButton>();
@@ -56,29 +63,30 @@ public class PartyMenuManager : MonoBehaviour
     [SerializeField] Transform classHolder;
     [SerializeField] Transform cardHolder;
     [SerializeField] private ClassDatabase classDatabase;
+    [SerializeField] private RaceDatabase raceDatabase;
+    [SerializeField] private EquipmentDatabase equipmentDatabase;
     [SerializeField] public GameObject inventoryCanvas;
-    private bool inventoryShown;
     private List<CharacterData> characterList;
     private Dictionary<CardDataSO, int> deck;
+    private CharacterData currentCharacter;
+    private List<EquipmentDataSO> inventory;
+    private int HP;
+    private int EN;
 
     private void Start()
     {
-        characterList = PlayerDataHolder.Instance.partyMembers;
+        currentCharacter = new CharacterData();
+        deck = new Dictionary<CardDataSO, int>();
+        inventory = new List<EquipmentDataSO>();
 
-        if (!inventoryCanvas.activeSelf)
-        {
-            inventoryShown = false;
-        }
-        else if (inventoryCanvas.activeSelf)
-        {
-            inventoryShown = true;
-        }
+        characterList = PlayerDataHolder.Instance.partyMembers;
 
         SetCharacterButtons();
 
         //sets the displayed information to be 1st character and their deck
         SelectedCharacter(buttonList[0]);
         SelectedPanel(panelList[0]);
+        SetInventory();
     }
 
     // == BUTTON METHODS ======================================================
@@ -94,7 +102,7 @@ public class PartyMenuManager : MonoBehaviour
 
         CharacterButton selectedBtn = buttonList.FirstOrDefault(btn => btn.button.gameObject == sender);
 
-        if (selectedBtn == null)
+        if (selectedBtn == null || selectedBtn.charData == currentCharacter)
         {
             return;
         }
@@ -112,7 +120,8 @@ public class PartyMenuManager : MonoBehaviour
             if (charButton == characterButton)
             {
                 charButton.button.image.color = cb.selectedColor;
-                SetCharacterInfo(characterButton.charData);
+                currentCharacter = characterButton.charData;
+                SetCharacterInfo();
             }
             else
             {
@@ -160,22 +169,37 @@ public class PartyMenuManager : MonoBehaviour
         }
     }
 
-    //button method for opening inventory
-    public void OpenInventory()
-    {
-        if (inventoryShown == false)
-        {
-            inventoryCanvas.SetActive(true);
-            inventoryShown = true;
-        }
-        else if (inventoryShown == true)
-        {
-            inventoryCanvas.SetActive(false);
-            inventoryShown = false;
-        }
-    }
-
     // == DISPLAY METHODS =====================================================
+
+    //generates equipment in player inventory
+    private void SetInventory()
+    {
+        for (int i = 0; i < PlayerDataHolder.Instance.inventoryItems.Count; i++)
+        {
+            string jsonItemName = PlayerDataHolder.Instance.inventoryItems[i].equipmentName;
+            Debug.Log($"Looking for: {jsonItemName}");
+
+            // Print all names in the equipment database
+            Debug.Log("Available in database:");
+            foreach (var item in equipmentDatabase.allEquipments)
+            {
+                Debug.Log("- " + item.equipmentName);
+            }
+
+            EquipmentDataSO selectedEquipment = equipmentDatabase.allEquipments
+                .Find(e => e.equipmentName == jsonItemName);
+
+            if (selectedEquipment == null)
+            {
+                Debug.LogWarning($"No match found for: {jsonItemName}");
+                continue;
+            }
+
+            InventoryManager.Instance.AddItem(selectedEquipment);
+            Debug.Log($"Added to inventory: {selectedEquipment.equipmentName}");
+        }
+
+    }
 
     //generates the character buttons based on the characterList
     private void SetCharacterButtons()
@@ -198,31 +222,25 @@ public class PartyMenuManager : MonoBehaviour
     }
 
     //changes the shown character info based on the selected characterButton
-    private void SetCharacterInfo(CharacterData character)
+    private void SetCharacterInfo()
     {
-        deck = new Dictionary<CardDataSO, int>();
+        deck.Clear();
 
-        // == GENERAL INFORMATION =============================================
-        characterName.text = character.basicInfo.characterName.ToString();
-        characterRace.text = character.basicInfo.raceName.ToString();
-        characterLevel.text = character.basicInfo.level.ToString();
-
-        // == Class INFORMATION ===============================================
-        //probably put this in another method, and also destroy all objects in classHolder making sure its empty
+        //make sure classHolder is empty
         foreach (Transform child in classHolder)
         {
             Destroy(child.gameObject);
         }
-
+        //make sure cardHolder is empty
         foreach (Transform child in cardHolder)
         {
             Destroy(child.gameObject);
         }
 
         //loops through all the classes
-        for (int i = 0; i < character.classes.Count; i++)
+        for (int i = 0; i < currentCharacter.classes.Count; i++)
         {
-            ClassDataSO selectedClass = classDatabase.allClasses.Find(c => c.className == character.classes[i]);
+            ClassDataSO selectedClass = classDatabase.allClasses.Find(c => c.className == currentCharacter.classes[i]);
 
             if (selectedClass == null)
             {
@@ -232,14 +250,14 @@ public class PartyMenuManager : MonoBehaviour
             //sets the character sprite
             if (i == 0)
             {
-                string playerGender = character.basicInfo.gender.ToLower();
-                characterSprite.sprite = SetCharacterSprite(selectedClass, playerGender);
+                string playerGender = currentCharacter.basicInfo.gender.ToLower();
+                charSpriteImage.sprite = SetCharacterSprite(selectedClass, playerGender);
             }
 
             //generates a text for the class
             GameObject classObj = Instantiate(listObjPrefab, classHolder);
-            classObj.name = character.classes[i].ToString();
-            classObj.GetComponentInChildren<TextMeshProUGUI>().text = character.classes[i].ToString();
+            classObj.name = currentCharacter.classes[i].ToString();
+            classObj.GetComponentInChildren<TextMeshProUGUI>().text = currentCharacter.classes[i].ToString();
 
             //alternating colors for each class text
             if (i % 2 == 1)
@@ -264,8 +282,16 @@ public class PartyMenuManager : MonoBehaviour
             }
         }
 
-        // == CARD GENERATION =================================================
+        //generate card sprites
         GenerateCards();
+        SetCharacterStats();
+
+        //input text on screen
+        charNameTxt.text = currentCharacter.basicInfo.characterName.ToString();
+        charRaceTxt.text = currentCharacter.basicInfo.raceName.ToString();
+        charLevelTxt.text = currentCharacter.basicInfo.level.ToString();
+        charHPTxt.text = "×" + HP.ToString();
+        charENTxt.text = "×" + EN.ToString();
     }
 
     private Sprite SetCharacterSprite(ClassDataSO selectedClass, string playerGender)
@@ -293,7 +319,67 @@ public class PartyMenuManager : MonoBehaviour
 
             Card card = new Card(cardData, null);
             InventoryCardInformation cardInfo = CardSpriteGenerator.Instance.GenerateCardSprite(card, cardHolder, count);
-            cardInfo.name = $"Card_{card.cardName} (x{count})";
+            cardInfo.name = $"Card_{card.cardName} (×{count})";
         }
+    }
+
+    private void SetCharacterStats()
+    {
+        RaceDataSO selectedRace = raceDatabase.allRaces.Find(r => r.raceName == currentCharacter.basicInfo.raceName);
+        charHPStatTxt.text = $"{selectedRace.HP.ToString("D2")}+{currentCharacter.allocatedStats.allocatedHP.ToString("D2")}";
+        charENStatTxt.text = $"{selectedRace.EN.ToString("D2")}+{currentCharacter.allocatedStats.allocatedEN.ToString("D2")}";
+        charPWRStatTxt.text = $"{selectedRace.PWR.ToString("D2")}+{currentCharacter.allocatedStats.allocatedPWR.ToString("D2")}";
+        charSPDStatTxt.text = $"{selectedRace.SPD.ToString("D2")}+{currentCharacter.allocatedStats.allocatedSPD.ToString("D2")}";
+
+        HP = Mathf.FloorToInt(1.5f * (selectedRace.HP + currentCharacter.allocatedStats.allocatedHP));
+        EN = Mathf.FloorToInt((selectedRace.EN + currentCharacter.allocatedStats.allocatedEN) / 5);
+    }
+
+    public void IncStatButtonAction()
+    {
+        HandleStatChange("increase");
+    }
+
+    public void DecStatButtonAction()
+    {
+        HandleStatChange("decrease");
+    }
+
+    private void HandleStatChange(string change)
+    {
+        //returns the 2nd gameobject of the stat, "HP", "EN", "PWR", "SPD"
+        GameObject sender = EventSystem.current.currentSelectedGameObject.transform.parent.GetChild(1).gameObject;
+
+        string statName = sender.name.ToUpper();
+
+        Debug.Log($"{change.ToUpper()} sender: {statName}");
+
+        ChangeStat(statName, change);
+    }
+
+    private void ChangeStat(string statName, string change)
+    {
+        int statChange = (change.ToLower() == "increase") ? 1 : -1;
+
+        switch (statName)
+        {
+            case "HP":
+                currentCharacter.allocatedStats.allocatedHP += statChange;
+                break;
+            case "EN":
+                currentCharacter.allocatedStats.allocatedEN += statChange;
+                break;
+            case "PWR":
+                currentCharacter.allocatedStats.allocatedPWR += statChange;
+                break;
+            case "SPD":
+                currentCharacter.allocatedStats.allocatedSPD += statChange;
+                break;
+            default:
+                Debug.LogWarning($"Unrecognized stat: {statName}");
+                break;
+        }
+
+        SetCharacterStats();
     }
 }

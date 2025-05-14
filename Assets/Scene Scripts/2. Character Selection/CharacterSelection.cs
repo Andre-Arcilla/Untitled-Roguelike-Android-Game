@@ -67,6 +67,7 @@ public class CharacterSelection : MonoBehaviour
         if (GameManager.Instance == null)
         {
             SceneManager.LoadScene("Persistent Data");
+            SceneManager.LoadScene("Town Selection");
         }
         else
         {

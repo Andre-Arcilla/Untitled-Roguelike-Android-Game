@@ -3,16 +3,30 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject prompt;
-    public string path;
+    [SerializeField] private GameObject prompt;
+    [SerializeField] private string path;
+    [SerializeField] private Button loadBtn;
+
+    private void Start()
+    {
+        path = Path.Combine(Application.persistentDataPath, "PartyData.json");
+
+        if (File.Exists(path))
+        {
+            loadBtn.interactable = true;
+        }
+        else
+        {
+            loadBtn.interactable = false;
+        }
+    }
 
     public void PlayGame()
     {
-        path = Path.Combine(Application.persistentDataPath, "Character1Data.json");
-
         if (File.Exists(path))
         {
             Debug.Log("Save file found");
@@ -22,6 +36,20 @@ public class MainMenu : MonoBehaviour
         {
             Debug.Log("No save file");
             SceneManager.LoadScene("Character Selection");
+        }
+    }
+
+    public void LoadGame()
+    {
+
+        if (GameManager.Instance == null)
+        {
+            SceneManager.LoadScene("Persistent Data");
+            SceneManager.LoadScene("Town 1");
+        }
+        else
+        {
+            SceneManager.LoadScene("Town 1");
         }
     }
 

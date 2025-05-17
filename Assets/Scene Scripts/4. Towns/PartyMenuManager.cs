@@ -55,23 +55,28 @@ public class PartyMenuManager : MonoBehaviour
     [Header("Panel Buttons")]
     [SerializeField] private List<PanelButton> panelList = new List<PanelButton>();
 
+    [Header("Inventory")]
+    [SerializeField] private List<EquipmentDataSO> inventory;
+
     [Header("Others")]
-    [SerializeField] Color selectedButton;
-    [SerializeField] Color listColorA;
-    [SerializeField] Color listColorB;
-    [SerializeField] GameObject listObjPrefab;
-    [SerializeField] Transform classHolder;
-    [SerializeField] Transform cardHolder;
+    [SerializeField] private Color selectedButton;
+    [SerializeField] private Color listColorA;
+    [SerializeField] private Color listColorB;
+    [SerializeField] private GameObject listObjPrefab;
+    [SerializeField] private Transform classHolder;
+    [SerializeField] private Transform cardHolder;
+    [SerializeField] private List<CharacterData> characterList;
+
+    [Header("Current Character")]
+    [SerializeField] private CharacterData currentCharacter;
+    [SerializeField] private Dictionary<CardDataSO, int> deck;
+    [SerializeField] private int HP;
+    [SerializeField] private int EN;
+
+    [Header("Databases")]
     [SerializeField] private ClassDatabase classDatabase;
     [SerializeField] private RaceDatabase raceDatabase;
     [SerializeField] private EquipmentDatabase equipmentDatabase;
-    [SerializeField] public GameObject inventoryCanvas;
-    private List<CharacterData> characterList;
-    private Dictionary<CardDataSO, int> deck;
-    private CharacterData currentCharacter;
-    private List<EquipmentDataSO> inventory;
-    private int HP;
-    private int EN;
 
     private void Start()
     {
@@ -174,20 +179,14 @@ public class PartyMenuManager : MonoBehaviour
     //generates equipment in player inventory
     private void SetInventory()
     {
+        List<string> tempInventory = new List<string>();
+
         for (int i = 0; i < PlayerDataHolder.Instance.inventoryItems.Count; i++)
         {
-            string jsonItemName = PlayerDataHolder.Instance.inventoryItems[i].equipmentName;
+            string jsonItemName = PlayerDataHolder.Instance.inventoryItems[i];
             Debug.Log($"Looking for: {jsonItemName}");
 
-            // Print all names in the equipment database
-            Debug.Log("Available in database:");
-            foreach (var item in equipmentDatabase.allEquipments)
-            {
-                Debug.Log("- " + item.equipmentName);
-            }
-
-            EquipmentDataSO selectedEquipment = equipmentDatabase.allEquipments
-                .Find(e => e.equipmentName == jsonItemName);
+            EquipmentDataSO selectedEquipment = equipmentDatabase.allEquipments.Find(e => e.equipmentName == jsonItemName);
 
             if (selectedEquipment == null)
             {
@@ -195,10 +194,14 @@ public class PartyMenuManager : MonoBehaviour
                 continue;
             }
 
+            inventory.Add(selectedEquipment);
             InventoryManager.Instance.AddItem(selectedEquipment);
             Debug.Log($"Added to inventory: {selectedEquipment.equipmentName}");
+            tempInventory.Add(selectedEquipment.equipmentName);
         }
 
+        PlayerDataHolder.Instance.inventoryItems.Clear();
+        PlayerDataHolder.Instance.inventoryItems.AddRange(tempInventory);
     }
 
     //generates the character buttons based on the characterList
@@ -236,6 +239,8 @@ public class PartyMenuManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        //make sure equipment slot is empty
+        InventoryManager.Instance.ClearEquipmentSlots();
 
         //loops through all the classes
         for (int i = 0; i < currentCharacter.classes.Count; i++)
@@ -282,9 +287,10 @@ public class PartyMenuManager : MonoBehaviour
             }
         }
 
-        //generate card sprites
+        //generate character specific things
         GenerateCards();
         SetCharacterStats();
+        GenerateEquipment();
 
         //input text on screen
         charNameTxt.text = currentCharacter.basicInfo.characterName.ToString();
@@ -381,5 +387,29 @@ public class PartyMenuManager : MonoBehaviour
         }
 
         SetCharacterStats();
+    }
+
+    private void GenerateEquipment()
+    {
+        EquipmentDataSO armor = equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.armor);
+        EquipmentDataSO weapon = equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.weapon);
+        EquipmentDataSO accessory1 = equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.accessory1);
+        EquipmentDataSO accessory2 = equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.accessory2);
+        EquipmentDataSO accessory3 = equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.accessory3);
+
+        if (armor != null) InventoryManager.Instance.AddEquippedItem(armor);
+        if (weapon != null) InventoryManager.Instance.AddEquippedItem(weapon);
+        if (accessory1 != null) InventoryManager.Instance.AddEquippedItem(accessory1);
+        if (accessory2 != null) InventoryManager.Instance.AddEquippedItem(accessory2);
+        if (accessory3 != null) InventoryManager.Instance.AddEquippedItem(accessory3);
+    }
+
+    public void UpdateCharacterItems()
+    {
+        currentCharacter.equipment.armor = InventoryManager.Instance.equipmentSlots[0].transform.GetComponentInChildren<EquipmentInfo>()?.equipment?.equipmentName ?? "";
+        currentCharacter.equipment.weapon = InventoryManager.Instance.equipmentSlots[1].transform.GetComponentInChildren<EquipmentInfo>()?.equipment?.equipmentName ?? "";
+        currentCharacter.equipment.accessory1 = InventoryManager.Instance.equipmentSlots[2].transform.GetComponentInChildren<EquipmentInfo>()?.equipment?.equipmentName ?? "";
+        currentCharacter.equipment.accessory2 = InventoryManager.Instance.equipmentSlots[3].transform.GetComponentInChildren<EquipmentInfo>()?.equipment?.equipmentName ?? "";
+        currentCharacter.equipment.accessory3 = InventoryManager.Instance.equipmentSlots[4].transform.GetComponentInChildren<EquipmentInfo>()?.equipment?.equipmentName ?? "";
     }
 }

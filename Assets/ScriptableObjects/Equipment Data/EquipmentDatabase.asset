@@ -15,3 +15,6 @@ MonoBehaviour:
   allEquipments:
   - {fileID: 11400000, guid: 203f6356710faee4ba486dc8f457acc1, type: 2}
   - {fileID: 11400000, guid: f123d7c7809044448a58df3d9fc67163, type: 2}
+  - {fileID: 11400000, guid: 7c11df1248300bc4f8f0dc24451754b2, type: 2}
+  - {fileID: 11400000, guid: f51a84bd6d4d88f4aa869608d04cd867, type: 2}
+  - {fileID: 11400000, guid: c36dcb8c91a12d04eaa2cfd5d29a15be, type: 2}

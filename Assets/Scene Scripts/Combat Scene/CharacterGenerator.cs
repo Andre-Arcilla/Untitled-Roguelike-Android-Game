@@ -143,13 +143,8 @@ public class CharacterGenerator : MonoBehaviour
         data.classes = new List<string>(so.classes);
 
         // Copy Equipment
-        data.equipment.headGear = so.equipment.headGear;
-        data.equipment.chestArmor = so.equipment.chestArmor;
-        data.equipment.legwear = so.equipment.legwear;
-        data.equipment.gloves = so.equipment.gloves;
-        data.equipment.boots = so.equipment.boots;
-        data.equipment.mainHand = so.equipment.mainHand;
-        data.equipment.offHand = so.equipment.offHand;
+        data.equipment.armor = so.equipment.armor;
+        data.equipment.weapon = so.equipment.weapon;
         data.equipment.accessory1 = so.equipment.accessory1;
         data.equipment.accessory2 = so.equipment.accessory2;
         data.equipment.accessory3 = so.equipment.accessory3;

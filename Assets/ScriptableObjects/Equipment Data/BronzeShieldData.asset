@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3e06572b8209464897a5a3f630f15e4, type: 3}
-  m_Name: ApprenticeRobeData
+  m_Name: BronzeShieldData
   m_EditorClassIdentifier: 
-  equipmentName: Apprentice Robe
+  equipmentName: Bronze Shield
   description: 
-  slotType: 1
-  bonusHP: 0
-  bonusEN: 5
-  bonusPWR: 5
+  slotType: 3
+  bonusHP: 10
+  bonusEN: 0
+  bonusPWR: 0
   bonusSPD: 0
-  sprite: {fileID: 21300000, guid: 0bd32aeabf4ce9d449bd2029730bcf78, type: 3}
+  sprite: {fileID: 21300000, guid: 9d087bc2abacfe94fa30d584e7052070, type: 3}

@@ -27,37 +27,22 @@ public class CharacterData
     [System.Serializable]
     public class Equipment
     {
-        [Header("Equipment")]
-        [Tooltip("Helmet or headwear")]
-        public string headGear;
+        [Tooltip("Equipped armor set or piece providing overall defense")]
+        public string armor;
 
-        [Tooltip("Chest gear")]
-        public string chestArmor;
+        [Tooltip("Equipped main weapon (e.g., sword, staff, bow)")]
+        public string weapon;
 
-        [Tooltip("Pants or leg protection")]
-        public string legwear;
-
-        [Tooltip("Gauntlets")]
-        public string gloves;
-
-        [Tooltip("Boots or footwear")]
-        public string boots;
-
-        [Tooltip("Primary weapon")]
-        public string mainHand;
-
-        [Tooltip("Secondary weapon or shield")]
-        public string offHand;
-
-        [Tooltip("First accessory (e.g., ring, amulet)")]
+        [Tooltip("First equipped accessory (e.g., ring or amulet)")]
         public string accessory1;
 
-        [Tooltip("Second accessory (e.g., ring, necklace)")]
+        [Tooltip("Second equipped accessory (e.g., necklace or charm)")]
         public string accessory2;
 
-        [Tooltip("Third accessory (e.g., bracelet, charm)")]
+        [Tooltip("Third equipped accessory (e.g., bracelet or talisman)")]
         public string accessory3;
     }
+
 
     public bool isAlive;
     public BasicInfo basicInfo = new BasicInfo();

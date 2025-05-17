@@ -90,6 +90,9 @@ public class TargetingSystem : MonoBehaviour
             card.NewPos(0.5f);
             ActionSystem.Instance.AddCard(sender, card, target);
         }
+
+        Debug.Log("this runs up to here");
+        sender.GetComponent<CharacterInfo>().UpdateResourcesView();
     }
 
     public void DeselectCard(CardInformation card)
@@ -99,5 +102,6 @@ public class TargetingSystem : MonoBehaviour
         card.GetComponentInParent<CharacterInfo>().currentEN += card.card.mana;
         ActionSystem.Instance.RemoveCard(card);
         CharacterDeck deck = card.GetComponentInParent<CharacterDeck>();
+        card.GetComponentInParent<CharacterInfo>().UpdateResourcesView();
     }
 }

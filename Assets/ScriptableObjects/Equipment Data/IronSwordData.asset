@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equipmentName: Iron Sword
   description: 
-  type: 2
+  slotType: 2
   bonusHP: 0
   bonusEN: 0
-  bonusPWR: 0
+  bonusPWR: 10
   bonusSPD: 0
-  sprite: {fileID: 21300000, guid: 4919ed9d90c13e14da9aef9aa8d11305, type: 3}
+  sprite: {fileID: 21300000, guid: 19db536de9356eb48b288b05182cd766, type: 3}

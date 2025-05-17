@@ -12,7 +12,7 @@ public class EquipmentDataSO : ScriptableObject
     public string description;
 
     [Tooltip("The type of equipment: Weapon, Armor, Accessory, etc.")]
-    public EquipmentType type;
+    public EquipmentType slotType;
 
     [Header("Stat Bonuses")]
     [Tooltip("Bonus HP granted by the equipment.")]

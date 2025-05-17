@@ -20,20 +20,14 @@ public class PlayerDataHolder : MonoBehaviour
     }
 
     [System.Serializable]
-    public class EquipmentSaveData
-    {
-        public string equipmentName;
-    }
-
-    [System.Serializable]
     private class PartyDataWrapper
     {
         public List<CharacterData> members = new List<CharacterData>();
-        public List<EquipmentSaveData> inventory = new List<EquipmentSaveData>();
+        public List<string> inventory = new List<string>();
     }
 
     public List<CharacterData> partyMembers = new List<CharacterData>();
-    public List<EquipmentSaveData> inventoryItems = new List<EquipmentSaveData>();
+    public List<string> inventoryItems = new List<string>();
 
 
     private void LoadPartyFromJson()
@@ -51,7 +45,7 @@ public class PlayerDataHolder : MonoBehaviour
         PartyDataWrapper wrapper = JsonUtility.FromJson<PartyDataWrapper>(json);
 
         partyMembers = wrapper.members;
-        inventoryItems = wrapper.inventory ?? new List<EquipmentSaveData>();
+        inventoryItems = wrapper.inventory ?? new List<string>();
 
         Debug.Log("Party loaded with " + partyMembers.Count + " members and " + inventoryItems.Count + " inventory items.");
     }

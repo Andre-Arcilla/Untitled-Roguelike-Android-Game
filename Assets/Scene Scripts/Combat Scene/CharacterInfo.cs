@@ -47,6 +47,11 @@ public class CharacterInfo : MonoBehaviour
 
     public void SetResources()
     {
+        if (gameObject.GetComponent<Targetable>().team == Team.Enemy)
+        {
+            ENText.transform.parent.gameObject.SetActive(false);
+        }
+
         maxEN = stats.totalEN / 5;
         maxHP = Mathf.FloorToInt(stats.totalHP / 1.5f);
         currentHP = maxHP;

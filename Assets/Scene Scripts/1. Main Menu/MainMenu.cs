@@ -10,10 +10,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject prompt;
     [SerializeField] private string path;
     [SerializeField] private Button loadBtn;
+    [SerializeField] private string filName;
 
     private void Start()
     {
-        path = Path.Combine(Application.persistentDataPath, "PartyData.json");
+        path = Path.Combine(Application.persistentDataPath, filName + ".json");
 
         if (File.Exists(path))
         {
@@ -52,6 +53,22 @@ public class MainMenu : MonoBehaviour
             SceneManager.LoadScene("Town 1");
         }
     }
+
+    public void Settings()
+    {
+        path = Path.Combine(Application.persistentDataPath, filName + ".json");
+
+        if (File.Exists(path))
+        {
+            loadBtn.interactable = true;
+        }
+        else
+        {
+            loadBtn.interactable = false;
+        }
+    }
+
+
 
     public void QuitGame()
     {

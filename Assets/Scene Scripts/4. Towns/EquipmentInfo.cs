@@ -9,7 +9,7 @@ public class EquipmentInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [HideInInspector] public Transform parentAfterDrag;
     [HideInInspector] private Canvas canvas => GetComponentInParent<Canvas>();
 
-    [SerializeField] private EquipmentDataSO equipment;
+    [SerializeField] public EquipmentDataSO equipment { get; private set; }
     [SerializeField] private Image image;
 
     public void Setup(EquipmentDataSO newEquipment)
@@ -22,11 +22,11 @@ public class EquipmentInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     //drag logic
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("Begind Drag");
         parentAfterDrag = transform.parent;
         transform.SetParent(canvas.transform);
         transform.SetAsLastSibling();
         image.raycastTarget = false;
+        parentAfterDrag.GetComponent<InventorySlot>().ForceFilledIcon();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -39,8 +39,9 @@ public class EquipmentInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("End Drag");
         transform.SetParent(parentAfterDrag);
         image.raycastTarget = true;
+        parentAfterDrag.GetComponent<InventorySlot>().ForceEmptyIcon();
+        PartyMenuManager.Instance.UpdateCharacterItems();
     }
 }

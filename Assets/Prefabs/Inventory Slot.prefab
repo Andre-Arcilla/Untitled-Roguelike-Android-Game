@@ -29,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 6503306151407103681}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.00008, y: 1.00008, z: 1.00008}
+  m_LocalScale: {x: 1, y: 1, z: 1.00008}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -38,7 +38,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6503306151407103742
 CanvasRenderer:
@@ -61,15 +61,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: fcc6f192f9bd224468b0fcdfba28f430, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 125, y: 125}
+  m_CellSize: {x: 160, y: 160}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -114,3 +114,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d09303fb4acc34d9ce68242b7b8ca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowedSlotType: 0
+  slotImage: {fileID: 6503306151407103743}
+  emptySlotSprite: {fileID: 21300000, guid: fcc6f192f9bd224468b0fcdfba28f430, type: 3}
+  armorSlotSprite: {fileID: 21300000, guid: bb4d13f9ab4891248b593836c55337d2, type: 3}
+  weaponSlotSprite: {fileID: 21300000, guid: a2b9a4234d3f76b478b0a9f8a10eea31, type: 3}
+  accessorySlotSprite: {fileID: 21300000, guid: 54f32554e54aaaf46b8c69213a8de4b6, type: 3}

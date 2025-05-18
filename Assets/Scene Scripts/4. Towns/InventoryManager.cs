@@ -22,7 +22,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] public GameObject equipmentPrefab;
     [SerializeField] private Transform trashcan;
 
-    public void AddItem(EquipmentDataSO equipment)
+    public bool AddItem(EquipmentDataSO equipment)
     {
         for (int i = 0; i < inventorySlots.Length; i++)
         {
@@ -32,9 +32,10 @@ public class InventoryManager : MonoBehaviour
             if (itemInSlot == null)
             {
                 SpawnItem(equipment, slot);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     public void AddEquippedItem(EquipmentDataSO equipment)

@@ -24,10 +24,12 @@ public class PlayerDataHolder : MonoBehaviour
     {
         public List<CharacterData> members = new List<CharacterData>();
         public List<string> inventory = new List<string>();
+        public int gold;
     }
 
     public List<CharacterData> partyMembers = new List<CharacterData>();
-    public List<string> inventoryItems = new List<string>();
+    public List<string> partyInventory = new List<string>();
+    public int partyGold;
 
 
     private void LoadPartyFromJson()
@@ -45,9 +47,10 @@ public class PlayerDataHolder : MonoBehaviour
         PartyDataWrapper wrapper = JsonUtility.FromJson<PartyDataWrapper>(json);
 
         partyMembers = wrapper.members;
-        inventoryItems = wrapper.inventory ?? new List<string>();
+        partyInventory = wrapper.inventory ?? new List<string>();
+        partyGold = wrapper.gold;
 
-        Debug.Log("Party loaded with " + partyMembers.Count + " members and " + inventoryItems.Count + " inventory items.");
+        Debug.Log("Party loaded with " + partyMembers.Count + " members and " + partyInventory.Count + " inventory items.");
     }
 
     public void SavePartyInfo()
@@ -55,7 +58,7 @@ public class PlayerDataHolder : MonoBehaviour
         PartyDataWrapper wrapper = new PartyDataWrapper
         {
             members = partyMembers,
-            inventory = inventoryItems
+            inventory = partyInventory
         };
 
         string saveFile = JsonUtility.ToJson(wrapper, true);

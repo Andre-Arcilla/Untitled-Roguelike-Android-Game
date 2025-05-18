@@ -13,10 +13,14 @@ MonoBehaviour:
   m_Name: ManaCrystalData
   m_EditorClassIdentifier: 
   equipmentName: Mana Crystal
-  description: 
+  description: "A glowing gem pulsing with raw magical energy. It replenishes the
+    wielder\u2019s power, unlocking the secrets of the arcane."
+  price: 250
   slotType: 3
+  classType: 0
   bonusHP: 0
   bonusEN: 10
   bonusPWR: 0
   bonusSPD: 0
+  cards: []
   sprite: {fileID: 21300000, guid: 9d087bc2abacfe94fa30d584e7052070, type: 3}

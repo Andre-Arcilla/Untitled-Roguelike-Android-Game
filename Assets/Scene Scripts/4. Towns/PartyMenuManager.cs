@@ -55,9 +55,6 @@ public class PartyMenuManager : MonoBehaviour
     [Header("Panel Buttons")]
     [SerializeField] private List<PanelButton> panelList = new List<PanelButton>();
 
-    [Header("Inventory")]
-    [SerializeField] private List<EquipmentDataSO> inventory;
-
     [Header("Others")]
     [SerializeField] private Color selectedButton;
     [SerializeField] private Color listColorA;
@@ -66,6 +63,7 @@ public class PartyMenuManager : MonoBehaviour
     [SerializeField] private Transform classHolder;
     [SerializeField] private Transform cardHolder;
     [SerializeField] private List<CharacterData> characterList;
+    [SerializeField] private TMP_Text goldTxt;
 
     [Header("Current Character")]
     [SerializeField] private CharacterData currentCharacter;
@@ -82,7 +80,6 @@ public class PartyMenuManager : MonoBehaviour
     {
         currentCharacter = new CharacterData();
         deck = new Dictionary<CardDataSO, int>();
-        inventory = new List<EquipmentDataSO>();
 
         characterList = PlayerDataHolder.Instance.partyMembers;
 
@@ -92,6 +89,7 @@ public class PartyMenuManager : MonoBehaviour
         SelectedCharacter(buttonList[0]);
         SelectedPanel(panelList[0]);
         SetInventory();
+        UpdateGoldAmount(0);
     }
 
     // == BUTTON METHODS ======================================================
@@ -181,9 +179,9 @@ public class PartyMenuManager : MonoBehaviour
     {
         List<string> tempInventory = new List<string>();
 
-        for (int i = 0; i < PlayerDataHolder.Instance.inventoryItems.Count; i++)
+        for (int i = 0; i < PlayerDataHolder.Instance.partyInventory.Count; i++)
         {
-            string jsonItemName = PlayerDataHolder.Instance.inventoryItems[i];
+            string jsonItemName = PlayerDataHolder.Instance.partyInventory[i];
             Debug.Log($"Looking for: {jsonItemName}");
 
             EquipmentDataSO selectedEquipment = equipmentDatabase.allEquipments.Find(e => e.equipmentName == jsonItemName);
@@ -194,14 +192,13 @@ public class PartyMenuManager : MonoBehaviour
                 continue;
             }
 
-            inventory.Add(selectedEquipment);
             InventoryManager.Instance.AddItem(selectedEquipment);
             Debug.Log($"Added to inventory: {selectedEquipment.equipmentName}");
             tempInventory.Add(selectedEquipment.equipmentName);
         }
 
-        PlayerDataHolder.Instance.inventoryItems.Clear();
-        PlayerDataHolder.Instance.inventoryItems.AddRange(tempInventory);
+        PlayerDataHolder.Instance.partyInventory.Clear();
+        PlayerDataHolder.Instance.partyInventory.AddRange(tempInventory);
     }
 
     //generates the character buttons based on the characterList
@@ -300,6 +297,7 @@ public class PartyMenuManager : MonoBehaviour
         charENTxt.text = "×" + EN.ToString();
     }
 
+    //set character sprite to the current character
     private Sprite SetCharacterSprite(ClassDataSO selectedClass, string playerGender)
     {
         if (playerGender == "male")
@@ -316,6 +314,7 @@ public class PartyMenuManager : MonoBehaviour
         }
     }
 
+    //generates cards for the current character
     private void GenerateCards()
     {
         foreach (var entry in deck)
@@ -325,10 +324,12 @@ public class PartyMenuManager : MonoBehaviour
 
             Card card = new Card(cardData, null);
             InventoryCardInformation cardInfo = CardSpriteGenerator.Instance.GenerateCardSprite(card, cardHolder, count);
+            cardInfo.transform.localScale = new Vector2(0.8f, 0.8f);
             cardInfo.name = $"Card_{card.cardName} (×{count})";
         }
     }
 
+    //sets the stats to match the current character's
     private void SetCharacterStats()
     {
         RaceDataSO selectedRace = raceDatabase.allRaces.Find(r => r.raceName == currentCharacter.basicInfo.raceName);
@@ -341,16 +342,19 @@ public class PartyMenuManager : MonoBehaviour
         EN = Mathf.FloorToInt((selectedRace.EN + currentCharacter.allocatedStats.allocatedEN) / 5);
     }
 
+    //method to increase stats
     public void IncStatButtonAction()
     {
         HandleStatChange("increase");
     }
 
+    //method to decrease stats
     public void DecStatButtonAction()
     {
         HandleStatChange("decrease");
     }
 
+    //finds what stat should change
     private void HandleStatChange(string change)
     {
         //returns the 2nd gameobject of the stat, "HP", "EN", "PWR", "SPD"
@@ -363,6 +367,7 @@ public class PartyMenuManager : MonoBehaviour
         ChangeStat(statName, change);
     }
 
+    //handles stat changes
     private void ChangeStat(string statName, string change)
     {
         int statChange = (change.ToLower() == "increase") ? 1 : -1;
@@ -389,6 +394,7 @@ public class PartyMenuManager : MonoBehaviour
         SetCharacterStats();
     }
 
+    //changes the items in the equipment slots to match the current character's
     private void GenerateEquipment()
     {
         EquipmentDataSO armor = equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.armor);
@@ -404,6 +410,7 @@ public class PartyMenuManager : MonoBehaviour
         if (accessory3 != null) InventoryManager.Instance.AddEquippedItem(accessory3);
     }
 
+    //updates the current character's data and party's inventory to match what is shown in UI
     public void UpdateCharacterItems()
     {
         currentCharacter.equipment.armor = InventoryManager.Instance.equipmentSlots[0].transform.GetComponentInChildren<EquipmentInfo>()?.equipment?.equipmentName ?? "";
@@ -411,5 +418,21 @@ public class PartyMenuManager : MonoBehaviour
         currentCharacter.equipment.accessory1 = InventoryManager.Instance.equipmentSlots[2].transform.GetComponentInChildren<EquipmentInfo>()?.equipment?.equipmentName ?? "";
         currentCharacter.equipment.accessory2 = InventoryManager.Instance.equipmentSlots[3].transform.GetComponentInChildren<EquipmentInfo>()?.equipment?.equipmentName ?? "";
         currentCharacter.equipment.accessory3 = InventoryManager.Instance.equipmentSlots[4].transform.GetComponentInChildren<EquipmentInfo>()?.equipment?.equipmentName ?? "";
+
+        PlayerDataHolder.Instance.partyInventory.Clear();
+        foreach (InventorySlot slot in InventoryManager.Instance.inventorySlots)
+        {
+            if (slot.transform.childCount > 0)
+            {
+                PlayerDataHolder.Instance.partyInventory.Add(slot.transform.GetComponentInChildren<EquipmentInfo>().equipment.equipmentName);
+            }
+        }
+    }
+
+    //method to update gold amount text on merchant screen
+    public void UpdateGoldAmount(int amount)
+    {
+        PlayerDataHolder.Instance.partyGold -= amount;
+        goldTxt.text = $"Gold: {PlayerDataHolder.Instance.partyGold.ToString()}";
     }
 }

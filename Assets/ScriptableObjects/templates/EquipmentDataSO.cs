@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewEquipment", menuName = "EquipmentData")]
 public class EquipmentDataSO : ScriptableObject
@@ -11,8 +12,14 @@ public class EquipmentDataSO : ScriptableObject
     [TextArea]
     public string description;
 
+    [Tooltip("Price of the equipment")]
+    public int price;
+
     [Tooltip("The type of equipment: Weapon, Armor, Accessory, etc.")]
     public EquipmentType slotType;
+
+    [Tooltip("The required class to use this equipment")]
+    public EquipmentClass classType;
 
     [Header("Stat Bonuses")]
     [Tooltip("Bonus HP granted by the equipment.")]
@@ -27,6 +34,10 @@ public class EquipmentDataSO : ScriptableObject
     [Tooltip("Bonus SPD granted by the equipment.")]
     public int bonusSPD;
 
+    [Header("Cards Provided")]
+    [Tooltip("Additional cards gained when equipment is used")]
+    public List<CardDataSO> cards;
+
     [Header("Other")]
     [Tooltip("Optional sprite/icon for the equipment.")]
     public Sprite sprite;
@@ -38,4 +49,15 @@ public enum EquipmentType
     Armor,
     Weapon,
     Accessory
+}
+
+public enum EquipmentClass
+{
+    Any,
+    Fire_Mage,
+    Earth_Mage,
+    Barrier_Mage,
+    Sword_God_Style,
+    North_God_Style,
+    Water_God_Style
 }

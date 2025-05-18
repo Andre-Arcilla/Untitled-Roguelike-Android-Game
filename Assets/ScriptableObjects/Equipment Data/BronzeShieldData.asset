@@ -13,10 +13,14 @@ MonoBehaviour:
   m_Name: BronzeShieldData
   m_EditorClassIdentifier: 
   equipmentName: Bronze Shield
-  description: 
+  description: Sturdy and timeworn, this shield has seen countless battles. It may
+    not gleam like silver, but it will stand firm to guard its bearer.
+  price: 450
   slotType: 3
+  classType: 0
   bonusHP: 10
   bonusEN: 0
   bonusPWR: 0
   bonusSPD: 0
+  cards: []
   sprite: {fileID: 21300000, guid: 9d087bc2abacfe94fa30d584e7052070, type: 3}

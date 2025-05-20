@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -20,7 +21,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] public InventorySlot[] inventorySlots;
     [SerializeField] public InventorySlot[] equipmentSlots;
     [SerializeField] public GameObject equipmentPrefab;
-    [SerializeField] private Transform trashcan;
+    [SerializeField] public Transform trashcan;
 
     public bool AddItem(EquipmentDataSO equipment)
     {
@@ -58,6 +59,24 @@ public class InventoryManager : MonoBehaviour
         GameObject newEquipment = Instantiate(equipmentPrefab, slot.transform);
         newEquipment.GetComponent<EquipmentInfo>().Setup(equipment);
         newEquipment.name = equipment.equipmentName;
+    }
+
+    public bool RemoveItem(EquipmentDataSO equipment)
+    {
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            InventorySlot slot = inventorySlots[i];
+            EquipmentInfo itemInSlot = slot.GetComponentInChildren<EquipmentInfo>();
+
+            if (itemInSlot != null && itemInSlot.equipment == equipment)
+            {
+                PlayerDataHolder.Instance.partyInventory.Remove(itemInSlot.equipment.equipmentName);
+                itemInSlot.transform.SetParent(trashcan);
+                Destroy(itemInSlot.gameObject);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void ClearEquipmentSlots()

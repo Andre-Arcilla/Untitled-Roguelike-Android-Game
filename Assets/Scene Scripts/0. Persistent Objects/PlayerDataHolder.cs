@@ -27,10 +27,9 @@ public class PlayerDataHolder : MonoBehaviour
         public int gold;
     }
 
-    public List<CharacterData> partyMembers = new List<CharacterData>();
-    public List<string> partyInventory = new List<string>();
-    public int partyGold;
-
+    [SerializeField] public List<CharacterData> partyMembers = new List<CharacterData>();
+    [SerializeField] public List<string> partyInventory = new List<string>();
+    [SerializeField] public int partyGold;
 
     private void LoadPartyFromJson()
     {

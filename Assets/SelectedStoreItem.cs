@@ -18,7 +18,8 @@ public class SelectedStoreItem : MonoBehaviour
     [SerializeField] private TMP_Text itemCardB;
     [SerializeField] private TMP_Text itemCardC;
     [SerializeField] private TMP_Text itemCardD;
-    [SerializeField] private TMP_Text buttonTxt;
+    [SerializeField] private TMP_Text buyButtonTxt;
+    [SerializeField] private TMP_Text sellButtonTxt;
     [SerializeField] public EquipmentDataSO equipment;
     [SerializeField] private GameObject currentItemGO;
 
@@ -34,7 +35,8 @@ public class SelectedStoreItem : MonoBehaviour
         itemEN.text = $"HP:  {newEquipment.bonusEN}";
         itemPWR.text = $"HP:  {newEquipment.bonusPWR}";
         itemSPD.text = $"HP:  {newEquipment.bonusSPD}";
-        buttonTxt.text = $"BUY ({newEquipment.price.ToString()}g)";
+        buyButtonTxt.text = $"BUY ({newEquipment.price.ToString("N0")}g)";
+        sellButtonTxt.text = $"SELL ({newEquipment.price.ToString("N0")}g)";
 
         SetupCards();
     }
@@ -78,14 +80,31 @@ public class SelectedStoreItem : MonoBehaviour
 
     public void BuyButtonAction()
     {
-        if (PlayerDataHolder.Instance.partyGold < equipment.price)
+        if (PlayerDataHolder.Instance.partyGold < equipment.price ||
+            MerchantManager.Instance.buyPanel.transform.Find("List Mask/List Holder").childCount <= 0)
         {
             return;
         }
 
         if (InventoryManager.Instance.AddItem(equipment))
         {
-            PartyMenuManager.Instance.UpdateGoldAmount(equipment.price);
+            PartyMenuManager.Instance.UpdateGoldAmount(-equipment.price);
+            PartyMenuManager.Instance.UpdateCharacterItems();
+            MerchantManager.Instance.RemoveItemFromList(currentItemGO);
+            MerchantManager.Instance.GenerateInventoryList();
+        }
+    }
+
+    public void SellButtonAction()
+    {
+        if (MerchantManager.Instance.sellPanel.transform.Find("List Mask/List Holder").childCount <= 0)
+        {
+            return;
+        }
+
+        if (InventoryManager.Instance.RemoveItem(equipment))
+        {
+            PartyMenuManager.Instance.UpdateGoldAmount(+equipment.price);
             PartyMenuManager.Instance.UpdateCharacterItems();
             MerchantManager.Instance.RemoveItemFromList(currentItemGO);
         }

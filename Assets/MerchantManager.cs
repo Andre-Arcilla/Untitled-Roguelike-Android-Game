@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class MerchantManager : MonoBehaviour
 {
@@ -18,21 +20,39 @@ public class MerchantManager : MonoBehaviour
         Instance = this;
     }
 
+    [SerializeField] private TMP_Text switchTxt;
+    [SerializeField] public GameObject buyPanel;
+    [SerializeField] private GameObject buyButton;
+    [SerializeField] public GameObject sellPanel;
+    [SerializeField] private GameObject sellButton;
     [SerializeField] private int amountOfItems;
     [SerializeField] private EquipmentDatabase equipmentDatabase;
     [SerializeField] private List<EquipmentDataSO> equipmentList;
     [SerializeField] private GameObject listObjectPrefab;
-    [SerializeField] private Transform listParent;
+    [SerializeField] private Transform parent;
     [SerializeField] private SelectedStoreItem itemDisplay;
 
     private void Start()
     {
-        GenerateRandomItems();
-        GenerateItemsList();
+        parent = buyPanel.transform.Find("List Mask/List Holder").transform;
+
+        GenerateBuyPanel();
+        GenerateInventoryList();
         SendFirstItemData();
     }
 
-    //generate random list of items
+    private void GenerateBuyPanel()
+    {
+        GenerateRandomItems();
+        GenerateItemsList(equipmentList, buyPanel.transform.Find("List Mask/List Holder").transform);
+    }
+
+    private void GenerateSellPanel()
+    {
+        GenerateInventoryList();
+    }
+
+    //generate random list of items for buy panel
     private void GenerateRandomItems()
     {
         int amount = Random.Range(5, amountOfItems);
@@ -48,11 +68,16 @@ public class MerchantManager : MonoBehaviour
     }
 
     //generate items to display
-    private void GenerateItemsList()
+    private void GenerateItemsList(List<EquipmentDataSO> list, Transform parent)
     {
-        foreach (EquipmentDataSO item in equipmentList)
+        foreach(Transform child in parent)
         {
-            GameObject listObject = Instantiate(listObjectPrefab, listParent);
+            Destroy(child.gameObject);
+        }
+
+        foreach (EquipmentDataSO item in list)
+        {
+            GameObject listObject = Instantiate(listObjectPrefab, parent);
             listObject.GetComponentInChildren<StoreItemInfo>().Setup(item);
         }
     }
@@ -66,12 +91,71 @@ public class MerchantManager : MonoBehaviour
     //automatically send 1st item's data
     private void SendFirstItemData()
     {
-        listParent.GetChild(0).GetComponent<StoreItemInfo>().SendEquipmentData();
+        if (parent != null && parent.childCount > 0)
+        {
+            parent.GetChild(0).GetComponent<StoreItemInfo>().SendEquipmentData();
+            itemDisplay.gameObject.SetActive(true);
+        }
+        else
+        {
+            itemDisplay.gameObject.SetActive(false);
+        }
     }
 
+    //removes an item from the list
     public void RemoveItemFromList(GameObject listObject)
     {
+        listObject.transform.SetParent(InventoryManager.Instance.trashcan);
         Destroy(listObject);
         SendFirstItemData();
+    }
+
+    //generates a List<EquipmentDataSO> of inventory items
+    public void GenerateInventoryList()
+    {
+        List<EquipmentDataSO> inventoryItems = new List<EquipmentDataSO>();
+
+        foreach (string itemString in PlayerDataHolder.Instance.partyInventory)
+        {
+            EquipmentDataSO selectedEquipment = equipmentDatabase.allEquipments.Find(e => e.equipmentName == itemString);
+
+            if (selectedEquipment == null)
+            {
+                Debug.LogWarning($"No match found for: {itemString}");
+                continue;
+            }
+            inventoryItems.Add(selectedEquipment);
+        }
+
+        GenerateItemsList(inventoryItems, sellPanel.transform.Find("List Mask/List Holder").transform);
+    }
+    
+    //switches between buy and sell panels
+    public void SwitchPanelAction()
+    {
+        if (buyPanel.activeSelf)
+        {
+            buyPanel.SetActive(false);
+            buyButton.SetActive(false);
+
+            sellPanel.SetActive(true);
+            sellButton.SetActive(true);
+
+            switchTxt.text = "BUY\nITEMS";
+            parent = sellPanel.transform.Find("List Mask/List Holder").transform;
+            SendFirstItemData();
+        }
+        else if (sellPanel.activeSelf)
+        {
+            sellPanel.SetActive(false);
+            sellButton.SetActive(false);
+
+            buyPanel.SetActive(true);
+            buyButton.SetActive(true);
+
+            switchTxt.text = "SELL\nITEMS";
+            parent = buyPanel.transform.Find("List Mask/List Holder").transform;
+            SendFirstItemData();
+        }
     }
 }

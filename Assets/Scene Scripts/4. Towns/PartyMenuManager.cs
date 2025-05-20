@@ -72,9 +72,13 @@ public class PartyMenuManager : MonoBehaviour
     [SerializeField] private int EN;
 
     [Header("Databases")]
-    [SerializeField] private ClassDatabase classDatabase;
-    [SerializeField] private RaceDatabase raceDatabase;
-    [SerializeField] private EquipmentDatabase equipmentDatabase;
+    [SerializeField] private ClassDatabase _classDatabase;
+    [SerializeField] private RaceDatabase _raceDatabase;
+    [SerializeField] private EquipmentDatabase _equipmentDatabase;
+
+    public ClassDatabase classDatabase => _classDatabase;
+    public RaceDatabase raceDatabase => _raceDatabase;
+    public EquipmentDatabase equipmentDatabase => _equipmentDatabase;
 
     private void Start()
     {
@@ -179,21 +183,17 @@ public class PartyMenuManager : MonoBehaviour
     {
         List<string> tempInventory = new List<string>();
 
-        for (int i = 0; i < PlayerDataHolder.Instance.partyInventory.Count; i++)
+        foreach (string itemString in PlayerDataHolder.Instance.partyInventory)
         {
-            string jsonItemName = PlayerDataHolder.Instance.partyInventory[i];
-            Debug.Log($"Looking for: {jsonItemName}");
-
-            EquipmentDataSO selectedEquipment = equipmentDatabase.allEquipments.Find(e => e.equipmentName == jsonItemName);
+            EquipmentDataSO selectedEquipment = equipmentDatabase.allEquipments.Find(e => e.equipmentName == itemString);
 
             if (selectedEquipment == null)
             {
-                Debug.LogWarning($"No match found for: {jsonItemName}");
+                Debug.LogWarning($"No match found for: {itemString}");
                 continue;
             }
 
             InventoryManager.Instance.AddItem(selectedEquipment);
-            Debug.Log($"Added to inventory: {selectedEquipment.equipmentName}");
             tempInventory.Add(selectedEquipment.equipmentName);
         }
 
@@ -432,7 +432,7 @@ public class PartyMenuManager : MonoBehaviour
     //method to update gold amount text on merchant screen
     public void UpdateGoldAmount(int amount)
     {
-        PlayerDataHolder.Instance.partyGold -= amount;
-        goldTxt.text = $"Gold: {PlayerDataHolder.Instance.partyGold.ToString()}";
+        PlayerDataHolder.Instance.partyGold += amount;
+        goldTxt.text = $"Gold: {PlayerDataHolder.Instance.partyGold.ToString("N0")}";
     }
 }

@@ -17,7 +17,7 @@ public class StoreItemInfo : MonoBehaviour
         equipment = newEquipment;
         itemImage.sprite = newEquipment.sprite;
         itemName.text = newEquipment.equipmentName;
-        itemPrice.text = $"{newEquipment.price.ToString()}g";
+        itemPrice.text = $"{newEquipment.price.ToString("N0")}g";
     }
 
     public void SendEquipmentData()

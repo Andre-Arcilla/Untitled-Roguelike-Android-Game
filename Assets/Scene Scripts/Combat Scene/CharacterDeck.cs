@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Splines.Examples;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -19,8 +20,8 @@ public class CharacterDeck : MonoBehaviour
     [SerializeField] private GameObject playParent; // play Parent for cards in play
     [SerializeField] private int handSize; // Size of hand
     [SerializeField] private int maxHandSize; // Max size of hand
-    [SerializeField] private Transform discardPos; // Discard position for animation
-    [SerializeField] private Transform deckPos; // Deck position for animation
+    [SerializeField] public Transform discardPos; // Discard position for animation
+    [SerializeField] public Transform deckPos; // Deck position for animation
 
     // Set the deck with shuffled card data
     public void SetDeck(List<CardDataSO> _deck)
@@ -104,7 +105,6 @@ public class CharacterDeck : MonoBehaviour
                     cardInfo.isDragging = false;
                     cardInfo.isDeselecting = false;
                     cardInfo.isUsing = false;
-                    card.GetComponent<SortingGroup>().sortingOrder = 0;
 
                     deck.Add(card);
                     card.transform.SetParent(deckParent.transform, false);
@@ -154,6 +154,7 @@ public class CharacterDeck : MonoBehaviour
         }
     }
 
+    /*
     public void DiscardCard(CardInformation card)
     {
         hand.Remove(card.gameObject);
@@ -162,6 +163,7 @@ public class CharacterDeck : MonoBehaviour
         card.gameObject.transform.SetParent(discardParent.transform, false);
         cardHolder.DrawHandAnimation();
     }
+    */
 
     //draw card effect method to draw x amount of cards
     public void DrawCard(int amount, CardInformation card)
@@ -177,11 +179,13 @@ public class CharacterDeck : MonoBehaviour
             cardObj.GetComponent<Collider2D>().enabled = false;
         }
 
-        yield return StartCoroutine(StartPlayCard(card));
+        yield return StartPlayCard(card);
 
         yield return new WaitForSeconds(0.2f);
 
-        yield return StartCoroutine(EndPlayCard(card));
+        yield return EndPlayCard(card);
+
+        yield return EndPlaySortHand();
 
         for (int i = 0; i < amount; i++)
         {
@@ -215,7 +219,7 @@ public class CharacterDeck : MonoBehaviour
                 deck.RemoveAt(0);
                 hand.Add(drawnCard);
                 drawnCard.transform.SetParent(playParent.transform, false);
-                yield return StartCoroutine(cardHolder.DrawCardAnimation(drawnCard.GetComponent<CardInformation>()));
+                yield return cardHolder.DrawCardAnimation(drawnCard.GetComponent<CardInformation>());
             }
             else if (hand.Count >= maxHandSize)
             {
@@ -223,11 +227,11 @@ public class CharacterDeck : MonoBehaviour
                 deck.RemoveAt(0);
                 discard.Add(drawnCard);
                 drawnCard.transform.SetParent(playParent.transform, false);
-                yield return StartCoroutine(cardHolder.DrawCardAnimation(drawnCard.GetComponent<CardInformation>(), discardParent));
+                yield return cardHolder.DrawCardAnimation(drawnCard.GetComponent<CardInformation>(), discardParent);
             }
         }
 
-        yield return cardHolder.SelectedCardsPosition();
+        //yield return cardHolder.SelectedCardsPosition();
 
         foreach (GameObject cardObj in hand)
         {
@@ -238,12 +242,18 @@ public class CharacterDeck : MonoBehaviour
     //method to add card to playing field
     public IEnumerator StartPlayCard(CardInformation card)
     {
-        Vector2 dropZone = new Vector2(playParent.transform.localPosition.x, playParent.transform.localPosition.y);
+        int layer = LayerMask.NameToLayer("Ignore Raycast");
+        foreach (Transform t in transform.parent.GetComponentsInChildren<Transform>(true))
+        {
+            t.gameObject.layer = layer;
+        }
+
+        Vector3 dropZone = new Vector3(0, 1, card.transform.position.z);
 
         var sequence = DOTween.Sequence();
-        sequence.Append(card.transform.DOMove(dropZone, 0.15f));
-        sequence.Join(card.transform.DOLocalRotate(Vector2.zero, 0.15f));
-        sequence.Join(card.transform.DOScale(Vector3.one, 0.15f));
+        sequence.Append(card.transform.DOMove(dropZone, 0.25f));
+        sequence.Join(card.transform.DOLocalRotate(Vector2.zero, 0.25f));
+        sequence.Join(card.transform.DOScale(1.2f, 0.25f));
         sequence.SetLink(gameObject).SetAutoKill(true);
 
         yield return sequence.WaitForCompletion();
@@ -258,11 +268,20 @@ public class CharacterDeck : MonoBehaviour
     //method to remove card from playing field
     public IEnumerator EndPlayCard(CardInformation card)
     {
-        Vector2 dropZone = new Vector2(discardPos.position.x, discardPos.position.y);
+        Vector3 dropZone = new Vector3(discardPos.position.x, discardPos.position.y, card.transform.position.z);
+        card.GetComponent<SortingGroup>().sortingOrder = 0;
 
         var sequence = DOTween.Sequence();
-        sequence.Append(card.transform.DOMove(dropZone, 0.15f));
-        sequence.Join(card.transform.DOScale(Vector3.zero, 0.15f));
+        sequence.Append(card.transform.DOMove(dropZone, 0.25f));
+        sequence.Join(card.transform.DOScale(1, 0.25f));
+        sequence.Join(card.transform.DOLocalRotateQuaternion(Quaternion.identity, 0.25f));
+        sequence.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 90f, 0f), 0.25f).SetEase(Ease.InOutQuad));
+        sequence.AppendCallback(() =>
+        {
+            card.transform.Find("Card Front").gameObject.SetActive(false);
+            card.transform.Find("Card Back").gameObject.SetActive(true);
+        });
+        sequence.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 0f, 0f), 0.15f).SetEase(Ease.InOutQuad));
         sequence.SetLink(gameObject).SetAutoKill(true);
 
         yield return sequence.WaitForCompletion();
@@ -274,8 +293,21 @@ public class CharacterDeck : MonoBehaviour
         card.isDragging = false;
         card.isUsing = false;
 
+        int layer = LayerMask.NameToLayer("Default");
+        foreach (Transform t in transform.parent.GetComponentsInChildren<Transform>(true))
+        {
+            t.gameObject.layer = layer;
+        }
+    }
+
+    public IEnumerator EndPlaySortHand()
+    {
         yield return cardHolder.SortCards();
-        yield return cardHolder.SelectedCardsPosition();
+    }
+
+    public IEnumerator UpdateSelectedCardPos()
+    {
+        yield return null;//cardHolder.SelectedCardsPosition();
     }
 
     void Shuffle<T>(List<T> list)

@@ -27,7 +27,9 @@ public class CardSpriteGenerator : MonoBehaviour
     public CardInformation GenerateCardSprite(Card card, Vector3 position, Quaternion rotation, Transform parent)
     {
         CardInformation cardSprite = Instantiate(cardPrefab, position, rotation, parent);
-        cardSprite.transform.localScale = Vector3.zero;
+        cardSprite.transform.localScale = Vector3.one;
+        cardSprite.transform.Find("Card Front").gameObject.SetActive(false);
+        cardSprite.transform.Find("Card Back").gameObject.SetActive(true);
         cardSprite.Setup(card);
         return cardSprite;
     }

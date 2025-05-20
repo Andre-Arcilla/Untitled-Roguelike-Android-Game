@@ -91,7 +91,6 @@ public class TargetingSystem : MonoBehaviour
             ActionSystem.Instance.AddCard(sender, card, target);
         }
 
-        Debug.Log("this runs up to here");
         sender.GetComponent<CharacterInfo>().UpdateResourcesView();
     }
 

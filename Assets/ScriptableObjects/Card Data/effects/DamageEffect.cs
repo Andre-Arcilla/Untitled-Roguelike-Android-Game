@@ -21,7 +21,7 @@ public class DamageEffect : ICardEffect
             target.gameObject.SetActive(false);
         }
 
-        target.UpdateResourcesView();
+        //target.UpdateResourcesView();
     }
 
     private int Calculate(int cardPower, int characterPower)

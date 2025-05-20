@@ -70,7 +70,7 @@ public class ActionSystem : MonoBehaviour
         Debug.Log("----------STATUS EFFECTS TRIGGERED----------");
         CheckForGroupDefeat();
         Debug.Log("----------DEATHS CHECKED----------");
-        DiscardAndDrawAllDecks();
+        yield return DiscardAndDrawAllDecks();
         Debug.Log("----------DECKS REDRAWN----------");
         //CharacterManager.Instance.ResetCardView();
 
@@ -132,11 +132,14 @@ public class ActionSystem : MonoBehaviour
             foreach (ICardEffect effect in action.card.card.effects)
             {
                 effect.Execute(action.sender, action.card, action.target);
+                senderInfo.UpdateResourcesView();
+                targetInfo.UpdateResourcesView();
             }
 
             //do an animation where it crashes to the enemy unit -------------------------------------
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.25f);
 
+            CheckForGroupDefeat();
             yield return senderDeck.EndPlayCard(action.card);
 
             if (targetInfo.currentHP <= 0)
@@ -229,13 +232,17 @@ public class ActionSystem : MonoBehaviour
         {
             effect.Execute(sender, card, target);
         }
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
 
         yield return senderDeck.EndPlayCard(card);
+
+        yield return senderDeck.EndPlaySortHand();
+
+        yield return senderDeck.UpdateSelectedCardPos();
     }
 
     //discards and draws all living units' decks
-    private void DiscardAndDrawAllDecks()
+    private IEnumerator DiscardAndDrawAllDecks()
     {
         List<Targetable> characters = new List<Targetable>();
         characters.AddRange(TargetingSystem.Instance.allies.members);
@@ -245,10 +252,21 @@ public class ActionSystem : MonoBehaviour
             .Select(c => c.GetComponent<CharacterDeck>())
             .ToList();
 
+        int completed = 0;
+
         foreach (CharacterDeck deck in deckList)
         {
-            StartCoroutine(deck.DiscardDrawCoroutine());
+            StartCoroutine(DeckCoroutine(deck, () => completed++));
         }
+
+        // Wait until all coroutines are done
+        yield return new WaitUntil(() => completed >= deckList.Count);
+    }
+
+    private IEnumerator DeckCoroutine(CharacterDeck deck, System.Action onDone)
+    {
+        yield return deck.DiscardDrawCoroutine();
+        onDone?.Invoke();
     }
 
     //reset all living units' manas
@@ -266,6 +284,7 @@ public class ActionSystem : MonoBehaviour
         foreach (CharacterInfo character in infoList)
         {
             character.EndTurnRestoreMana();
+            character.UpdateResourcesView();
         }
     }
 }

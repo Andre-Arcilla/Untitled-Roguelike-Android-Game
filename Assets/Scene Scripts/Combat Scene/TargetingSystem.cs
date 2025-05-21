@@ -30,6 +30,7 @@ public class TargetingSystem : MonoBehaviour
     [SerializeField] public TeamContainer allies;
     [SerializeField] public TeamContainer enemies;
     [SerializeField] public GameObject center;
+    [SerializeField] public GameObject darkPanel;
 
     private bool TryGetValidTarget(Vector2 cardPosition, CardInformation card, out GameObject validTarget)
     {

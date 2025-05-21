@@ -10,16 +10,24 @@ using UnityEngine.Splines;
 public class CardHolder : MonoBehaviour
 {
     [SerializeField] private SplineContainer splineContainer;
-    [SerializeField] private GameObject spawnPoint => GetComponentInParent<CharacterDeck>().deckPos.gameObject;
-    [SerializeField] private GameObject despawnPoint => GetComponentInParent<CharacterDeck>().discardPos.gameObject;
     [SerializeField] private GameObject handParent;
     [SerializeField] private GameObject playParent;
 
     //method for drawing a new hand
     public IEnumerator DrawHandAnimation()
     {
+        GameObject spawnPoint = GetComponentInParent<CharacterDeck>().deckPos.gameObject;
+        GameObject despawnPoint = GetComponentInParent<CharacterDeck>().discardPos.gameObject;
+        if (GetComponentInParent<Targetable>().team == Team.Enemy)
+        {
+            yield break;
+        }
+
         int childCount = handParent.transform.childCount;
-        if (childCount <= 0) yield return null;
+        if (childCount <= 0)
+        {
+            yield break;
+        }
 
         float cardSpacing = 1f / childCount;
         float firstCardPos = 0.5f - (childCount - 1) * cardSpacing / 2;
@@ -78,6 +86,12 @@ public class CardHolder : MonoBehaviour
     //method for discarding current hand
     public IEnumerator DiscardHandAnimation()
     {
+        GameObject despawnPoint = GetComponentInParent<CharacterDeck>().discardPos.gameObject;
+        if (GetComponentInParent<Targetable>().team == Team.Enemy)
+        {
+            yield break;
+        }
+
         int childCount = handParent.transform.childCount;
         Vector3 despawnPos = despawnPoint.transform.position;
 
@@ -114,6 +128,12 @@ public class CardHolder : MonoBehaviour
     //method for when using draw cards and adding to hand
     public IEnumerator DrawCardAnimation(CardInformation card)
     {
+        GameObject spawnPoint = GetComponentInParent<CharacterDeck>().deckPos.gameObject;
+        if (GetComponentInParent<Targetable>().team == Team.Enemy)
+        {
+            yield break;
+        }
+
         card.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, handParent.transform.position.z);
         card.GetComponent<SortingGroup>().sortingOrder = 0;
         card.transform.rotation = Quaternion.identity;
@@ -147,6 +167,13 @@ public class CardHolder : MonoBehaviour
     //method for when using draw cards and hand is full
     public IEnumerator DrawCardAnimation(CardInformation card, GameObject parent)
     {
+        GameObject spawnPoint = GetComponentInParent<CharacterDeck>().deckPos.gameObject;
+        GameObject despawnPoint = GetComponentInParent<CharacterDeck>().discardPos.gameObject;
+        if (GetComponentInParent<Targetable>().team == Team.Enemy)
+        {
+            yield break;
+        }
+
         card.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, handParent.transform.position.z);
         card.GetComponent<SortingGroup>().sortingOrder = 0;
         card.transform.rotation = Quaternion.identity;
@@ -193,8 +220,16 @@ public class CardHolder : MonoBehaviour
     //method to sort the cards in hand
     public IEnumerator SortCards()
     {
+        if (GetComponentInParent<Targetable>().team == Team.Enemy)
+        {
+            yield break;
+        }
+
         int childCount = handParent.transform.childCount;
-        if (childCount <= 0) yield return null;
+        if (childCount <= 0)
+        {
+            yield break;
+        }
 
         float cardSpacing = 1f / childCount;
         float firstCardPos = 0.5f - (childCount - 1) * cardSpacing / 2;

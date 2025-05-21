@@ -54,10 +54,10 @@ public class CharacterGenerator : MonoBehaviour
         int positionIndex = 0;
         Vector2[] positions = new Vector2[]
         {
-            new Vector2(-0.75f, 0.25f),
-            new Vector2(-2.25f, 0.25f),
-            new Vector2(-1.5f, 0.5f),
-            new Vector2(-3.0f, 0.5f)
+            new Vector2(-0.75f, 0.15f),
+            new Vector2(-1.5f, 0.3f),
+            new Vector2(-2.25f, 0.15f),
+            new Vector2(-3.0f, 0.3f)
         };
 
         for (int i = 0; i < partyMembers.Count && i < positions.Length; i++)
@@ -94,10 +94,10 @@ public class CharacterGenerator : MonoBehaviour
 
         Vector2[] positions = new Vector2[] 
         {
-            new Vector2(0.75f, 0.25f),
-            new Vector2(2.25f, 0.25f),
-            new Vector2(1.5f, 0.5f),
-            new Vector2(3.0f, 0.5f)
+            new Vector2(0.75f, 0.15f),
+            new Vector2(1.5f, 0.3f),
+            new Vector2(2.25f, 0.15f),
+            new Vector2(3.0f, 0.3f)
         };
 
         for (int i = 0; i < count && i < positions.Length; i++)

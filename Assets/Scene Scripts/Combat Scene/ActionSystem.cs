@@ -127,6 +127,7 @@ public class ActionSystem : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
             }
 
+            ActionPhaseAnimation.Instance.ActionAnimationStart(action.sender, action.card, action.target);
             yield return StartCoroutine(senderDeck.StartPlayCard(action.card));
 
             foreach (ICardEffect effect in action.card.card.effects)
@@ -136,11 +137,14 @@ public class ActionSystem : MonoBehaviour
                 targetInfo.UpdateResourcesView();
             }
 
-            //do an animation where it crashes to the enemy unit -------------------------------------
+            yield return ActionPhaseAnimation.Instance.ActionAnimationPerform(action.sender, action.card, action.target);
+            //do an animation where it crashes to the enemy unit ----------------------------------------------------------------------------------
+
             yield return new WaitForSeconds(0.25f);
 
             CheckForGroupDefeat();
             yield return senderDeck.EndPlayCard(action.card);
+            ActionPhaseAnimation.Instance.ActionAnimationEnd(action.sender, action.card, action.target);
 
             if (targetInfo.currentHP <= 0)
             {
@@ -249,6 +253,7 @@ public class ActionSystem : MonoBehaviour
         characters.AddRange(TargetingSystem.Instance.enemies.members);
 
         List<CharacterDeck> deckList = characters
+            .Where(c => c.GetComponent<CharacterInfo>().currentHP > 0)
             .Select(c => c.GetComponent<CharacterDeck>())
             .ToList();
 

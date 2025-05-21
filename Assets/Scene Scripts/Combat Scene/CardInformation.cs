@@ -98,7 +98,6 @@ public class CardInformation : MonoBehaviour
         originalPosition = transform.position;
         originalRotation = transform.rotation;
         originalScale = transform.localScale;
-        GetComponent<SortingGroup>().sortingOrder = 1;
 
         if (isSelected == true)
         {
@@ -125,6 +124,21 @@ public class CardInformation : MonoBehaviour
             return;
         }
 
+        //put valid targets in front of a panel
+        GetComponent<SortingGroup>().sortingOrder = 3;
+        TargetingSystem.Instance.darkPanel.SetActive(true);
+        Targetable sender = GetComponentInParent<Targetable>();
+        List<GameObject> potentialTargets = TargetSelector.Instance.GetTargets(this, sender);
+        foreach (GameObject target in potentialTargets)
+        {
+            target.GetComponentInChildren<SortingGroup>().sortingOrder = 2;
+            if (target.name == TargetingSystem.Instance.center.name)
+            {
+                target.GetComponent<SpriteRenderer>().enabled = true;
+            }
+        }
+
+
         // Update the object's position as the mouse is dragged
         Vector3 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 mousePosition = new Vector3(mouse.x, mouse.y, transform.position.z);
@@ -138,6 +152,20 @@ public class CardInformation : MonoBehaviour
 
     void OnMouseUp()
     {
+        //return valid targets to original state
+        GetComponent<SortingGroup>().sortingOrder = 0;
+        TargetingSystem.Instance.darkPanel.SetActive(false);
+        Targetable sender = GetComponentInParent<Targetable>();
+        List<GameObject> potentialTargets = TargetSelector.Instance.GetTargets(this, sender);
+        foreach (GameObject target in potentialTargets)
+        {
+            target.GetComponentInChildren<SortingGroup>().sortingOrder = 0;
+            if (target.name == TargetingSystem.Instance.center.name)
+            {
+                target.GetComponent<SpriteRenderer>().enabled = false;
+            }
+        }
+
         if (isSelected == true)
         {
             return;
@@ -173,7 +201,6 @@ public class CardInformation : MonoBehaviour
         sequence.SetLink(gameObject).SetAutoKill(true);
         sequence.OnComplete(() => collider.enabled = true);
 
-        GetComponent<SortingGroup>().sortingOrder = 0;
     }
 
     private void OnMouseEnter()

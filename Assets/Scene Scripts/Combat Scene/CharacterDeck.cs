@@ -154,17 +154,6 @@ public class CharacterDeck : MonoBehaviour
         }
     }
 
-    /*
-    public void DiscardCard(CardInformation card)
-    {
-        hand.Remove(card.gameObject);
-        discard.Add(card.gameObject);
-
-        card.gameObject.transform.SetParent(discardParent.transform, false);
-        cardHolder.DrawHandAnimation();
-    }
-    */
-
     //draw card effect method to draw x amount of cards
     public void DrawCard(int amount, CardInformation card)
     {
@@ -231,8 +220,6 @@ public class CharacterDeck : MonoBehaviour
             }
         }
 
-        //yield return cardHolder.SelectedCardsPosition();
-
         foreach (GameObject cardObj in hand)
         {
             cardObj.GetComponent<Collider2D>().enabled = true;
@@ -242,6 +229,7 @@ public class CharacterDeck : MonoBehaviour
     //method to add card to playing field
     public IEnumerator StartPlayCard(CardInformation card)
     {
+        //prevent card interaction on play start
         int layer = LayerMask.NameToLayer("Ignore Raycast");
         foreach (Transform t in transform.parent.GetComponentsInChildren<Transform>(true))
         {
@@ -249,19 +237,41 @@ public class CharacterDeck : MonoBehaviour
         }
 
         Vector3 dropZone = new Vector3(0, 1, card.transform.position.z);
+        Targetable cardOwner = GetComponentInParent<Targetable>();
+        card.transform.Find("Card Front").gameObject.SetActive(true);
+        card.transform.Find("Card Back").gameObject.SetActive(false);
 
-        var sequence = DOTween.Sequence();
-        sequence.Append(card.transform.DOMove(dropZone, 0.25f));
-        sequence.Join(card.transform.DOLocalRotate(Vector2.zero, 0.25f));
-        sequence.Join(card.transform.DOScale(1.2f, 0.25f));
-        sequence.SetLink(gameObject).SetAutoKill(true);
+        if (cardOwner.team == Team.Player)
+        {
+            var sequence = DOTween.Sequence();
+            sequence.Append(card.transform.DOMove(dropZone, 0.25f));
+            sequence.Join(card.transform.DOLocalRotate(Vector2.zero, 0.25f));
+            sequence.Join(card.transform.DOScale(1.2f, 0.25f));
+            sequence.SetLink(gameObject).SetAutoKill(true);
 
-        yield return sequence.WaitForCompletion();
+            yield return sequence.WaitForCompletion();
+        }
 
         hand.Remove(card.gameObject);
         playing.Add(card.gameObject);
 
         card.gameObject.transform.SetParent(playParent.transform, false);
+
+        if (cardOwner.team == Team.Enemy)
+        {
+            card.transform.position = cardOwner.gameObject.transform.Find("Character Sprite").gameObject.transform.position;
+            card.transform.localScale = Vector3.zero;
+
+            var sequence = DOTween.Sequence();
+            sequence.Append(card.transform.DOScale(0.3f, 0.25f));
+            sequence.Append(card.transform.DOMove(dropZone, 0.35f));
+            sequence.Join(card.transform.DOLocalRotate(Vector2.zero, 0.35f));
+            sequence.Join(card.transform.DOScale(1.2f, 0.35f));
+            sequence.SetLink(gameObject).SetAutoKill(true);
+
+            yield return sequence.WaitForCompletion();
+        }
+
         card.transform.position = dropZone;
     }
 
@@ -269,22 +279,39 @@ public class CharacterDeck : MonoBehaviour
     public IEnumerator EndPlayCard(CardInformation card)
     {
         Vector3 dropZone = new Vector3(discardPos.position.x, discardPos.position.y, card.transform.position.z);
-        card.GetComponent<SortingGroup>().sortingOrder = 0;
+        Targetable cardOwner = GetComponentInParent<Targetable>();
 
-        var sequence = DOTween.Sequence();
-        sequence.Append(card.transform.DOMove(dropZone, 0.25f));
-        sequence.Join(card.transform.DOScale(1, 0.25f));
-        sequence.Join(card.transform.DOLocalRotateQuaternion(Quaternion.identity, 0.25f));
-        sequence.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 90f, 0f), 0.25f).SetEase(Ease.InOutQuad));
-        sequence.AppendCallback(() =>
+        if (cardOwner.team == Team.Player)
         {
-            card.transform.Find("Card Front").gameObject.SetActive(false);
-            card.transform.Find("Card Back").gameObject.SetActive(true);
-        });
-        sequence.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 0f, 0f), 0.15f).SetEase(Ease.InOutQuad));
-        sequence.SetLink(gameObject).SetAutoKill(true);
+            var sequence = DOTween.Sequence();
+            sequence.Append(card.transform.DOMove(dropZone, 0.25f));
+            sequence.Join(card.transform.DOScale(1, 0.25f));
+            sequence.Join(card.transform.DOLocalRotateQuaternion(Quaternion.identity, 0.25f));
+            sequence.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 90f, 0f), 0.25f).SetEase(Ease.InOutQuad));
+            sequence.AppendCallback(() =>
+            {
+                card.transform.Find("Card Front").gameObject.SetActive(false);
+                card.transform.Find("Card Back").gameObject.SetActive(true);
+            });
+            sequence.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 0f, 0f), 0.15f).SetEase(Ease.InOutQuad));
+            sequence.SetLink(gameObject).SetAutoKill(true);
 
-        yield return sequence.WaitForCompletion();
+            yield return sequence.WaitForCompletion();
+        }
+
+        if (cardOwner.team == Team.Enemy)
+        {
+            dropZone = cardOwner.gameObject.transform.Find("Character Sprite").gameObject.transform.position;
+
+            var sequence = DOTween.Sequence();
+            sequence.Append(card.transform.DOMove(dropZone, 0.35f));
+            sequence.Join(card.transform.DOLocalRotate(Vector2.zero, 0.35f));
+            sequence.Join(card.transform.DOScale(0.3f, 0.35f));
+            sequence.Append(card.transform.DOScale(Vector3.zero, 0.25f));
+            sequence.SetLink(gameObject).SetAutoKill(true);
+
+            yield return sequence.WaitForCompletion();
+        }
 
         playing.Remove(card.gameObject);
         discard.Add(card.gameObject);
@@ -293,6 +320,7 @@ public class CharacterDeck : MonoBehaviour
         card.isDragging = false;
         card.isUsing = false;
 
+        //returns card interaction on play end
         int layer = LayerMask.NameToLayer("Default");
         foreach (Transform t in transform.parent.GetComponentsInChildren<Transform>(true))
         {
@@ -307,7 +335,7 @@ public class CharacterDeck : MonoBehaviour
 
     public IEnumerator UpdateSelectedCardPos()
     {
-        yield return null;//cardHolder.SelectedCardsPosition();
+        yield return null;
     }
 
     void Shuffle<T>(List<T> list)

@@ -12,6 +12,5 @@ public class CardPwrUpEffect : ICardEffect
         CardInformation target = targetObj.GetComponent<CardInformation>();
 
         target.card.ChangePower(card.card.power, change);
-        target.UpdateCard();
     }
 }

@@ -26,6 +26,9 @@ public class CharacterInfo : MonoBehaviour
     [SerializeField] private List<CardDataSO> deck;
     [SerializeReference, SR] public List<IStatusEffect> activeEffects = new List<IStatusEffect>();
 
+    [Header("Others")]
+    [SerializeField] private PhysicsMaterial2D bouncyMaterial;
+
     [System.Serializable]
     public class Stats
     {
@@ -110,6 +113,8 @@ public class CharacterInfo : MonoBehaviour
             sprite.transform.localRotation = Quaternion.Euler(0, 180, 0);
         }
         sprite.AddComponent<PolygonCollider2D>();
+        sprite.AddComponent<Rigidbody2D>();
+        sprite.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         gameObject.GetComponent<Targetable>().targetCollider = sprite.GetComponent<Collider2D>();
     }
 

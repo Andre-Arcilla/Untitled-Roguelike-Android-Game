@@ -98,14 +98,17 @@ public class ActionSystem : MonoBehaviour
     //does all action from fastest to slowest sender
     private IEnumerator DoActions()
     {
+        TargetingSystem.Instance.darkPanel.SetActive(true);
+
         foreach (Action action in actions)
         {
             CharacterInfo senderInfo = action.sender.GetComponent<CharacterInfo>();
             CharacterInfo targetInfo = action.target.GetComponent<CharacterInfo>();
+            CardInformation targetCard = targetInfo == null ? action.target.GetComponent<CardInformation>() : null;
 
             CharacterDeck senderDeck = senderInfo.GetComponent<CharacterDeck>();
 
-            if (senderInfo == null || targetInfo == null)
+            if (senderInfo == null || (targetInfo == null && targetCard == null))
             {
                 string senderName = action.sender != null ? action.sender.name : "NULL sender";
                 string targetName = action.target != null ? action.target.name : "NULL target";
@@ -115,10 +118,19 @@ public class ActionSystem : MonoBehaviour
                 continue;
             }
 
-            if (senderInfo.currentHP <= 0 || targetInfo.currentHP <= 0)
+            if (senderInfo == null || senderInfo.currentHP <= 0)
             {
+                Debug.Log($"{senderInfo.name} is dead or null");
                 continue;
             }
+
+            if (targetInfo != null && targetInfo.currentHP <= 0)
+            {
+                Debug.Log($"{targetInfo.name} is dead");
+                continue;
+            }
+
+            CharacterManager.Instance.DisplayCardView();
 
             if (TargetingSystem.Instance.allies.members.Contains(action.sender))
             {
@@ -133,27 +145,24 @@ public class ActionSystem : MonoBehaviour
             foreach (ICardEffect effect in action.card.card.effects)
             {
                 effect.Execute(action.sender, action.card, action.target);
-                senderInfo.UpdateResourcesView();
-                targetInfo.UpdateResourcesView();
             }
 
-            yield return ActionPhaseAnimation.Instance.ActionAnimationPerform(action.sender, action.card, action.target);
             //do an animation where it crashes to the enemy unit ----------------------------------------------------------------------------------
+            yield return ActionPhaseAnimation.Instance.ActionAnimationPerform(action.sender, action.card, action.target);
 
-            yield return new WaitForSeconds(0.25f);
-
-            CheckForGroupDefeat();
             yield return senderDeck.EndPlayCard(action.card);
             ActionPhaseAnimation.Instance.ActionAnimationEnd(action.sender, action.card, action.target);
 
-            if (targetInfo.currentHP <= 0)
+            if (targetInfo != null && targetInfo.currentHP <= 0)
             {
                 targetInfo.currentHP = 0;
-                targetInfo.gameObject.SetActive(false);
+                //targetInfo.gameObject.SetActive(false);
             }
 
             yield return new WaitForSeconds(0.1f);
         }
+
+        TargetingSystem.Instance.darkPanel.SetActive(false);
     }
 
     //apply all status effects

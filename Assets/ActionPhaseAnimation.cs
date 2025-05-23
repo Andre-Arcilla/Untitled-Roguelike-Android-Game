@@ -1,8 +1,15 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.Splines.Examples;
+using Unity.VisualScripting;
+using UnityEditor;
+using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class ActionPhaseAnimation : MonoBehaviour
 {
@@ -20,54 +27,321 @@ public class ActionPhaseAnimation : MonoBehaviour
         Instance = this;
     }
 
+    [SerializeField] private int speed;
+    [SerializeField] private float animationSpeed;
+
     //take sender, target, and card to sorting group layer 2
     //show darkPanel
     public void ActionAnimationStart(Targetable sender, CardInformation card, GameObject target)
     {
-        TargetingSystem.Instance.darkPanel.SetActive(true);
-        sender.GetComponentInChildren<SortingGroup>().sortingOrder = 2;
-        target.GetComponentInChildren<SortingGroup>().sortingOrder = 2;
+        (sender.transform.Find("Character Sprite")?.GetComponentInChildren<SortingGroup>() ?? sender.GetComponentInChildren<SortingGroup>()).sortingOrder = 2;
         card.GetComponentInChildren<SortingGroup>().sortingOrder = 2;
+        (target.transform.Find("Character Sprite")?.GetComponentInChildren<SortingGroup>() ?? card.GetComponentInChildren<SortingGroup>()).sortingOrder = 2;
+
     }
 
     public IEnumerator ActionAnimationPerform(Targetable sender, CardInformation card, GameObject target)
     {
-        float speed = 5f; // Units per second
-        float stopDistance = 0.1f;
+        // Get necessary components
+        Collider2D senderCollider = sender.transform.Find("Character Sprite")?.GetComponentInChildren<Collider2D>() ?? target.GetComponentInChildren<Collider2D>(); //should get the one from character sprite
+        Collider2D cardCollider = card.GetComponentInChildren<Collider2D>();
+        Collider2D targetCollider = target.transform.Find("Character Sprite")?.GetComponentInChildren<Collider2D>() ?? target.GetComponentInChildren<Collider2D>(); //should get the one from character sprite
+        Rigidbody2D cardRB = card.gameObject.GetComponentInChildren<Rigidbody2D>();
 
-
-        Collider2D cardCollider = card.gameObject.GetComponentInChildren<Collider2D>();
-        Collider2D targetCollider = target.GetComponentInChildren<Collider2D>();
-
-        if (cardCollider == null || targetCollider == null)
+        // Validate components
+        if (senderCollider == null || cardCollider == null || targetCollider == null || cardRB == null)
         {
-            Debug.LogWarning("Missing Collider2D on card or target.");
+            Debug.LogWarning("Missing required Collider2D or Rigidbody2D components.");
             yield break;
         }
 
-        card.gameObject.transform.localScale = new Vector3(0.6f, 0.6f);
+        //set the sender and target's object
+        GameObject senderHolder = senderCollider.transform.parent.gameObject;
+        GameObject targetHolder = targetCollider.transform.parent.name == "Character Sprite" ? targetCollider.transform.parent.gameObject : targetCollider.gameObject;
 
-        // Start tweening
-        Tween moveTween = card.gameObject.transform.DOMove(target.transform.position, 1f).SetSpeedBased(true).SetEase(Ease.Linear);
+        // Save original parents
+        Transform senderParent = senderHolder.transform.parent;
+        Transform cardParent = cardCollider.transform.parent;
+        Transform targetParent = targetHolder.transform.parent;
 
-        // Wait until touching
+        // Move all objects to a common parent to force same Z plane
+        Transform sharedParent = TargetingSystem.Instance.darkPanel.transform.parent;
+        senderHolder.transform.SetParent(sharedParent);
+        cardCollider.transform.SetParent(sharedParent);
+        targetHolder.transform.SetParent(sharedParent);
+
+        //save original pos and scale of target/sender
+        Vector3 senderOrigPos = senderHolder.transform.position;
+        Vector3 targetOrigPos = targetHolder.transform.position;
+        Vector3 senderOrigScale = senderHolder.transform.localScale;
+        Vector3 targetOrigScale = targetHolder.transform.localScale;
+
+        //pass the senderHolder/targetHolder to targetanimation methods
+        yield return ChooseAnimation(senderHolder, targetHolder, sender.gameObject, target);
+
+        yield return new WaitForSeconds(0.15f);
+
+        // Scale the card and determine target position
+        card.transform.localScale = new Vector3(0.6f, 0.6f);
+        Vector2 targetPos = targetCollider.transform.position;
+
+        // Move the card toward the target
         while (!cardCollider.IsTouching(targetCollider))
         {
-            yield return null;
+            Vector2 direction = (targetPos - cardRB.position).normalized;
+            Vector2 newPos = Vector2.MoveTowards(cardRB.position, targetPos, speed * Time.fixedDeltaTime);
+            cardRB.MovePosition(newPos);
+            yield return new WaitForFixedUpdate();
         }
 
-        // Stop tween when contact is made
-        moveTween.Kill();
+        // Update resources immediately on impact
+        sender.GetComponentInParent<CharacterInfo>()?.UpdateResourcesView();
+        CharacterInfo charInfo = target.GetComponentInParent<CharacterInfo>();
+        if (charInfo != null)
+        {
+            charInfo.UpdateResourcesView();
+        }
+        else
+        {
+            CardInformation cardInfo = target.GetComponent<CardInformation>();
+            if (cardInfo != null)
+                cardInfo.UpdateCard();
+        }
 
-        // Optional: Trigger hit effect or cleanup
+        float knockbackDistance = 1f;
+        float shakeStrength = 0.2f;
+
+        // Directions
+        Vector2 knockbackDirectionCard = (cardRB.position - (Vector2)targetCollider.transform.position).normalized;
+        Vector2 knockbackDirectionTarget = ((Vector2)targetCollider.transform.position - cardRB.position).normalized;
+
+        //shake and knockback effects
+        var sequence = DOTween.Sequence();
+        sequence.Append(cardRB.transform.DOMove((Vector2)cardRB.transform.position + knockbackDirectionCard * knockbackDistance, animationSpeed).SetEase(Ease.OutQuad));
+        sequence.Join(cardRB.transform.DOShakeRotation(animationSpeed, shakeStrength, vibrato: 10, randomness: 90, fadeOut: true));
+        sequence.Join(cardRB.transform.DOShakeScale(animationSpeed, shakeStrength, vibrato: 10, randomness: 90, fadeOut: true));
+
+        if (targetCollider.GetComponent<CardInformation>() == null)
+        {
+            sequence.Join(targetHolder.transform.DOMove((Vector2)targetHolder.transform.position + knockbackDirectionTarget * knockbackDistance, animationSpeed).SetEase(Ease.OutQuad));
+        }
+        sequence.Join(targetHolder.transform.DOShakeRotation(animationSpeed, shakeStrength, vibrato: 10, randomness: 90, fadeOut: true));
+        sequence.Join(targetHolder.transform.DOShakeScale(animationSpeed, shakeStrength, vibrato: 10, randomness: 90, fadeOut: true));
+
+        //restore changes made to position and scale of sender and target
+        sequence.Append(senderHolder.transform.DOLocalMove(senderOrigPos, animationSpeed));
+        sequence.Join(senderHolder.transform.DOScale(senderOrigScale, animationSpeed));
+
+        yield return sequence.WaitForCompletion();
+
+        sequence = DOTween.Sequence();
+        if (targetCollider.GetComponent<CardInformation>() == null)
+        {
+            sequence.Join(targetHolder.transform.DOLocalMove(targetOrigPos, animationSpeed));
+            sequence.Join(targetHolder.transform.DOScale(targetOrigScale, animationSpeed));
+        }
+        else
+        {
+            sequence.Append(targetHolder.transform.DOLocalMove(senderHolder.transform.position, animationSpeed));
+            sequence.Join(targetHolder.transform.DOScale(Vector3.zero, animationSpeed));
+        }
+
+        yield return sequence.WaitForCompletion();
+
+        //restore original parent hierarchy
+        senderHolder.transform.SetParent(senderParent);
+        cardCollider.transform.SetParent(cardParent);
+        targetHolder.transform.SetParent(targetParent);
+
+        if (targetCollider.GetComponent<CardInformation>() != null)
+        {
+            target.transform.localScale = Vector3.one;
+            target.transform.Find("Card Front").gameObject.SetActive(false);
+            target.transform.Find("Card Back").gameObject.SetActive(true);
+            target.GetComponentInChildren<SortingGroup>().sortingOrder = 0;
+        }
+
+        yield return null;
+
         Debug.Log("Card hit the target!");
     }
 
     public void ActionAnimationEnd(Targetable sender, CardInformation card, GameObject target)
     {
-        TargetingSystem.Instance.darkPanel.SetActive(false);
-        sender.GetComponentInChildren<SortingGroup>().sortingOrder = 0;
-        target.GetComponentInChildren<SortingGroup>().sortingOrder = 0;
+        (sender.transform.Find("Character Sprite")?.GetComponentInChildren<SortingGroup>() ?? sender.GetComponentInChildren<SortingGroup>()).sortingOrder = 0;
         card.GetComponentInChildren<SortingGroup>().sortingOrder = 0;
+        (target.transform.Find("Character Sprite")?.GetComponentInChildren<SortingGroup>() ?? card.GetComponentInChildren<SortingGroup>()).sortingOrder = 0;
+    }
+
+    //make a new method that just determines which animation to use
+    private IEnumerator ChooseAnimation(GameObject senderObj, GameObject targetObj, GameObject sender, GameObject target)
+    {
+        Targetable senderInfo = sender.GetComponent<Targetable>();
+        Targetable targetInfo = target.GetComponent<Targetable>();
+        CardInformation targetCard = targetInfo == null ? target.GetComponent<CardInformation>() : null;
+
+        if (targetInfo == null && targetCard != null)
+        {
+            yield return CardTargetAnimation(senderObj, targetObj, senderInfo, targetCard);
+        }
+        else if (senderInfo == targetInfo)
+        {
+            yield return SelfTargetAnimation(senderObj, targetObj, senderInfo, targetInfo);
+        }
+        else if (senderInfo.team != targetInfo.team)
+        {
+            yield return EnemyTargetAnimation(senderObj, targetObj, senderInfo, targetInfo);
+        }
+        else if (senderInfo.team == targetInfo.team)
+        {
+            yield return AllyTargetAnimation(senderObj, targetObj, senderInfo, targetInfo);
+        }
+    }
+
+    //positions depending on sender and target
+    private IEnumerator CardTargetAnimation(GameObject senderObj, GameObject targetObj, Targetable sender, CardInformation target)
+    {
+        if (sender == null)
+        {
+            yield break;
+        }
+
+        target.transform.localScale = Vector3.zero;
+        target.transform.localPosition = senderObj.transform.position;
+        target.transform.Find("Card Front").gameObject.SetActive(true);
+        target.transform.Find("Card Back").gameObject.SetActive(false);
+        target.GetComponentInChildren<SortingGroup>().sortingOrder = 2;
+
+        //checks for sender's team
+        if (sender.team == Team.Player)
+        {
+            var sequence = DOTween.Sequence();
+            sequence.Append(senderObj.transform.DOMove(new Vector3(-6f, 1f), animationSpeed));
+            sequence.Join(senderObj.transform.DOScale(new Vector3(2.5f, 2.5f), animationSpeed));
+
+            sequence.Join(targetObj.transform.DOMove(new Vector3(-3f, 1f), animationSpeed));
+            sequence.Join(targetObj.transform.DOScale(new Vector3(1f, 1f), animationSpeed));
+            sequence.SetLink(gameObject).SetAutoKill(true);
+
+            yield return sequence.WaitForCompletion();
+        }
+
+        //checks for sender's team
+        if (sender.team == Team.Enemy)
+        {
+            var sequence = DOTween.Sequence();
+            sequence.Append(senderObj.transform.DOMove(new Vector3(6f, 1f), animationSpeed));
+            sequence.Join(senderObj.transform.DOScale(new Vector3(2.5f, 2.5f), animationSpeed));
+
+            sequence.Join(targetObj.transform.DOMove(new Vector3(3.5f, 1f), animationSpeed));
+            sequence.Join(targetObj.transform.DOScale(new Vector3(0.85f, 0.85f), animationSpeed));
+            sequence.SetLink(gameObject).SetAutoKill(true);
+
+            yield return sequence.WaitForCompletion();
+        }
+    }
+
+    private IEnumerator SelfTargetAnimation(GameObject senderObj, GameObject targetObj, Targetable sender, Targetable target)
+    {
+        if (sender == null)
+        {
+            yield break;
+        }
+
+        //checks for sender's team
+        if (sender.team == Team.Player)
+        {
+            var sequence = DOTween.Sequence();
+            sequence.Append(targetObj.transform.DOMove(new Vector3(-4.5f, 1f), animationSpeed));
+            sequence.Join(targetObj.transform.DOScale(new Vector3(2.5f, 2.5f), animationSpeed));
+
+            sequence.SetLink(gameObject).SetAutoKill(true);
+
+            yield return sequence.WaitForCompletion();
+        }
+
+        //checks for sender's team
+        if (sender.team == Team.Enemy)
+        {
+            var sequence = DOTween.Sequence();
+            sequence.Append(targetObj.transform.DOMove(new Vector3(4.5f, 1f), animationSpeed));
+            sequence.Join(targetObj.transform.DOScale(new Vector3(2.5f, 2.5f), animationSpeed));
+
+            sequence.SetLink(gameObject).SetAutoKill(true);
+
+            yield return sequence.WaitForCompletion();
+        }
+    }
+
+    private IEnumerator EnemyTargetAnimation(GameObject senderObj, GameObject targetObj, Targetable sender, Targetable target)
+    {
+        if (sender == null)
+        {
+            yield break;
+        }
+
+        //checks for sender's team
+        if (sender.team == Team.Player)
+        {
+            var sequence = DOTween.Sequence();
+            sequence.Append(senderObj.transform.DOMove(new Vector3(-4.5f, 1f), animationSpeed));
+            sequence.Join(senderObj.transform.DOScale(new Vector3(2.5f, 2.5f), animationSpeed));
+            sequence.Join(targetObj.transform.DOMove(new Vector3(4.5f, 1f), animationSpeed));
+            sequence.Join(targetObj.transform.DOScale(new Vector3(2.5f, 2.5f), animationSpeed));
+            sequence.SetLink(gameObject).SetAutoKill(true);
+
+            yield return sequence.WaitForCompletion();
+        }
+
+        //checks for sender's team
+        if (sender.team == Team.Enemy)
+        {
+            var sequence = DOTween.Sequence();
+            sequence.Append(senderObj.transform.DOMove(new Vector3(4.5f, 1f), animationSpeed));
+            sequence.Join(senderObj.transform.DOScale(new Vector3(2.5f, 2.5f), animationSpeed));
+            sequence.Join(targetObj.transform.DOMove(new Vector3(-4.5f, 1f), animationSpeed));
+            sequence.Join(targetObj.transform.DOScale(new Vector3(2.5f, 2.5f), animationSpeed));
+            sequence.SetLink(gameObject).SetAutoKill(true);
+
+            yield return sequence.WaitForCompletion();
+        }
+    }
+
+    private IEnumerator AllyTargetAnimation(GameObject senderObj, GameObject targetObj, Targetable sender, Targetable target)
+    {
+        if (sender == null)
+        {
+            yield break;
+        }
+
+        //checks for sender's team
+        if (sender.team == Team.Player)
+        {
+            var sequence = DOTween.Sequence();
+            sequence.Append(senderObj.transform.DOMove(new Vector3(-6.5f, 1f), animationSpeed));
+            sequence.Join(senderObj.transform.DOScale(new Vector3(2.5f, 2.5f), animationSpeed));
+
+            sequence.Join(targetObj.transform.DOMove(new Vector3(-3.5f, 3f), animationSpeed));
+            sequence.Join(targetObj.transform.DOScale(new Vector3(2.5f, 2.5f), animationSpeed));
+
+            sequence.SetLink(gameObject).SetAutoKill(true);
+
+            yield return sequence.WaitForCompletion();
+        }
+
+        //checks for sender's team
+        if (sender.team == Team.Enemy)
+        {
+            var sequence = DOTween.Sequence();
+            sequence.Append(senderObj.transform.DOMove(new Vector3(6.5f, 1f), animationSpeed));
+            sequence.Join(senderObj.transform.DOScale(new Vector3(2.5f, 2.5f), animationSpeed));
+
+            sequence.Join(targetObj.transform.DOMove(new Vector3(3.5f, 2.5f), animationSpeed));
+            sequence.Join(targetObj.transform.DOScale(new Vector3(2.5f, 2.5f), animationSpeed));
+
+            sequence.SetLink(gameObject).SetAutoKill(true);
+
+            yield return sequence.WaitForCompletion();
+        }
     }
 }

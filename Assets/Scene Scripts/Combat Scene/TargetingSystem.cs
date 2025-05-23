@@ -31,6 +31,7 @@ public class TargetingSystem : MonoBehaviour
     [SerializeField] public TeamContainer enemies;
     [SerializeField] public GameObject center;
     [SerializeField] public GameObject darkPanel;
+    [SerializeField] public List<GameObject> potentialTargets;
 
     private bool TryGetValidTarget(Vector2 cardPosition, CardInformation card, out GameObject validTarget)
     {
@@ -39,7 +40,7 @@ public class TargetingSystem : MonoBehaviour
             return false;
 
         // Get all potential targets based on the card's target type
-        List<GameObject> potentialTargets = TargetSelector.Instance.GetTargets(card, card.GetComponentInParent<Targetable>());
+        potentialTargets = TargetSelector.Instance.GetTargets(card, card.GetComponentInParent<Targetable>());
 
         if (potentialTargets == null || potentialTargets.Count == 0)
             return false;

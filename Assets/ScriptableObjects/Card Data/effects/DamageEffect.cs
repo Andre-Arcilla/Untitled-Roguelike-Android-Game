@@ -15,13 +15,6 @@ public class DamageEffect : ICardEffect
         {
             target.currentHP -= damage;
         }
-
-        if (target.currentHP <= 0)
-        {
-            target.gameObject.SetActive(false);
-        }
-
-        //target.UpdateResourcesView();
     }
 
     private int Calculate(int cardPower, int characterPower)

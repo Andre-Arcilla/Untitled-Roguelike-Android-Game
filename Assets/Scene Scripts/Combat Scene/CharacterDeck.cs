@@ -246,7 +246,7 @@ public class CharacterDeck : MonoBehaviour
             var sequence = DOTween.Sequence();
             sequence.Append(card.transform.DOMove(dropZone, 0.25f));
             sequence.Join(card.transform.DOLocalRotate(Vector2.zero, 0.25f));
-            sequence.Join(card.transform.DOScale(1.2f, 0.25f));
+            sequence.Join(card.transform.DOScale(1f, 0.25f));
             sequence.SetLink(gameObject).SetAutoKill(true);
 
             yield return sequence.WaitForCompletion();

@@ -179,6 +179,7 @@ MonoBehaviour:
     members: []
   center: {fileID: 452942719}
   darkPanel: {fileID: 1468363840}
+  potentialTargets: []
 --- !u!114 &30612946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,6 +235,38 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 391}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &151016802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 151016803}
+  m_Layer: 0
+  m_Name: Action Area
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &151016803
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151016802}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1468363841}
+  m_Father: {fileID: 1711668875}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &159271143
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,7 +466,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -474,7 +507,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 0
 --- !u!212 &452942724
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1652,6 +1685,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 016823572593d9c48a2c92d4ebc11bb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 50
+  animationSpeed: 0.3
 --- !u!1 &1468363840
 GameObject:
   m_ObjectHideFlags: 0
@@ -1676,13 +1711,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1468363840}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.09, y: 0.02, z: 0}
   m_LocalScale: {x: 37.100693, y: 17.940926, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1711668875}
-  m_RootOrder: 4
+  m_Father: {fileID: 151016803}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1468363842
 SpriteRenderer:
@@ -1903,7 +1938,7 @@ Transform:
   - {fileID: 1801829123}
   - {fileID: 347922854}
   - {fileID: 1162710430}
-  - {fileID: 1468363841}
+  - {fileID: 151016803}
   - {fileID: 452942722}
   - {fileID: 1238763913}
   - {fileID: 159271144}

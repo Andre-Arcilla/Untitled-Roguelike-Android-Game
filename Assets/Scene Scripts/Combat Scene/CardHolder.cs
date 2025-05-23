@@ -12,6 +12,7 @@ public class CardHolder : MonoBehaviour
     [SerializeField] private SplineContainer splineContainer;
     [SerializeField] private GameObject handParent;
     [SerializeField] private GameObject playParent;
+    [SerializeField] private float animationSpeed = 0.1f;
 
     //method for drawing a new hand
     public IEnumerator DrawHandAnimation()
@@ -71,8 +72,8 @@ public class CardHolder : MonoBehaviour
                 child.Find("Card Back").gameObject.SetActive(false);
             });
             cardSequence.Append(child.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 0f, 0f), 0.15f).SetEase(Ease.InOutQuad));
-            cardSequence.Append(child.transform.DOLocalMove(splinePosition + ((i * 0.2f) * Vector3.back), 0.15f));
-            cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, 0.15f));
+            cardSequence.Append(child.transform.DOLocalMove(splinePosition + ((i * 0.2f) * Vector3.back), animationSpeed));
+            cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, animationSpeed));
             cardSequence.SetLink(gameObject).SetAutoKill(true);
             cardSequence.OnComplete(() => collider.enabled = true);
 
@@ -106,8 +107,8 @@ public class CardHolder : MonoBehaviour
             child.GetComponent<SortingGroup>().sortingOrder = 0;
 
             var cardSequence = DOTween.Sequence();
-            cardSequence.Append(child.transform.DOMove(new Vector3(despawnPos.x, despawnPos.y, child.transform.position.z), 0.15f));
-            cardSequence.Join(child.transform.DOLocalRotateQuaternion(Quaternion.identity, 0.15f));
+            cardSequence.Append(child.transform.DOMove(new Vector3(despawnPos.x, despawnPos.y, child.transform.position.z), animationSpeed));
+            cardSequence.Join(child.transform.DOLocalRotateQuaternion(Quaternion.identity, animationSpeed));
             cardSequence.Append(child.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 90f, 0f), 0.15f).SetEase(Ease.InOutQuad));
             cardSequence.AppendCallback(() =>
             {
@@ -154,11 +155,11 @@ public class CardHolder : MonoBehaviour
             card.transform.Find("Card Back").gameObject.SetActive(false);
         });
         sequence.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 0f, 0f), 0.15f).SetEase(Ease.InOutQuad));
-        sequence.Append(card.transform.DOMove(dropZone, 0.25f));
+        sequence.Append(card.transform.DOMove(dropZone, 0.15f));
         sequence.SetLink(gameObject).SetAutoKill(true);
         yield return sequence.WaitForCompletion();
 
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(animationSpeed);
 
         card.transform.SetParent(handParent.transform, true);
         yield return SortCards();
@@ -195,14 +196,14 @@ public class CardHolder : MonoBehaviour
             card.transform.Find("Card Back").gameObject.SetActive(false);
         });
         sequenceA.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 0f, 0f), 0.15f).SetEase(Ease.InOutQuad));
-        sequenceA.Append(card.transform.DOMove(dropZoneA, 0.25f));
+        sequenceA.Append(card.transform.DOMove(dropZoneA, 0.15f));
         sequenceA.SetLink(gameObject).SetAutoKill(true);
         yield return sequenceA.WaitForCompletion();
 
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(animationSpeed);
 
         var sequenceB = DOTween.Sequence();
-        sequenceB.Join(card.transform.DOMove(dropZoneB, 0.25f));
+        sequenceB.Join(card.transform.DOMove(dropZoneB, 0.15f));
         sequenceB.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 90f, 0f), 0.15f).SetEase(Ease.InOutQuad));
         sequenceB.AppendCallback(() =>
         {
@@ -253,12 +254,12 @@ public class CardHolder : MonoBehaviour
 
             // Create a sub-sequence for this card
             var cardSequence = DOTween.Sequence();
-            cardSequence.Append(child.transform.DOLocalMove(targetPosition, 0.25f));
-            cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, 0.25f));
+            cardSequence.Append(child.transform.DOLocalMove(targetPosition, animationSpeed));
+            cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, animationSpeed));
             cardSequence.SetLink(gameObject).SetAutoKill(true);
             cardSequence.OnComplete(() => collider.enabled = true);
         }
 
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(animationSpeed);
     }
 }

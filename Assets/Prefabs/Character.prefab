@@ -639,6 +639,7 @@ MonoBehaviour:
   splineContainer: {fileID: 4076701268247897898}
   handParent: {fileID: 6085580888313190472}
   playParent: {fileID: 6412065338789664441}
+  animationSpeed: 0.075
 --- !u!1 &5838126829343219995
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,6 +852,7 @@ MonoBehaviour:
     totalSPD: 0
   deck: []
   activeEffects: []
+  bouncyMaterial: {fileID: 6200000, guid: 6a7bef266a127f84c95e1f0537f39182, type: 2}
   references:
     version: 2
     RefIds: []

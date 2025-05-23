@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,7 @@ public class CharacterManager : MonoBehaviour
 
     [SerializeField] public List<GameObject> characterList;
     [SerializeField] private List<GameObject> allCardViews;
+    private Tween currentPulseTween;
 
     public void SetCardViews()
     {
@@ -40,7 +42,26 @@ public class CharacterManager : MonoBehaviour
     {
         foreach (var cardView in allCardViews)
         {
-            cardView.SetActive(cardView == targetView);
+            bool isTarget = cardView == targetView;
+            cardView.SetActive(isTarget);
+
+            Transform characterSprite = cardView.transform.parent.Find("Character Sprite");
+
+            //stop ongoing tweens
+            characterSprite.DOKill();
+
+            if (isTarget)
+            {
+                //apply pulse and move character
+                characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.3f), 0.25f);
+                characterSprite.DOScale(0.8f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+            }
+            else
+            {
+                //reset pos and size
+                characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.15f), 0.25f);
+                characterSprite.localScale = new Vector3(0.750f, 0.750f);
+            }
         }
     }
 
@@ -53,7 +74,29 @@ public class CharacterManager : MonoBehaviour
 
         foreach (var cardView in allCardViews)
         {
-            cardView.SetActive(cardView == targetView);
+            bool isTarget = cardView == targetView;
+            cardView.SetActive(isTarget);
+
+            Transform characterSprite = cardView.transform.parent.Find("Character Sprite");
+
+            //stop ongoing tweens and reset size and pos
+            characterSprite.DOKill();
+            characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.15f), 0.25f);
+            characterSprite.localScale = new Vector3(0.750f, 0.750f);
+            Debug.Log(transform.parent.name);
+        }
+    }
+
+    public void DisplayCardView()
+    {
+        foreach (var cardView in allCardViews)
+        {
+            Transform characterSprite = cardView.transform.parent.Find("Character Sprite");
+
+            //stop ongoing tweens and reset size and pos
+            characterSprite.DOKill();
+            characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.15f), 0.25f);
+            characterSprite.localScale = new Vector3(0.750f, 0.750f);
         }
     }
 

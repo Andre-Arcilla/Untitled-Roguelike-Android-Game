@@ -18,8 +18,6 @@ public class HealEffect : ICardEffect
         {
             target.currentHP = target.maxHP;
         }
-
-        //target.UpdateResourcesView();
     }
 
     private int Calculate(int cardPower, int characterPower)

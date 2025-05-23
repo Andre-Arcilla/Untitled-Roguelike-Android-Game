@@ -13,6 +13,5 @@ public class CardEnDownEffect : ICardEffect
         CardInformation target = targetObj.GetComponent<CardInformation>();
 
         target.card.ChangeMana(card.card.power, change);
-        target.UpdateCard();
     }
 }

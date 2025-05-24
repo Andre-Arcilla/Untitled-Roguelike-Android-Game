@@ -228,15 +228,21 @@ public class ActionSystem : MonoBehaviour
     //do instant action cards with no target (e.g. draw cards)
     public void TriggerAction(Targetable sender, CardInformation card)
     {
+        CharacterGenerator.Instance.DisablePlayerRaycasts();
+
         foreach (ICardEffect effect in card.card.effects)
         {
             effect.Execute(sender, card, null);
         }
+
+        CharacterGenerator.Instance.EnablePlayerRaycasts();
     }
 
     //do instant action cards with target (e.g. buff cards)
     public IEnumerator TriggerAction(Targetable sender, CardInformation card, GameObject target)
     {
+        CharacterGenerator.Instance.DisablePlayerRaycasts();
+
         CharacterDeck senderDeck = sender.GetComponent<CharacterDeck>();
 
         yield return StartCoroutine(senderDeck.StartPlayCard(card));
@@ -255,6 +261,8 @@ public class ActionSystem : MonoBehaviour
         yield return senderDeck.EndPlaySortHand();
 
         yield return senderDeck.UpdateSelectedCardPos();
+
+        CharacterGenerator.Instance.EnablePlayerRaycasts();
     }
 
     //discards and draws all living units' decks

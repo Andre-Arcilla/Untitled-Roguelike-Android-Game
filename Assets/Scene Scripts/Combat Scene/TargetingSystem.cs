@@ -33,7 +33,7 @@ public class TargetingSystem : MonoBehaviour
     [SerializeField] public GameObject darkPanel;
     [SerializeField] public List<GameObject> potentialTargets;
 
-    private bool TryGetValidTarget(Vector2 cardPosition, CardInformation card, out GameObject validTarget)
+    public bool TryGetValidTarget(Vector2 cardPosition, CardInformation card, out GameObject validTarget)
     {
         validTarget = null;
         if (card == null)

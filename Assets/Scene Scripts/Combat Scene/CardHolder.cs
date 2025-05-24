@@ -9,7 +9,8 @@ using UnityEngine.Splines;
 
 public class CardHolder : MonoBehaviour
 {
-    [SerializeField] private SplineContainer splineContainer;
+    [SerializeField] private SplineContainer splineContainer1;
+    [SerializeField] private SplineContainer splineContainer2;
     [SerializeField] private GameObject handParent;
     [SerializeField] private GameObject playParent;
     [SerializeField] private float animationSpeed = 0.1f;
@@ -32,7 +33,7 @@ public class CardHolder : MonoBehaviour
 
         float cardSpacing = 1f / childCount;
         float firstCardPos = 0.5f - (childCount - 1) * cardSpacing / 2;
-        Spline spline = splineContainer.Spline;
+        Spline spline = splineContainer1.Spline;
 
         // Main sequence to hold all animations in order
         var mainSequence = DOTween.Sequence();
@@ -238,6 +239,8 @@ public class CardHolder : MonoBehaviour
     //method to sort the cards in hand
     public IEnumerator SortCards()
     {
+        yield return new WaitForSeconds(0.1f); // wait for mouse-up logic to finish
+
         if (GetComponentInParent<Targetable>().team == Team.Enemy)
         {
             yield break;
@@ -251,7 +254,7 @@ public class CardHolder : MonoBehaviour
 
         float cardSpacing = 1f / childCount;
         float firstCardPos = 0.5f - (childCount - 1) * cardSpacing / 2;
-        Spline spline = splineContainer.Spline;
+        Spline spline = splineContainer1.Spline;
 
         for (int i = 0; i < childCount; i++)
         {
@@ -276,7 +279,106 @@ public class CardHolder : MonoBehaviour
             cardSequence.SetLink(gameObject).SetAutoKill(true);
             cardSequence.OnComplete(() => collider.enabled = true);
         }
+        yield return new WaitForSeconds(animationSpeed);
+    }
 
+    //sort cards with ignored card
+    public IEnumerator SortCards(CardInformation cardToIgnore)
+    {
+        yield return new WaitForSeconds(0.01f); // wait for mouse-up logic to finish
+
+        if (GetComponentInParent<Targetable>().team == Team.Enemy)
+            yield break;
+
+        List<Transform> validCards = new List<Transform>();
+        for (int i = 0; i < handParent.transform.childCount; i++)
+        {
+            Transform child = handParent.transform.GetChild(i);
+            CardInformation info = child.GetComponent<CardInformation>();
+            if (info != null && info != cardToIgnore)
+                validCards.Add(child);
+        }
+
+        int cardCount = validCards.Count;
+        if (cardCount <= 0)
+            yield break;
+
+        float cardSpacing = 1f / cardCount;
+        float firstCardPos = 0.5f - (cardCount - 1) * cardSpacing / 2;
+        Spline spline = splineContainer1.Spline;
+
+        for (int i = 0; i < cardCount; i++)
+        {
+            Transform child = validCards[i];
+            CardInformation info = child.GetComponent<CardInformation>();
+            bool isSelected = info.isSelected;
+            BoxCollider2D collider = child.GetComponent<BoxCollider2D>();
+            if (collider != null) collider.enabled = false;
+            child.GetComponent<SortingGroup>().sortingOrder = 0;
+
+            float p = firstCardPos + (i * cardSpacing);
+            Vector3 splinePosition = spline.EvaluatePosition(p);
+            float extraYOffset = isSelected ? 0.6f : 0f;
+            Vector3 targetPosition = splinePosition + ((i * 0.2f) * Vector3.back) + new Vector3(0, extraYOffset, 0);
+            Vector3 forward = spline.EvaluateTangent(p);
+            Vector3 up = spline.EvaluateUpVector(p);
+            Quaternion rotation = Quaternion.LookRotation(up, Vector3.Cross(up, forward).normalized);
+
+            // Tween card into position
+            var cardSequence = DOTween.Sequence();
+            cardSequence.Append(child.transform.DOLocalMove(targetPosition, animationSpeed));
+            cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, animationSpeed));
+            cardSequence.SetLink(gameObject).SetAutoKill(true);
+            cardSequence.OnComplete(() => collider.enabled = true);
+        }
+        yield return new WaitForSeconds(animationSpeed);
+    }
+
+
+    //fan out the highlighted cards
+    public IEnumerator FanCardsAction(CardInformation cardToIgnore = null)
+    {
+        if (GetComponentInParent<Targetable>().team == Team.Enemy)
+            yield break;
+
+        // Build list of cards to include
+        List<Transform> validCards = new List<Transform>();
+        for (int i = 0; i < handParent.transform.childCount; i++)
+        {
+            Transform child = handParent.transform.GetChild(i);
+            CardInformation info = child.GetComponent<CardInformation>();
+            if (info != null && info != cardToIgnore)
+                validCards.Add(child);
+        }
+
+        int validCount = validCards.Count;
+        if (validCount <= 0)
+            yield break;
+
+        float cardSpacing = 1f / validCount;
+        float firstCardPos = 0.5f - (validCount - 1) * cardSpacing / 2;
+        Spline spline = splineContainer2.Spline;
+
+        for (int i = 0; i < validCount; i++)
+        {
+            Transform child = validCards[i];
+            CardInformation info = child.GetComponent<CardInformation>();
+
+            bool isSelected = info.isSelected;
+
+            float p = firstCardPos + (i * cardSpacing);
+            Vector3 splinePosition = spline.EvaluatePosition(p);
+            float extraYOffset = isSelected ? 0.6f : 0f;
+            Vector3 targetPosition = splinePosition + ((i * 0.2f) * Vector3.back) + new Vector3(0, extraYOffset, 0);
+            Vector3 forward = spline.EvaluateTangent(p);
+            Vector3 up = spline.EvaluateUpVector(p);
+            Quaternion rotation = Quaternion.LookRotation(up, Vector3.Cross(up, forward).normalized);
+
+            var cardSequence = DOTween.Sequence();
+            cardSequence.Append(child.transform.DOMove(targetPosition, animationSpeed));
+            cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, animationSpeed));
+            cardSequence.SetLink(gameObject).SetAutoKill(true);
+        }
         yield return new WaitForSeconds(animationSpeed);
     }
 }

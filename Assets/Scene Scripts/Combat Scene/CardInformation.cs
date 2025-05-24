@@ -94,6 +94,12 @@ public class CardInformation : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (card.target == Target.Card)
+        {
+            CardHolder holder = transform.parent.parent.GetComponent<CardHolder>();
+            holder.StartCoroutine(holder.FanCardsAction(this));
+        }
+
         // Store the original position and rotation
         originalPosition = transform.position;
         originalRotation = transform.rotation;
@@ -153,6 +159,24 @@ public class CardInformation : MonoBehaviour
     void OnMouseUp()
     {
         //return valid targets to original state
+        bool hasEnoughMana = GetComponentInParent<CharacterInfo>().currentEN >= card.mana;
+        bool hasValidTarget = TargetingSystem.Instance.TryGetValidTarget(transform.position, this, out GameObject t);
+        bool willPlay = !isDeselecting && !isSelected && hasEnoughMana && hasValidTarget;
+
+        CardHolder holder = transform.parent.parent.GetComponent<CardHolder>();
+
+        if (card.target == Target.Card)
+        {
+            if (willPlay)
+            {
+                holder.StartCoroutine(holder.SortCards(this));
+            }
+            else
+            {
+                holder.StartCoroutine(holder.SortCards());
+            }
+        }
+
         GetComponent<SortingGroup>().sortingOrder = 0;
         TargetingSystem.Instance.darkPanel.SetActive(false);
         Targetable sender = GetComponentInParent<Targetable>();
@@ -200,7 +224,6 @@ public class CardInformation : MonoBehaviour
         sequence.Join(transform.DOScale(originalScale, 0.15f));
         sequence.SetLink(gameObject).SetAutoKill(true);
         sequence.OnComplete(() => collider.enabled = true);
-
     }
 
     private void OnMouseEnter()

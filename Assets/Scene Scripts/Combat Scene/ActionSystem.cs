@@ -63,6 +63,7 @@ public class ActionSystem : MonoBehaviour
         CharacterGenerator.Instance.DisablePlayerRaycasts();
         EnemyActionsManager.Instance.SetEnemyAction();
         CharacterManager.Instance.DisplayCardView();
+        DrawLine.Instance.RemoveAllLines();
         Debug.Log("----------ENEMY ACTION SET----------");
         SortActions();
         Debug.Log("----------ACTIONS SORTED----------");

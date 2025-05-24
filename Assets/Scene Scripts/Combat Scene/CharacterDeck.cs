@@ -229,6 +229,7 @@ public class CharacterDeck : MonoBehaviour
     //method to add card to playing field
     public IEnumerator StartPlayCard(CardInformation card)
     {
+        DrawLine.Instance.RemoveLineForCard(card.gameObject);
         Vector3 dropZone = new Vector3(0, 1, card.transform.position.z);
         Targetable cardOwner = GetComponentInParent<Targetable>();
         card.transform.Find("Card Front").gameObject.SetActive(true);

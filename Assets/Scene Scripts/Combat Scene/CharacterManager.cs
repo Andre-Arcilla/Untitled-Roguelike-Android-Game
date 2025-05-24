@@ -50,13 +50,13 @@ public class CharacterManager : MonoBehaviour
             if (isTarget)
             {
                 //apply pulse and move character
-                characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.3f), 0.25f);
+                characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.35f + 0.15f), 0.25f);
                 characterSprite.DOScale(0.8f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
             }
             else
             {
                 //reset pos and size
-                characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.15f), 0.25f);
+                characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.35f), 0.25f);
                 characterSprite.localScale = new Vector3(0.750f, 0.750f);
             }
         }
@@ -78,7 +78,7 @@ public class CharacterManager : MonoBehaviour
 
             //stop ongoing tweens and reset size and pos
             characterSprite.DOKill();
-            characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.15f), 0.25f);
+            characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.35f), 0.25f);
             characterSprite.localScale = new Vector3(0.750f, 0.750f);
             Debug.Log(transform.parent.name);
         }
@@ -92,7 +92,7 @@ public class CharacterManager : MonoBehaviour
 
             //stop ongoing tweens and reset size and pos
             characterSprite.DOKill();
-            characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.15f), 0.25f);
+            characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.35f), 0.25f);
             characterSprite.localScale = new Vector3(0.750f, 0.750f);
         }
     }

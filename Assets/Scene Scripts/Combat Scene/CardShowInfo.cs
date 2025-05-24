@@ -19,23 +19,28 @@ public class CardShowInfo : MonoBehaviour
         Instance = this;
     }
 
-    [SerializeField] private CardInformation selectedCard;
+    [SerializeField] private CardInformation cardPreview;
     [SerializeField] private bool dragging;
+    [HideInInspector] public CardInformation _cardPreview => cardPreview;
 
     public void Show(Card card)
     {
         if (dragging == false)
         {
-            selectedCard.gameObject.SetActive(true);
-            selectedCard.Setup(card);
+            cardPreview.gameObject.SetActive(true);
+            cardPreview.Setup(card);
         }
     }
 
     public void Hide()
     {
-        if (dragging == false)
+        if (!dragging)
         {
-            selectedCard.gameObject?.SetActive(false);
+            if (cardPreview != null)
+            {
+                cardPreview.transform.position = new Vector3(-7f, cardPreview.transform.position.y, cardPreview.transform.position.z);
+                cardPreview.gameObject.SetActive(false);
+            }
         }
     }
 

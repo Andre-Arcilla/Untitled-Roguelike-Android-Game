@@ -252,6 +252,8 @@ public class CardHolder : MonoBehaviour
             yield break;
         }
 
+        transform.Find("Line Holder").gameObject.SetActive(false);
+
         float cardSpacing = 1f / childCount;
         float firstCardPos = 0.5f - (childCount - 1) * cardSpacing / 2;
         Spline spline = splineContainer1.Spline;
@@ -277,8 +279,14 @@ public class CardHolder : MonoBehaviour
             cardSequence.Append(child.transform.DOLocalMove(targetPosition, animationSpeed));
             cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, animationSpeed));
             cardSequence.SetLink(gameObject).SetAutoKill(true);
-            cardSequence.OnComplete(() => collider.enabled = true);
+            cardSequence.OnComplete(() =>
+            {
+                collider.enabled = true;
+                DrawLine.Instance.UpdateAllLineStarts();
+                transform.Find("Line Holder").gameObject.SetActive(true);
+            });
         }
+
         yield return new WaitForSeconds(animationSpeed);
     }
 
@@ -302,6 +310,8 @@ public class CardHolder : MonoBehaviour
         int cardCount = validCards.Count;
         if (cardCount <= 0)
             yield break;
+
+        transform.Find("Line Holder").gameObject.SetActive(false);
 
         float cardSpacing = 1f / cardCount;
         float firstCardPos = 0.5f - (cardCount - 1) * cardSpacing / 2;
@@ -329,8 +339,14 @@ public class CardHolder : MonoBehaviour
             cardSequence.Append(child.transform.DOLocalMove(targetPosition, animationSpeed));
             cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, animationSpeed));
             cardSequence.SetLink(gameObject).SetAutoKill(true);
-            cardSequence.OnComplete(() => collider.enabled = true);
+            cardSequence.OnComplete(() =>
+            {
+                collider.enabled = true;
+                DrawLine.Instance.UpdateAllLineStarts();
+                transform.Find("Line Holder").gameObject.SetActive(true);
+            });
         }
+
         yield return new WaitForSeconds(animationSpeed);
     }
 
@@ -354,6 +370,8 @@ public class CardHolder : MonoBehaviour
         int validCount = validCards.Count;
         if (validCount <= 0)
             yield break;
+
+        transform.Find("Line Holder").gameObject.SetActive(false);
 
         float cardSpacing = 1f / validCount;
         float firstCardPos = 0.5f - (validCount - 1) * cardSpacing / 2;

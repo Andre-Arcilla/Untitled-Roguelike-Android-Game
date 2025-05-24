@@ -141,6 +141,7 @@ MonoBehaviour:
   cardNameTxt: {fileID: 4946561987744739731}
   cardDescTxt: {fileID: 3550225388934438915}
   sprite: {fileID: 6291042451393704250}
+  distanceLimit: 6
   isSelected: 0
   isDragging: 0
   isDeselecting: 0

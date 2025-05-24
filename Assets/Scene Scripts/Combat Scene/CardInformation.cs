@@ -79,6 +79,7 @@ public class CardInformation : MonoBehaviour
 
     //drag and drop ===============================================================================================
     [Header("Card Position")]
+    [SerializeField] private int distanceLimit = 2;
     [SerializeField] public bool isSelected = false;
     [SerializeField] public bool isDragging = false;
     [SerializeField] public bool isDeselecting = false;
@@ -144,6 +145,13 @@ public class CardInformation : MonoBehaviour
             }
         }
 
+        float distance = Vector3.Distance(transform.position, CardShowInfo.Instance._cardPreview.transform.position);
+
+        if (distance < distanceLimit && Vector3.Distance(transform.position, originalPosition) > 2f)
+        {
+            float snapX = transform.position.x < CardShowInfo.Instance._cardPreview.transform.position.x ? -7f : 7f;
+            CardShowInfo.Instance._cardPreview.transform.position = new Vector3(snapX, CardShowInfo.Instance._cardPreview.transform.position.y, CardShowInfo.Instance._cardPreview.transform.position.z);
+        }
 
         // Update the object's position as the mouse is dragged
         Vector3 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);

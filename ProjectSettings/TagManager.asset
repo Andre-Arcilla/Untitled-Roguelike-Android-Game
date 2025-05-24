@@ -38,6 +38,24 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Sky
+    uniqueID: 273706585
+    locked: 0
+  - name: Clouds
+    uniqueID: 3415854543
+    locked: 0
+  - name: Floor
+    uniqueID: 2756712611
+    locked: 0
+  - name: Walls
+    uniqueID: 673645495
+    locked: 0
+  - name: Player
+    uniqueID: 3436869367
+    locked: 0
+  - name: Playmat
+    uniqueID: 523036289
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

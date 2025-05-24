@@ -60,7 +60,9 @@ public class ActionSystem : MonoBehaviour
 
     private IEnumerator EndTurnCoroutine()
     {
+        CharacterGenerator.Instance.DisablePlayerRaycasts();
         EnemyActionsManager.Instance.SetEnemyAction();
+        CharacterManager.Instance.DisplayCardView();
         Debug.Log("----------ENEMY ACTION SET----------");
         SortActions();
         Debug.Log("----------ACTIONS SORTED----------");
@@ -72,7 +74,7 @@ public class ActionSystem : MonoBehaviour
         Debug.Log("----------DEATHS CHECKED----------");
         yield return DiscardAndDrawAllDecks();
         Debug.Log("----------DECKS REDRAWN----------");
-        //CharacterManager.Instance.ResetCardView();
+        CharacterGenerator.Instance.EnablePlayerRaycasts();
 
         actions.Clear();
         EndTurnRestoreMana();
@@ -129,8 +131,6 @@ public class ActionSystem : MonoBehaviour
                 Debug.Log($"{targetInfo.name} is dead");
                 continue;
             }
-
-            CharacterManager.Instance.DisplayCardView();
 
             if (TargetingSystem.Instance.allies.members.Contains(action.sender))
             {
@@ -245,6 +245,9 @@ public class ActionSystem : MonoBehaviour
         {
             effect.Execute(sender, card, target);
         }
+
+        target.GetComponent<CardInformation>().UpdateCard();
+
         yield return new WaitForSeconds(0.5f);
 
         yield return senderDeck.EndPlayCard(card);

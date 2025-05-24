@@ -4,36 +4,40 @@ public class CounterStatusEffect : IStatusEffect
 {
     public string Name => "Counter";
     public int Duration { get => duration; set => duration = value; }
-    public bool IsShortTerm => true;
-    public bool NegatesDamage => negateDamage;
-    public bool ExpiresOnHit => expiresOnHit;
+    public bool NegatesDamage => _NegateDamage;
+    public bool ExpiresOnHit => _ExpiresOnHit;
+    public bool IsShortTerm => _IsShortTerm;
 
     [SerializeField] private int duration = 1;
     [SerializeField] private int damage;
-    [SerializeField] private bool negateDamage;
-    [SerializeField] private bool expiresOnHit;
-    [SerializeField] private CharacterInfo target;
+    [SerializeField] private bool _NegateDamage = false;
+    [SerializeField] private bool _ExpiresOnHit = false;
+    [SerializeField] private bool _IsShortTerm = true;
+    private CharacterInfo target;
+
+    public CounterStatusEffect() { }
 
     public CounterStatusEffect(int damage, bool negateDamage, bool expiresOnHit)
     {
         this.damage = damage;
-        this.negateDamage = negateDamage;
-        this.expiresOnHit = expiresOnHit;
+        this._NegateDamage = negateDamage;
+        this._ExpiresOnHit = expiresOnHit;
     }
 
     public void OnApply(CharacterInfo target)
     {
         this.target = target;
-        Debug.Log(target.characterData.basicInfo.characterName + " has gained counter");
     }
 
-    public void OnTurnStart() { }
+    public void OnTurnStart()
+    {
+        duration--;
+    }
 
-    public void OnRemove() { Debug.Log(target.characterData.basicInfo.characterName + " has lost counter"); }
+    public void OnRemove() { }
 
     public void OnTrigger(CharacterInfo attacker)
     {
         attacker.currentHP -= damage;
-        Debug.Log(attacker.characterData.basicInfo.characterName + " got hit with a counter");
     }
 }

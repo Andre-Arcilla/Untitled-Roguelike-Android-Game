@@ -4,30 +4,32 @@ public class DodgeStatusEffect : IStatusEffect
 {
     public string Name => "Dodge";
     public int Duration { get => duration; set => duration = value; }
-    public bool IsShortTerm => true;
-    public bool ExpiresOnHit => expiresOnHit;
+    public bool IsShortTerm => _IsShortTerm;
+    public bool ExpiresOnHit => _ExpiresOnHit;
 
     [SerializeField] private int duration = 1;
-    [SerializeField] private bool expiresOnHit;
-    [SerializeField] private CharacterInfo target;
+    [SerializeField] private bool _ExpiresOnHit;
+    [SerializeField] private bool _IsShortTerm = true;
+    private CharacterInfo target;
+
+    public DodgeStatusEffect() { }
 
     public DodgeStatusEffect(bool expiresOnHit)
     {
-        this.expiresOnHit = expiresOnHit;
+        _ExpiresOnHit = expiresOnHit;
     }
 
     public void OnApply(CharacterInfo target)
     {
         this.target = target;
-        Debug.Log(target.characterData.basicInfo.characterName + " has gained dodge");
     }
 
-    public void OnTurnStart() { }
-
-    public void OnRemove() { Debug.Log(target.characterData.basicInfo.characterName + " has lost dodge"); }
-
-    public void OnTrigger(CharacterInfo attacker)
+    public void OnTurnStart()
     {
-        Debug.Log(attacker.characterData.basicInfo.characterName + " missed");
+        duration--;
     }
+
+    public void OnRemove() { }
+
+    public void OnTrigger(CharacterInfo attacker) { }
 }

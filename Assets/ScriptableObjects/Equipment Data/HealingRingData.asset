@@ -18,12 +18,17 @@ MonoBehaviour:
   price: 150
   slotType: 3
   classType: 0
-  bonusHP: 10
+  bonusHP: 0
   bonusEN: 0
-  bonusPWR: 0
+  bonusPWR: 13
   bonusSPD: 0
   cards:
-  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
   - {fileID: 11400000, guid: 1064ac19135e89244b66dca2f30d403e, type: 2}
-  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
+  - {fileID: 11400000, guid: 1064ac19135e89244b66dca2f30d403e, type: 2}
+  - {fileID: 11400000, guid: 1064ac19135e89244b66dca2f30d403e, type: 2}
+  - {fileID: 11400000, guid: 1064ac19135e89244b66dca2f30d403e, type: 2}
+  effects: []
   sprite: {fileID: 21300000, guid: 9d087bc2abacfe94fa30d584e7052070, type: 3}
+  references:
+    version: 2
+    RefIds: []

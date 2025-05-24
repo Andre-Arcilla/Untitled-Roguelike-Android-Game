@@ -822,9 +822,6 @@ MonoBehaviour:
   ENText: {fileID: 312320385275971962}
   spriteHolder: {fileID: 4738295694272716097}
   sprite: {fileID: 4557150397770405615}
-  classDatabase: {fileID: 11400000, guid: 079756c96ff5c61459f2b5d3cde6bb23, type: 2}
-  enemyClassDatabase: {fileID: 11400000, guid: d41b80b74e9c821459f62460cb2edb82, type: 2}
-  raceDatabase: {fileID: 11400000, guid: 5fe67e59516e4804c9748cebd6d79e09, type: 2}
   characterDeck: {fileID: 1906858228604015044}
   characterData:
     isAlive: 0
@@ -850,9 +847,13 @@ MonoBehaviour:
     totalEN: 0
     totalPWR: 0
     totalSPD: 0
+  equipmentList: []
   deck: []
   activeEffects: []
-  bouncyMaterial: {fileID: 6200000, guid: 6a7bef266a127f84c95e1f0537f39182, type: 2}
+  enemyClassDatabase: {fileID: 11400000, guid: d41b80b74e9c821459f62460cb2edb82, type: 2}
+  classDatabase: {fileID: 11400000, guid: 079756c96ff5c61459f2b5d3cde6bb23, type: 2}
+  raceDatabase: {fileID: 11400000, guid: 5fe67e59516e4804c9748cebd6d79e09, type: 2}
+  equipmentDatabase: {fileID: 11400000, guid: 1e4bbed14a7395d40a4f339860c16f81, type: 2}
   references:
     version: 2
     RefIds: []

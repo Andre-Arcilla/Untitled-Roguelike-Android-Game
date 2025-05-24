@@ -2,6 +2,7 @@ using SerializeReferenceEditor;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class CharacterInfo : MonoBehaviour
 {
@@ -17,17 +18,18 @@ public class CharacterInfo : MonoBehaviour
     [Header("Character Information")]
     [SerializeField] private GameObject spriteHolder;
     [SerializeField] private GameObject sprite;
-    [SerializeField] private ClassDatabase classDatabase;
-    [SerializeField] private ClassDatabase enemyClassDatabase;
-    [SerializeField] private RaceDatabase raceDatabase;
     [SerializeField] private CharacterDeck characterDeck;
     [SerializeField] public CharacterData characterData;
     [SerializeField] public Stats stats;
+    [SerializeField] public List<EquipmentDataSO> equipmentList;
     [SerializeField] private List<CardDataSO> deck;
     [SerializeReference, SR] public List<IStatusEffect> activeEffects = new List<IStatusEffect>();
 
     [Header("Others")]
-    [SerializeField] private PhysicsMaterial2D bouncyMaterial;
+    [SerializeField] private ClassDatabase enemyClassDatabase;
+    [SerializeField] private ClassDatabase classDatabase;
+    [SerializeField] private RaceDatabase raceDatabase;
+    [SerializeField] private EquipmentDatabase equipmentDatabase;
 
     [System.Serializable]
     public class Stats
@@ -44,6 +46,7 @@ public class CharacterInfo : MonoBehaviour
 
         GenerateCharacterStats();
         GenerateCharacterDeck();
+        SetCharacterEquipment();
         GenerateCharacterSprite();
         characterDeck.SetDeck(deck);
     }
@@ -77,6 +80,87 @@ public class CharacterInfo : MonoBehaviour
         stats.totalSPD = selectedRace.SPD + characterData.allocatedStats.allocatedSPD;
 
         SetResources();
+    }
+
+    private void GenerateCharacterDeck()
+    {
+        foreach (var targetClassName in characterData.classes)
+        {
+            ClassDataSO selectedClass = null;
+
+            if (gameObject.GetComponent<Targetable>().team == Team.Player)
+            {
+                selectedClass = classDatabase.allClasses.Find(c => c.className == targetClassName);
+
+                if (selectedClass == null)
+                {
+                    Debug.LogError($"Class '{targetClassName}' not found in database.");
+                    continue;
+                }
+            }
+            else if (gameObject.GetComponent<Targetable>().team == Team.Enemy)
+            {
+                selectedClass = enemyClassDatabase.allClasses.Find(c => c.className == targetClassName);
+
+                if (selectedClass == null)
+                {
+                    Debug.LogError($"Class '{targetClassName}' not found in database.");
+                    continue;
+                }
+            }
+
+            // Merge the current class's deck into the character's deck
+            deck.AddRange(selectedClass.startingDeck);
+        }
+    }
+
+    private void SetCharacterEquipment()
+    {
+        //give effects
+
+        List<string> equipmentNames = new List<string>
+        {
+            characterData.equipment.armor,
+            characterData.equipment.weapon,
+            characterData.equipment.accessory1,
+            characterData.equipment.accessory2,
+            characterData.equipment.accessory3
+        };
+
+        foreach (string equipmentName in equipmentNames)
+        {
+            if (string.IsNullOrWhiteSpace(equipmentName)) continue;
+
+            EquipmentDataSO foundEquipment = equipmentDatabase.allEquipments.Find(i => i.equipmentName == equipmentName);
+
+            if (foundEquipment != null)
+            {
+                //set the equipment to character list
+                equipmentList.Add(foundEquipment);
+
+                //add bonus stats to character stats
+                stats.totalHP += foundEquipment.bonusHP;
+                stats.totalEN += foundEquipment.bonusEN;
+                stats.totalPWR += foundEquipment.bonusPWR;
+                stats.totalSPD += foundEquipment.bonusSPD;
+
+                //add bonus cards to character deck
+                if (foundEquipment.cards != null && foundEquipment.cards.Count > 0)
+                {
+                    deck.AddRange(foundEquipment.cards);
+                }
+
+                //add bonus effects to character's effects list
+                if (foundEquipment.effects != null && foundEquipment.effects.Count > 0)
+                {
+                    foreach (IStatusEffect effect in foundEquipment.effects)
+                    {
+                        IStatusEffect cloned = CloneStatusEffect(effect);
+                        ApplyStatusEffect(cloned);
+                    }
+                }
+            }
+        }
     }
 
     private void GenerateCharacterSprite()
@@ -116,38 +200,6 @@ public class CharacterInfo : MonoBehaviour
         sprite.AddComponent<Rigidbody2D>();
         sprite.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         gameObject.GetComponent<Targetable>().targetCollider = sprite.GetComponent<Collider2D>();
-    }
-
-    private void GenerateCharacterDeck()
-    {
-        foreach (var targetClassName in characterData.classes)
-        {
-            ClassDataSO selectedClass = null;
-
-            if (gameObject.GetComponent<Targetable>().team == Team.Player)
-            {
-                selectedClass = classDatabase.allClasses.Find(c => c.className == targetClassName);
-
-                if (selectedClass == null)
-                {
-                    Debug.LogError($"Class '{targetClassName}' not found in database.");
-                    continue;
-                }
-            }
-            else if (gameObject.GetComponent<Targetable>().team == Team.Enemy)
-            {
-                selectedClass = enemyClassDatabase.allClasses.Find(c => c.className == targetClassName);
-
-                if (selectedClass == null)
-                {
-                    Debug.LogError($"Class '{targetClassName}' not found in database.");
-                    continue;
-                }
-            }
-
-            // Merge the current class's deck into the character's deck
-            deck.AddRange(selectedClass.startingDeck);
-        }
     }
 
     public void ApplyStatusEffect(IStatusEffect newEffect)
@@ -200,6 +252,12 @@ public class CharacterInfo : MonoBehaviour
             effect.OnRemove();
             activeEffects.Remove(effect);
         }
+    }
+
+    public static IStatusEffect CloneStatusEffect(IStatusEffect original)
+    {
+        string json = JsonUtility.ToJson(original);
+        return (IStatusEffect)JsonUtility.FromJson(json, original.GetType());
     }
 
     public bool TriggerOnHitEffects(CharacterInfo attacker)

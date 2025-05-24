@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0d893017317f027479a23f906934b0e3
+guid: 69e4d0686a8daae478643de028e450b7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 1, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 0, y: 6, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -105,13 +105,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: wall bg_0
+      name: Clouds_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 0
-        width: 336
-        height: 33
+        x: 0
+        y: 50
+        width: 144
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -119,8 +119,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ccc787c0093dce445a87a495010c942d
-      internalID: -815724235
+      spriteID: 57db051f7b0bf4945b64f3b0b65ce31b
+      internalID: -47107692
       vertices: []
       indices: 
       edges: []
@@ -136,7 +136,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      wall bg_0: -815724235
+      Clouds_0: -47107692
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

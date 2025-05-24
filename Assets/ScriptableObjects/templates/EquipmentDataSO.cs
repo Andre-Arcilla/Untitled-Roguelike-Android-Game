@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SerializeReferenceEditor;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewEquipment", menuName = "EquipmentData")]
@@ -37,6 +38,11 @@ public class EquipmentDataSO : ScriptableObject
     [Header("Cards Provided")]
     [Tooltip("Additional cards gained when equipment is used")]
     public List<CardDataSO> cards;
+
+    [Header("Effects Provided")]
+    [Tooltip("Effects provided when equipment is used")]
+    [SerializeReference, SR]
+    public List<IStatusEffect> effects;
 
     [Header("Other")]
     [Tooltip("Optional sprite/icon for the equipment.")]

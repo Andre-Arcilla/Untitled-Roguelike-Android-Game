@@ -18,9 +18,24 @@ MonoBehaviour:
   price: 450
   slotType: 3
   classType: 0
-  bonusHP: 10
-  bonusEN: 0
+  bonusHP: 0
+  bonusEN: 13
   bonusPWR: 0
   bonusSPD: 0
-  cards: []
+  cards:
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  effects:
+  - rid: 58940946188600143
   sprite: {fileID: 21300000, guid: 9d087bc2abacfe94fa30d584e7052070, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 58940946188600143
+      type: {class: DodgeStatusEffect, ns: , asm: Assembly-CSharp}
+      data:
+        duration: 5
+        _ExpiresOnHit: 0
+        _IsShortTerm: 0

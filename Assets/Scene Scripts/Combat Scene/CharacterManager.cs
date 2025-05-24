@@ -20,7 +20,6 @@ public class CharacterManager : MonoBehaviour
 
     [SerializeField] public List<GameObject> characterList;
     [SerializeField] private List<GameObject> allCardViews;
-    private Tween currentPulseTween;
 
     public void SetCardViews()
     {
@@ -34,8 +33,6 @@ public class CharacterManager : MonoBehaviour
                 allCardViews.Add(cardView);
             }
         }
-
-        allCardViews[0].SetActive(true);
     }
 
     public void DisplayCardView(GameObject targetView)
@@ -100,13 +97,23 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
-    public void ResetCardView()
+    public void SelectFirstCharacter()
+    {
+        foreach (var card in allCardViews)
+        {
+            if (card.GetComponentInParent<CharacterInfo>().currentHP > 0)
+            {
+                DisplayCardView(card);
+                break;
+            }
+        }
+    }
+
+    public void DeselectCharacters()
     {
         foreach (var cardView in allCardViews)
         {
             cardView.SetActive(false);
         }
-
-        allCardViews[0].SetActive(true);
     }
 }

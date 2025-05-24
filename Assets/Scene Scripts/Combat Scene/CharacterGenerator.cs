@@ -1,7 +1,10 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.Splines.Examples;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CharacterGenerator : MonoBehaviour
 {
@@ -22,11 +25,19 @@ public class CharacterGenerator : MonoBehaviour
     [SerializeField] private GameObject allyParent;
     [SerializeField] private GameObject enemyParent;
     [SerializeField] private EnemyDatabase enemyDatabase;
+    [SerializeField] private List<BackgroundController> backgrounds;
+    [SerializeField] public float moveSpeed => backgrounds.Find(bg => bg.name == "floor bg").parallaxSpeed;
 
     private void Start()
     {
         GenerateParty();
-        GenerateEnemy();
+
+        DisablePlayerRaycasts();
+        DOVirtual.DelayedCall(2f, () =>
+        {
+            GenerateEnemy();
+        });
+
         CharacterManager.Instance.SetCardViews();
     }
 
@@ -43,7 +54,12 @@ public class CharacterGenerator : MonoBehaviour
 
         TargetingSystem.Instance.enemies.members.Clear();
         EnemyActionsManager.Instance.enemyList.Clear();
-        GenerateEnemy();
+
+        DisablePlayerRaycasts();
+        DOVirtual.DelayedCall(2f, () =>
+        {
+            GenerateEnemy();
+        });
     }
 
 
@@ -100,6 +116,9 @@ public class CharacterGenerator : MonoBehaviour
             new Vector2(3.0f, 0.15f)
         };
 
+        enemyParent.transform.DOKill();
+        enemyParent.transform.position = new Vector3(allyParent.transform.position.x + 15, 0f);
+        
         for (int i = 0; i < count && i < positions.Length; i++)
         {
             CharacterDataSO randomEnemySO = enemyDatabase.allEnemies[Random.Range(0, enemyDatabase.allEnemies.Count)];
@@ -121,6 +140,29 @@ public class CharacterGenerator : MonoBehaviour
 
             info.Initialize();
         }
+
+        StartCoroutine(MoveAndScrollCoroutine(Vector3.zero));
+    }
+
+    private IEnumerator MoveAndScrollCoroutine(Vector3 targetPos)
+    {
+        while (Vector3.Distance(enemyParent.transform.position, targetPos) > 0.01f)
+        {
+            DisablePlayerRaycasts();
+            // Move enemyParent towards target
+            enemyParent.transform.position = Vector3.MoveTowards(enemyParent.transform.position, targetPos, moveSpeed * Time.deltaTime);
+
+            // Scroll backgrounds based on deltaTime
+            foreach (var bg in backgrounds)
+            {
+                bg.Scroll(Time.deltaTime);
+            }
+
+            yield return new WaitForFixedUpdate(); // wait for next frame
+        }
+
+        EnablePlayerRaycasts();
+        CharacterManager.Instance.SelectFirstCharacter();
     }
 
     private CharacterData ConvertSOToCharacterData(CharacterDataSO so)
@@ -150,5 +192,26 @@ public class CharacterGenerator : MonoBehaviour
         data.equipment.accessory3 = so.equipment.accessory3;
 
         return data;
+    }
+
+    public void DisablePlayerRaycasts()
+    {
+        int layer = LayerMask.NameToLayer("Ignore Raycast");
+        SetLayerRecursively(allyParent.transform, layer);
+    }
+
+    public void EnablePlayerRaycasts()
+    {
+        int layer = LayerMask.NameToLayer("Default");
+        SetLayerRecursively(allyParent.transform, layer);
+    }
+
+    private void SetLayerRecursively(Transform parent, int layer)
+    {
+        foreach (Transform child in parent)
+        {
+            child.gameObject.layer = layer;
+            SetLayerRecursively(child, layer);
+        }
     }
 }

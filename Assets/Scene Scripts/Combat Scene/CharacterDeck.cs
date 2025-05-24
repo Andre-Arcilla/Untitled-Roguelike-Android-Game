@@ -229,13 +229,6 @@ public class CharacterDeck : MonoBehaviour
     //method to add card to playing field
     public IEnumerator StartPlayCard(CardInformation card)
     {
-        //prevent card interaction on play start
-        int layer = LayerMask.NameToLayer("Ignore Raycast");
-        foreach (Transform t in transform.parent.GetComponentsInChildren<Transform>(true))
-        {
-            t.gameObject.layer = layer;
-        }
-
         Vector3 dropZone = new Vector3(0, 1, card.transform.position.z);
         Targetable cardOwner = GetComponentInParent<Targetable>();
         card.transform.Find("Card Front").gameObject.SetActive(true);
@@ -319,13 +312,6 @@ public class CharacterDeck : MonoBehaviour
         card.gameObject.transform.SetParent(discardParent.transform, false);
         card.isDragging = false;
         card.isUsing = false;
-
-        //returns card interaction on play end
-        int layer = LayerMask.NameToLayer("Default");
-        foreach (Transform t in transform.parent.GetComponentsInChildren<Transform>(true))
-        {
-            t.gameObject.layer = layer;
-        }
     }
 
     public IEnumerator EndPlaySortHand()
@@ -338,7 +324,7 @@ public class CharacterDeck : MonoBehaviour
         yield return null;
     }
 
-    void Shuffle<T>(List<T> list)
+    private void Shuffle<T>(List<T> list)
     {
         System.Random random = new System.Random();
 

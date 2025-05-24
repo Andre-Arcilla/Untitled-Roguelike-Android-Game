@@ -15,7 +15,7 @@ public class CombatSystem : MonoBehaviour
         }
 
         Instance = this;
-        waves = TownManager.Instance.waves;
+        waves = TownManager.Instance?.waves ?? 1;
         currentWave = 1;
     }
 

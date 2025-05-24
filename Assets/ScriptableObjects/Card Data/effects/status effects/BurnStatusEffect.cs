@@ -4,11 +4,14 @@ public class BurnStatusEffect : IStatusEffect
 {
     public string Name => "Burn";
     public int Duration { get => duration; set => duration = value; }
-    public bool IsShortTerm => false;
+    public bool IsShortTerm => _IsShortTerm;
 
     [SerializeField] private int duration;
     [SerializeField] private int damage;
-    [SerializeField] private CharacterInfo target;
+    [SerializeField] private bool _IsShortTerm = false;
+    private CharacterInfo target;
+
+    public BurnStatusEffect() { }
 
     public BurnStatusEffect(int duration, int damage)
     {

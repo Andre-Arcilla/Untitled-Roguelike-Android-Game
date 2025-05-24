@@ -48,7 +48,6 @@ public class CardHolder : MonoBehaviour
             child.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, spawnPoint.transform.position.z);
             child.transform.rotation = Quaternion.identity;
             child.transform.localScale = Vector3.one;
-            child.GetComponent<SortingGroup>().sortingOrder = 0;
             child.Find("Card Front").gameObject.SetActive(false);
             child.Find("Card Back").gameObject.SetActive(true);
 
@@ -63,6 +62,7 @@ public class CardHolder : MonoBehaviour
             var cardSequence = DOTween.Sequence();
             cardSequence.AppendCallback(() =>
             {
+                child.GetComponent<SortingGroup>().sortingOrder = 1;
                 child.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, handParent.transform.position.z);
             });
             cardSequence.Append(child.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 90f, 0f), 0.15f).SetEase(Ease.InOutQuad));
@@ -75,10 +75,14 @@ public class CardHolder : MonoBehaviour
             cardSequence.Append(child.transform.DOLocalMove(splinePosition + ((i * 0.2f) * Vector3.back), animationSpeed));
             cardSequence.Join(child.transform.DOLocalRotateQuaternion(rotation, animationSpeed));
             cardSequence.SetLink(gameObject).SetAutoKill(true);
-            cardSequence.OnComplete(() => collider.enabled = true);
+            cardSequence.OnComplete(() => {
+                collider.enabled = true;
+                child.GetComponent<SortingGroup>().sortingOrder = 0;
+            });
 
             // Append this card's animation to the main sequence with a short delay between cards
             mainSequence.Append(cardSequence);
+
         }
 
         yield return mainSequence.WaitForCompletion();
@@ -104,9 +108,12 @@ public class CardHolder : MonoBehaviour
         for (int i = childCount; i > 0; i--)
         {
             Transform child = handParent.transform.GetChild(i - 1);
-            child.GetComponent<SortingGroup>().sortingOrder = 0;
 
             var cardSequence = DOTween.Sequence();
+            cardSequence.AppendCallback(() =>
+            {
+                child.GetComponent<SortingGroup>().sortingOrder = 1;
+            });
             cardSequence.Append(child.transform.DOMove(new Vector3(despawnPos.x, despawnPos.y, child.transform.position.z), animationSpeed));
             cardSequence.Join(child.transform.DOLocalRotateQuaternion(Quaternion.identity, animationSpeed));
             cardSequence.Append(child.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 90f, 0f), 0.15f).SetEase(Ease.InOutQuad));
@@ -116,8 +123,11 @@ public class CardHolder : MonoBehaviour
                 child.Find("Card Back").gameObject.SetActive(true);
             });
             cardSequence.Append(child.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 0f, 0f), 0.15f).SetEase(Ease.InOutQuad));
-            cardSequence.OnComplete(() => child.transform.position += new Vector3(despawnPos.x, despawnPos.y, despawnPos.z));
             cardSequence.SetLink(gameObject).SetAutoKill(true);
+            cardSequence.OnComplete(() => {
+                child.transform.position += new Vector3(despawnPos.x, despawnPos.y, despawnPos.z);
+                child.GetComponent<SortingGroup>().sortingOrder = 0;
+            });
 
             // Append this card's animation to the main sequence with a short delay between cards
             mainSequence.Append(cardSequence);
@@ -136,7 +146,6 @@ public class CardHolder : MonoBehaviour
         }
 
         card.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, handParent.transform.position.z);
-        card.GetComponent<SortingGroup>().sortingOrder = 0;
         card.transform.rotation = Quaternion.identity;
         card.transform.localScale = Vector3.one;
         Vector3 dropZone = new Vector3(0, 1, card.transform.position.z);
@@ -146,6 +155,7 @@ public class CardHolder : MonoBehaviour
         var sequence = DOTween.Sequence();
         sequence.AppendCallback(() =>
         {
+            card.GetComponent<SortingGroup>().sortingOrder = 1;
             card.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, handParent.transform.position.z);
         });
         sequence.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 90f, 0f), 0.15f).SetEase(Ease.InOutQuad));
@@ -157,6 +167,10 @@ public class CardHolder : MonoBehaviour
         sequence.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 0f, 0f), 0.15f).SetEase(Ease.InOutQuad));
         sequence.Append(card.transform.DOMove(dropZone, 0.15f));
         sequence.SetLink(gameObject).SetAutoKill(true);
+        sequence.OnComplete(() => {
+            card.GetComponent<SortingGroup>().sortingOrder = 0;
+        });
+
         yield return sequence.WaitForCompletion();
 
         yield return new WaitForSeconds(animationSpeed);
@@ -176,7 +190,6 @@ public class CardHolder : MonoBehaviour
         }
 
         card.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, handParent.transform.position.z);
-        card.GetComponent<SortingGroup>().sortingOrder = 0;
         card.transform.rotation = Quaternion.identity;
         card.transform.localScale = Vector3.one;
         Vector3 dropZoneA = new Vector3(0, 1, card.transform.position.z);
@@ -187,6 +200,7 @@ public class CardHolder : MonoBehaviour
         var sequenceA = DOTween.Sequence();
         sequenceA.AppendCallback(() =>
         {
+            card.GetComponent<SortingGroup>().sortingOrder = 1;
             card.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, handParent.transform.position.z);
         });
         sequenceA.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 90f, 0f), 0.15f).SetEase(Ease.InOutQuad));
@@ -213,6 +227,9 @@ public class CardHolder : MonoBehaviour
         sequenceB.Append(card.transform.DOLocalRotateQuaternion(Quaternion.Euler(0f, 0f, 0f), 0.15f).SetEase(Ease.InOutQuad));
         sequenceB.OnComplete(() => card.transform.position += new Vector3(0, 0, 1));
         sequenceB.SetLink(gameObject).SetAutoKill(true);
+        sequenceB.OnComplete(() => {
+            card.GetComponent<SortingGroup>().sortingOrder = 0;
+        });
         yield return sequenceB.WaitForCompletion();
 
         card.transform.SetParent(parent.transform, true);

@@ -200,7 +200,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partyMembers: []
-  inventoryItems: []
+  partyInventory: []
+  partyGold: 0
 --- !u!4 &1425264276
 Transform:
   m_ObjectHideFlags: 0

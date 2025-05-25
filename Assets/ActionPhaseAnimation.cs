@@ -162,8 +162,6 @@ public class ActionPhaseAnimation : MonoBehaviour
         }
 
         yield return null;
-
-        Debug.Log("Card hit the target!");
     }
 
     public void ActionAnimationEnd(Targetable sender, CardInformation card, GameObject target)

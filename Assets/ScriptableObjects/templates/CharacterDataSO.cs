@@ -10,6 +10,7 @@ public class CharacterDataSO : ScriptableObject
         [Header("Basic Info")]
         public string characterName;
         public int level;
+        public int xp;
         public string gender;
         public string raceName;
     }

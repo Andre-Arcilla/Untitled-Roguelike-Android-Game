@@ -26,6 +26,7 @@ public class CharacterGenerator : MonoBehaviour
     [SerializeField] private GameObject enemyParent;
     [SerializeField] private EnemyDatabase enemyDatabase;
     [SerializeField] private List<BackgroundController> backgrounds;
+    [SerializeField] private CloudSpawner clouds;
     [SerializeField] public float moveSpeed => backgrounds.Find(bg => bg.name == "floor bg").parallaxSpeed;
     [SerializeField] public float moveDelay = 2f;
 
@@ -148,10 +149,11 @@ public class CharacterGenerator : MonoBehaviour
     private IEnumerator MoveAndScrollCoroutine(Vector3 targetPos)
     {
         //yield return new WaitForSeconds(moveDelay);
+        DisablePlayerRaycasts();
+        clouds.driftSpeed = 3;
 
         while (Vector3.Distance(enemyParent.transform.position, targetPos) > 0.01f)
         {
-            DisablePlayerRaycasts();
             // Move enemyParent towards target
             enemyParent.transform.position = Vector3.MoveTowards(enemyParent.transform.position, targetPos, moveSpeed * Time.deltaTime);
 
@@ -165,6 +167,7 @@ public class CharacterGenerator : MonoBehaviour
         }
 
         EnablePlayerRaycasts();
+        clouds.driftSpeed = 1;
         CharacterManager.Instance.SelectFirstCharacter();
     }
 

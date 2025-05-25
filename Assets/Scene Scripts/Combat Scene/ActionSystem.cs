@@ -1,10 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class ActionSystem : MonoBehaviour
 {
@@ -22,8 +20,6 @@ public class ActionSystem : MonoBehaviour
         Instance = this;
     }
 
-    [SerializeField] private List<Action> actions = new List<Action>();
-
     [System.Serializable]
     public struct Action
     {
@@ -38,6 +34,8 @@ public class ActionSystem : MonoBehaviour
             this.target = target;
         }
     }
+
+    [SerializeField] private List<Action> actions = new List<Action>();
 
     public void AddCard(Targetable sender, CardInformation card, GameObject target)
     {
@@ -61,9 +59,12 @@ public class ActionSystem : MonoBehaviour
     private IEnumerator EndTurnCoroutine()
     {
         CharacterGenerator.Instance.DisablePlayerRaycasts();
-        EnemyActionsManager.Instance.SetEnemyAction();
+        Debug.Log("----------DISABLE RAYCASTS----------");
         CharacterManager.Instance.DisplayCardView();
+        Debug.Log("----------DESELECT CHARACTERS----------");
         DrawLine.Instance.RemoveAllLines();
+        Debug.Log("----------TARGET LINES REMOVED----------");
+        EnemyActionsManager.Instance.SetEnemyAction();
         Debug.Log("----------ENEMY ACTION SET----------");
         SortActions();
         Debug.Log("----------ACTIONS SORTED----------");
@@ -71,14 +72,16 @@ public class ActionSystem : MonoBehaviour
         Debug.Log("----------ACTIONS DONE----------");
         DoStatusEffects();
         Debug.Log("----------STATUS EFFECTS TRIGGERED----------");
-        CheckForGroupDefeat();
-        Debug.Log("----------DEATHS CHECKED----------");
         yield return DiscardAndDrawAllDecks();
         Debug.Log("----------DECKS REDRAWN----------");
-        CharacterGenerator.Instance.EnablePlayerRaycasts();
-
         actions.Clear();
+        Debug.Log("----------ACTIONS CLEARED----------");
         EndTurnRestoreMana();
+        Debug.Log("----------MANA RESTORED----------");
+        CheckForGroupDefeat();
+        Debug.Log("----------DEATHS CHECKED----------");
+        CharacterGenerator.Instance.EnablePlayerRaycasts();
+        Debug.Log("----------ENABLE RAYCASTS----------");
     }
 
     //sorts all action by sender's speed stat
@@ -141,7 +144,7 @@ public class ActionSystem : MonoBehaviour
             }
 
             ActionPhaseAnimation.Instance.ActionAnimationStart(action.sender, action.card, action.target);
-            yield return StartCoroutine(senderDeck.StartPlayCard(action.card));
+            yield return senderDeck.StartPlayCard(action.card);
 
             foreach (ICardEffect effect in action.card.card.effects)
             {
@@ -157,6 +160,16 @@ public class ActionSystem : MonoBehaviour
             if (targetInfo != null && targetInfo.currentHP <= 0)
             {
                 targetInfo.currentHP = 0;
+                targetInfo.UpdateResourcesView();
+
+                if (TargetingSystem.Instance.allies.members.Contains(senderInfo.GetComponent<Targetable>()))
+                {
+                    int levelDiff = Mathf.Max(targetInfo.characterData.basicInfo.level - senderInfo.characterData.basicInfo.level, 1);
+                    float multiplier = Mathf.Max(levelDiff * 0.75f, 1.25f);
+                    int goldFound = Mathf.RoundToInt(Random.Range(50, 101) * multiplier);
+
+                    CombatSystem.Instance.AddKillCount(senderInfo.characterData, levelDiff, goldFound);
+                }
                 //targetInfo.gameObject.SetActive(false);
             }
 
@@ -217,7 +230,7 @@ public class ActionSystem : MonoBehaviour
         if (allAlliesDead == true)
         {
             Debug.Log("All allies are dead. Defeat.");
-            CombatSystem.Instance.CombatCompleteLose();
+            CombatSystem.Instance.CombatCompleteLose(allAlliesDead);
         }
         else if (allEnemiesDead == true)
         {

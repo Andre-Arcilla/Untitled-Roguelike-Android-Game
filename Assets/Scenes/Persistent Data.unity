@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b868e1b47868bc4458d400a91389b80c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fallBackTown: {fileID: 11400000, guid: a12e403b6132aea40bc428b7e77358f2, type: 2}
   townFrom: {fileID: 0}
   townTo: {fileID: 0}
   waves: 0

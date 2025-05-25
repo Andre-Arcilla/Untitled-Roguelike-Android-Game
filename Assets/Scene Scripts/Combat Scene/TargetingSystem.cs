@@ -142,15 +142,8 @@ public class TargetingSystem : MonoBehaviour
         start.y += 1f;
         start.z -= 0.5f;
         end.z += 0.5f;
-
-        Debug.Log(sender);
-        Debug.Log(target);
-
         Color senderColor = GetSenderColor(sender);
         Color targetColor = GetSenderColor(target);
-
-        Debug.Log(senderColor);
-        Debug.Log(targetColor);
 
         DrawLine.Instance.CreateCurvedLine(lineHolder, card, start, end, senderColor, targetColor);
     }

@@ -39,7 +39,6 @@ public class DrawLine : MonoBehaviour
     public void CreateCurvedLine(Transform senderParent, GameObject card, Vector3 start, Vector3 end, Color? senderColor = null, Color? targetColor = null)
     {
         GameObject lineObj = new GameObject("CurvedLine");
-        Debug.Log(senderParent);
         lineObj.transform.SetParent(senderParent);
 
         LineRenderer lr = lineObj.AddComponent<LineRenderer>();

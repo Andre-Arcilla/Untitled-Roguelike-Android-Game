@@ -138,7 +138,23 @@ public class CardInformation : MonoBehaviour
         List<GameObject> potentialTargets = TargetSelector.Instance.GetTargets(this, sender);
         foreach (GameObject target in potentialTargets)
         {
-            target.GetComponentInChildren<SortingGroup>().sortingOrder = 2;
+            SortingGroup sortingGroup = null;
+
+            Transform charSprite = target.transform.Find("Character Sprite");
+            if (charSprite != null)
+            {
+                sortingGroup = charSprite.GetComponentInChildren<SortingGroup>();
+            }
+            else
+            {
+                sortingGroup = target.GetComponentInChildren<SortingGroup>();
+            }
+
+            if (sortingGroup != null)
+            {
+                sortingGroup.sortingOrder = 2;
+            }
+
             if (target.name == TargetingSystem.Instance.center.name)
             {
                 target.GetComponent<SpriteRenderer>().enabled = true;
@@ -191,7 +207,23 @@ public class CardInformation : MonoBehaviour
         List<GameObject> potentialTargets = TargetSelector.Instance.GetTargets(this, sender);
         foreach (GameObject target in potentialTargets)
         {
-            target.GetComponentInChildren<SortingGroup>().sortingOrder = 0;
+            SortingGroup sortingGroup = null;
+
+            Transform charSprite = target.transform.Find("Character Sprite");
+            if (charSprite != null)
+            {
+                sortingGroup = charSprite.GetComponentInChildren<SortingGroup>();
+            }
+            else
+            {
+                sortingGroup = target.GetComponentInChildren<SortingGroup>();
+            }
+
+            if (sortingGroup != null)
+            {
+                sortingGroup.sortingOrder = 0;
+            }
+
             if (target.name == TargetingSystem.Instance.center.name)
             {
                 target.GetComponent<SpriteRenderer>().enabled = false;

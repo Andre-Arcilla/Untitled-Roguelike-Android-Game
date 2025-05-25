@@ -14,8 +14,13 @@ public class TownManager : MonoBehaviour
         }
 
         Instance = this;
+        if (townTo == null)
+        {
+            townTo = fallBackTown;
+        }
     }
 
+    [SerializeField] private TownDataSO fallBackTown;
     [SerializeField] public TownDataSO townFrom;
     [SerializeField] public TownDataSO townTo;
     [SerializeField] public int waves;

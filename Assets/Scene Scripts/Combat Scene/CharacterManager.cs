@@ -80,7 +80,6 @@ public class CharacterManager : MonoBehaviour
             characterSprite.DOKill();
             characterSprite.DOLocalMove(new Vector3(characterSprite.localPosition.x, 0.35f), 0.25f);
             characterSprite.localScale = new Vector3(0.750f, 0.750f);
-            Debug.Log(transform.parent.name);
         }
     }
 

@@ -23,6 +23,7 @@ public class CharacterDataSO : ScriptableObject
         public int allocatedEN;
         public int allocatedPWR;
         public int allocatedSPD;
+        public int statPoints;
     }
 
     [System.Serializable]

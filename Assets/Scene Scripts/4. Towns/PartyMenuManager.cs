@@ -43,6 +43,7 @@ public class PartyMenuManager : MonoBehaviour
     [SerializeField] private TMP_Text charHPTxt;
 
     [Header("Character Stats Panel")]
+    [SerializeField] private TMP_Text remainingStats;
     [SerializeField] private TMP_Text charHPStatTxt;
     [SerializeField] private TMP_Text charENStatTxt;
     [SerializeField] private TMP_Text charPWRStatTxt;
@@ -64,12 +65,15 @@ public class PartyMenuManager : MonoBehaviour
     [SerializeField] private List<CharacterData> characterList;
     [SerializeField] private TMP_Text goldTxt1;
     [SerializeField] private TMP_Text goldTxt2;
+    [SerializeField] private Button classAddBtn;
 
     [Header("Current Character")]
-    [SerializeField] private CharacterData currentCharacter;
-    [SerializeField] private Dictionary<CardDataSO, int> deck;
-    [SerializeField] private int HP;
-    [SerializeField] private int EN;
+    private CharacterData currentCharacter;
+    private Dictionary<CardDataSO, int> deck;
+    private int HP;
+    private int EN;
+    private int pointsLeft;
+    private List<ClassDataSO> availableClasses = new List<ClassDataSO>();
 
     [Header("Databases")]
     [SerializeField] private ClassDatabase _classDatabase;
@@ -114,6 +118,7 @@ public class PartyMenuManager : MonoBehaviour
             return;
         }
 
+        SelectedPanel(panelList[0]);
         SelectedCharacter(selectedBtn);
     }
 
@@ -229,6 +234,10 @@ public class PartyMenuManager : MonoBehaviour
         //make sure classHolder is empty
         foreach (Transform child in classHolder)
         {
+            if (child.GetComponent<Button>())
+            {
+                continue;
+            }
             Destroy(child.gameObject);
         }
         //make sure cardHolder is empty
@@ -284,10 +293,18 @@ public class PartyMenuManager : MonoBehaviour
             }
         }
 
+        int totalAllocated = currentCharacter.allocatedStats.allocatedHP
+                   + currentCharacter.allocatedStats.allocatedEN
+                   + currentCharacter.allocatedStats.allocatedPWR
+                   + currentCharacter.allocatedStats.allocatedSPD;
+        int maxAllocated = currentCharacter.basicInfo.level * 10;
+        pointsLeft = maxAllocated - totalAllocated;
+
         //generate character specific things
         GenerateCards();
         SetCharacterStats();
         GenerateEquipment();
+        classAddBtn.gameObject.SetActive(ClassAdditions());
 
         //input text on screen
         charNameTxt.text = currentCharacter.basicInfo.characterName.ToString();
@@ -333,6 +350,7 @@ public class PartyMenuManager : MonoBehaviour
     private void SetCharacterStats()
     {
         RaceDataSO selectedRace = raceDatabase.allRaces.Find(r => r.raceName == currentCharacter.basicInfo.raceName);
+        remainingStats.text = $"Remaining stat points: {pointsLeft}";
         charHPStatTxt.text = $"{selectedRace.HP.ToString("D2")}+{currentCharacter.allocatedStats.allocatedHP.ToString("D2")}";
         charENStatTxt.text = $"{selectedRace.EN.ToString("D2")}+{currentCharacter.allocatedStats.allocatedEN.ToString("D2")}";
         charPWRStatTxt.text = $"{selectedRace.PWR.ToString("D2")}+{currentCharacter.allocatedStats.allocatedPWR.ToString("D2")}";
@@ -345,6 +363,7 @@ public class PartyMenuManager : MonoBehaviour
     //method to increase stats
     public void IncStatButtonAction()
     {
+
         HandleStatChange("increase");
     }
 
@@ -372,24 +391,72 @@ public class PartyMenuManager : MonoBehaviour
     {
         int statChange = (change.ToLower() == "increase") ? 1 : -1;
 
+        int maxAllocated = currentCharacter.basicInfo.level * 10;
+
+        // Get current allocated stats into variables for easy manipulation
+        int allocatedHP = currentCharacter.allocatedStats.allocatedHP;
+        int allocatedEN = currentCharacter.allocatedStats.allocatedEN;
+        int allocatedPWR = currentCharacter.allocatedStats.allocatedPWR;
+        int allocatedSPD = currentCharacter.allocatedStats.allocatedSPD;
+
+        // Calculate total allocated excluding the stat we are about to change
+        int totalAllocatedExcludingCurrentStat = allocatedHP + allocatedEN + allocatedPWR + allocatedSPD;
+
+        // Subtract current stat from total (to avoid double counting)
         switch (statName)
         {
-            case "HP":
-                currentCharacter.allocatedStats.allocatedHP += statChange;
-                break;
-            case "EN":
-                currentCharacter.allocatedStats.allocatedEN += statChange;
-                break;
-            case "PWR":
-                currentCharacter.allocatedStats.allocatedPWR += statChange;
-                break;
-            case "SPD":
-                currentCharacter.allocatedStats.allocatedSPD += statChange;
-                break;
+            case "HP": totalAllocatedExcludingCurrentStat -= allocatedHP; break;
+            case "EN": totalAllocatedExcludingCurrentStat -= allocatedEN; break;
+            case "PWR": totalAllocatedExcludingCurrentStat -= allocatedPWR; break;
+            case "SPD": totalAllocatedExcludingCurrentStat -= allocatedSPD; break;
             default:
                 Debug.LogWarning($"Unrecognized stat: {statName}");
-                break;
+                return;
         }
+
+        // Proposed new value for the stat after change
+        int newStatValue = 0;
+        switch (statName)
+        {
+            case "HP": newStatValue = allocatedHP + statChange; break;
+            case "EN": newStatValue = allocatedEN + statChange; break;
+            case "PWR": newStatValue = allocatedPWR + statChange; break;
+            case "SPD": newStatValue = allocatedSPD + statChange; break;
+        }
+
+        // Check boundaries: no negative stats, no exceeding max allocated points
+        if (newStatValue < 0)
+        {
+            Debug.Log($"Cannot decrease {statName} below zero.");
+            return;
+        }
+
+        if (totalAllocatedExcludingCurrentStat + newStatValue > maxAllocated)
+        {
+            Debug.Log($"Cannot increase {statName}: allocated stats maxed out.");
+            return;
+        }
+
+        // Apply change
+        switch (statName)
+        {
+            case "HP": currentCharacter.allocatedStats.allocatedHP = newStatValue; break;
+            case "EN": currentCharacter.allocatedStats.allocatedEN = newStatValue; break;
+            case "PWR": currentCharacter.allocatedStats.allocatedPWR = newStatValue; break;
+            case "SPD": currentCharacter.allocatedStats.allocatedSPD = newStatValue; break;
+        }
+
+        // Update pointsLeft based on new totals
+        int totalAllocated = allocatedHP + allocatedEN + allocatedPWR + allocatedSPD;
+        // Update totalAllocated again with changed stat
+        switch (statName)
+        {
+            case "HP": totalAllocated = totalAllocatedExcludingCurrentStat + currentCharacter.allocatedStats.allocatedHP; break;
+            case "EN": totalAllocated = totalAllocatedExcludingCurrentStat + currentCharacter.allocatedStats.allocatedEN; break;
+            case "PWR": totalAllocated = totalAllocatedExcludingCurrentStat + currentCharacter.allocatedStats.allocatedPWR; break;
+            case "SPD": totalAllocated = totalAllocatedExcludingCurrentStat + currentCharacter.allocatedStats.allocatedSPD; break;
+        }
+        pointsLeft = maxAllocated - totalAllocated;
 
         SetCharacterStats();
     }
@@ -481,5 +548,39 @@ public class PartyMenuManager : MonoBehaviour
         {
             SelectedCharacter(firstValidButton);
         }
+    }
+
+    private bool ClassAdditions()
+    {
+        int amountAvailable = 1 + (currentCharacter.basicInfo.level / 5);
+        int classCount = currentCharacter.classes.Count;
+
+        if (classCount < amountAvailable)
+        {
+            int slotsAvailable = amountAvailable - classCount;
+
+            // Get available classes that are not already assigned to the character
+            availableClasses = classDatabase.allClasses.Where(c => !currentCharacter.classes.Contains(c.className)).ToList();
+
+            Debug.Log($"You can add {slotsAvailable} more class(es). Choose from:");
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void AddClass()
+    {
+        GenerateRandomClass.Instance.GenerateClasses(availableClasses, currentCharacter);
+    }
+
+    public void AddSelectedClass(ClassDataSO classData)
+    {
+        GenerateRandomClass.Instance.RemoveCharacterChoice(currentCharacter);
+        currentCharacter.classes.Add(classData.className);
+        SetCharacterInfo();
     }
 }

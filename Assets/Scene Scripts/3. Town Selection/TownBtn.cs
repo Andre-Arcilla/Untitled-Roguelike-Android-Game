@@ -1,12 +1,12 @@
-using UnityEditor.EditorTools;
-using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
-public class TownBtn : MonoBehaviour
+public class TownBtn : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private TownDataSO town;
 
-    public void OnMouseDown()
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (town != null && !string.IsNullOrEmpty(town.sceneName))
         {

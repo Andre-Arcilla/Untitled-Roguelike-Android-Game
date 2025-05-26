@@ -29,8 +29,8 @@ public class MerchantManager : MonoBehaviour
     [SerializeField] private EquipmentDatabase equipmentDatabase;
     [SerializeField] private List<EquipmentDataSO> equipmentList;
     [SerializeField] private GameObject listObjectPrefab;
-    [SerializeField] private Transform parent;
     [SerializeField] private SelectedStoreItem itemDisplay;
+    private Transform parent;
 
     private void Start()
     {

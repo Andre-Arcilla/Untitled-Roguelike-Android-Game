@@ -32,7 +32,13 @@ public class StatManager : MonoBehaviour
 
     [SerializeField] private int statPoints;
     [SerializeField] private List<Racebtn> raceButtons;
-    [SerializeField] private Racebtn defaultRace;
+    [SerializeField] private Racebtn defaultRace; public int RemainingStatPoints
+    {
+        get
+        {
+            return statPoints - (allocatedHP + allocatedEN + allocatedPWR + allocatedSPD);
+        }
+    }
 
     private void Start()
     {

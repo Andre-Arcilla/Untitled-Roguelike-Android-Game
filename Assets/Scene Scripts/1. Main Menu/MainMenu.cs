@@ -14,7 +14,7 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        path = Path.Combine(Application.persistentDataPath, filName + ".json");
+        path = Path.Combine(Application.persistentDataPath, "PartyData.json");
 
         if (File.Exists(path))
         {
@@ -53,22 +53,6 @@ public class MainMenu : MonoBehaviour
             SceneManager.LoadScene("Town 1");
         }
     }
-
-    public void Settings()
-    {
-        path = Path.Combine(Application.persistentDataPath, filName + ".json");
-
-        if (File.Exists(path))
-        {
-            loadBtn.interactable = true;
-        }
-        else
-        {
-            loadBtn.interactable = false;
-        }
-    }
-
-
 
     public void QuitGame()
     {

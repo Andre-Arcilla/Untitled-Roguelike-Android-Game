@@ -35,7 +35,7 @@ public class CharDisplayInfo : MonoBehaviour
 
         charName.text = $"{characterData.basicInfo.characterName}";
         charIcon.sprite = selectedClass.imageMale;
-        charLevelRace.text = $"{characterData.basicInfo.characterName} - {characterData.basicInfo.raceName}";
+        charLevelRace.text = $"{characterData.basicInfo.level} - {characterData.basicInfo.raceName}";
         charHP.text = $"HP: {characterData.allocatedStats.allocatedHP + selectedRace.HP}";
         charEN.text = $"EN: {characterData.allocatedStats.allocatedEN + selectedRace.EN}";
         charPWR.text = $"PWR: {characterData.allocatedStats.allocatedPWR + selectedRace.PWR}";

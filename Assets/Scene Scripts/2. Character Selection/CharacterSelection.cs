@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,16 +13,9 @@ public class CharacterSelection : MonoBehaviour
     [System.Serializable]
     public class PlayerSaveData
     {
-        // Basic Info
         public PlayerInfo basicInfo;
-
-        // Allocated Stats
         public PlayerStats allocatedStats;
-
-        // Classes
         public List<string> classes = new List<string>();
-
-        // Equipment section
         public PlayerEquipment equipment;
 
         [System.Serializable]
@@ -42,22 +34,26 @@ public class CharacterSelection : MonoBehaviour
             public int allocatedEN;
             public int allocatedPWR;
             public int allocatedSPD;
+            public int statPoints;
         }
 
         [System.Serializable]
         public class PlayerEquipment
         {
-            public string headGear;
-            public string chestArmor;
-            public string legwear;
-            public string gloves;
-            public string boots;
-            public string mainHand;
-            public string offHand;
+            public string armor;
+            public string weapon;
             public string accessory1;
             public string accessory2;
             public string accessory3;
         }
+    }
+
+    [System.Serializable]
+    private class PartyDataWrapper
+    {
+        public List<CharacterData> members = new List<CharacterData>();
+        public List<string> inventory = new List<string>();
+        public int gold = 0;
     }
 
     public void Create()
@@ -82,47 +78,78 @@ public class CharacterSelection : MonoBehaviour
 
     public void UpdatePlayerInfo()
     {
-        // Basic Info
+        // Fill PlayerSaveData from UI
         playerData.basicInfo = new PlayerSaveData.PlayerInfo
         {
-            playerName = "nionioiongf",  // Replace with actual player name if needed
-            level = 1,  // Adjust the level as necessary
+            playerName = "NewPlayer", // Replace this with actual input if needed
+            level = 1,
             gender = classManager.selectedGender,
             raceName = statManager.selectedRace.raceName
         };
 
-        // Allocated Stats
         playerData.allocatedStats = new PlayerSaveData.PlayerStats
         {
             allocatedHP = statManager.allocatedHP,
             allocatedEN = statManager.allocatedEN,
             allocatedPWR = statManager.allocatedPWR,
-            allocatedSPD = statManager.allocatedSPD
+            allocatedSPD = statManager.allocatedSPD,
+            statPoints = statManager.RemainingStatPoints
         };
 
-        // Classes
         playerData.classes.Clear();
         playerData.classes.Add(classManager.selectedClass.className);
 
-        // Equipment
         playerData.equipment = new PlayerSaveData.PlayerEquipment
         {
-            headGear = null,
-            chestArmor = null,
-            legwear = null,
-            gloves = null,
-            boots = null,
-            mainHand = null,
-            offHand = null,
+            armor = null,
+            weapon = null,
             accessory1 = null,
             accessory2 = null,
             accessory3 = null
         };
 
-        string saveFile = JsonUtility.ToJson(playerData, true);
-        string path = Path.Combine(Application.persistentDataPath, "Character1Data.json");
-        File.WriteAllText(path, saveFile);
+        // Convert to CharacterData
+        CharacterData character = new CharacterData
+        {
+            isAlive = true,
+            basicInfo = new CharacterData.BasicInfo
+            {
+                characterName = playerData.basicInfo.playerName,
+                level = playerData.basicInfo.level,
+                xp = 0, // Assuming new characters start at 0 XP
+                gender = playerData.basicInfo.gender,
+                raceName = playerData.basicInfo.raceName
+            },
+            allocatedStats = new CharacterData.AllocatedStats
+            {
+                allocatedHP = playerData.allocatedStats.allocatedHP,
+                allocatedEN = playerData.allocatedStats.allocatedEN,
+                allocatedPWR = playerData.allocatedStats.allocatedPWR,
+                allocatedSPD = playerData.allocatedStats.allocatedSPD
+            },
+            classes = new List<string>(playerData.classes),
+            equipment = new CharacterData.Equipment
+            {
+                armor = playerData.equipment.armor,
+                weapon = playerData.equipment.weapon,
+                accessory1 = playerData.equipment.accessory1,
+                accessory2 = playerData.equipment.accessory2,
+                accessory3 = playerData.equipment.accessory3
+            }
+        };
 
-        Debug.Log("Player data saved to: " + path);
+        // Save character inside a wrapper
+        PartyDataWrapper wrapper = new PartyDataWrapper
+        {
+            members = new List<CharacterData> { character },
+            inventory = new List<string>(),
+            gold = 0
+        };
+
+        string path = Path.Combine(Application.persistentDataPath, "PartyData.json");
+        string json = JsonUtility.ToJson(wrapper, true);
+        File.WriteAllText(path, json);
+
+        Debug.Log("Character saved to: " + path);
     }
 }

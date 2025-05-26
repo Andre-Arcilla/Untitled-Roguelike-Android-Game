@@ -4,10 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
-public class CardInformation : MonoBehaviour
+public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Card Display")] //temp
     [SerializeField] private string cardName; //temp
@@ -23,7 +24,33 @@ public class CardInformation : MonoBehaviour
 
     //holds the data of this instance of the card
     public Card card {  get; private set; }
+    void Start()
+    {
+        Debug.Log("---- PointerEventSetupDebugger Start ----");
 
+        // Check EventSystem
+        var eventSystem = EventSystem.current;
+        Debug.Log("EventSystem present? " + (eventSystem != null));
+
+        // Check if this GameObject has a Collider2D
+        var collider2D = GetComponent<Collider2D>();
+        Debug.Log("Collider2D present on this GameObject? " + (collider2D != null));
+
+        // Check if Camera has Physics2DRaycaster
+        var mainCam = Camera.main;
+        if (mainCam == null)
+        {
+            Debug.LogError("Main Camera not found!");
+        }
+        else
+        {
+            var physics2DRaycaster = mainCam.GetComponent<UnityEngine.EventSystems.Physics2DRaycaster>();
+            Debug.Log("Physics2DRaycaster on Main Camera? " + (physics2DRaycaster != null));
+        }
+
+        // Check layer of this GameObject
+        Debug.Log("GameObject Layer: " + LayerMask.LayerToName(gameObject.layer));
+    }
     public void Setup(Card card)
     {
         this.card = card;
@@ -93,8 +120,9 @@ public class CardInformation : MonoBehaviour
         originalPosition.y += newPos;
     }
 
-    void OnMouseDown()
+    public void OnPointerDown(PointerEventData eventData)
     {
+        Debug.Log("aaaa");
         if (card.target == Target.Card)
         {
             CardHolder holder = transform.parent.parent.GetComponent<CardHolder>();
@@ -119,8 +147,9 @@ public class CardInformation : MonoBehaviour
         CardShowInfo.Instance.Drag(true);
     }
 
-    void OnMouseDrag()
+    public void OnDrag(PointerEventData eventData)
     {
+        Debug.Log("bbbb");
         if (isDragging == false)
         {
             return;
@@ -170,18 +199,18 @@ public class CardInformation : MonoBehaviour
         }
 
         // Update the object's position as the mouse is dragged
-        Vector3 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 mousePosition = new Vector3(mouse.x, mouse.y, transform.position.z);
+        Vector3 screenPos = eventData.position;
+        screenPos.z = Mathf.Abs(Camera.main.transform.position.z - transform.position.z);
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(screenPos);
 
-        var sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMove(mousePosition, 0.15f));
-        sequence.Join(transform.DORotateQuaternion(Quaternion.identity, 0.15f));
-        sequence.Join(transform.DOScale(Vector3.one * 0.5f, 0.15f));
-        sequence.SetLink(gameObject).SetAutoKill(true);
+        transform.position = mousePosition;
+        transform.rotation = Quaternion.identity;
+        transform.localScale = Vector3.one * 0.5f;
     }
 
-    void OnMouseUp()
+    public void OnPointerUp(PointerEventData eventData)
     {
+        Debug.Log("cccc");
         //return valid targets to original state
         bool hasEnoughMana = GetComponentInParent<CharacterInfo>().currentEN >= card.mana;
         bool hasValidTarget = TargetingSystem.Instance.TryGetValidTarget(transform.position, this, out GameObject t);
@@ -266,15 +295,13 @@ public class CardInformation : MonoBehaviour
         sequence.OnComplete(() => collider.enabled = true);
     }
 
-    private void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData eventData)
     {
         CardShowInfo.Instance.Show(card);
     }
 
-    private void OnMouseExit()
+    public void OnPointerExit(PointerEventData eventData)
     {
         CardShowInfo.Instance.Hide();
     }
-
-    //stats and actions ===========================================================================================
 }

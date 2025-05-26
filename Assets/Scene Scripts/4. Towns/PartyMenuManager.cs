@@ -4,7 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class PartyMenuManager : MonoBehaviour
 {
@@ -63,7 +62,8 @@ public class PartyMenuManager : MonoBehaviour
     [SerializeField] private Transform classHolder;
     [SerializeField] private Transform cardHolder;
     [SerializeField] private List<CharacterData> characterList;
-    [SerializeField] private TMP_Text goldTxt;
+    [SerializeField] private TMP_Text goldTxt1;
+    [SerializeField] private TMP_Text goldTxt2;
 
     [Header("Current Character")]
     [SerializeField] private CharacterData currentCharacter;
@@ -206,17 +206,17 @@ public class PartyMenuManager : MonoBehaviour
     {
         for (int i = 0; i < buttonList.Count; i++)
         {
-            if (characterList[i] == null)
-            {
-                buttonList[i].button.interactable = false;
-                buttonList[i].text.text = "";
-                continue;
-            }
-            else
+            if (i < characterList.Count && characterList[i] != null)
             {
                 buttonList[i].button.interactable = true;
                 buttonList[i].text.text = characterList[i].basicInfo.characterName.ToString();
                 buttonList[i].charData = characterList[i];
+            }
+            else
+            {
+                buttonList[i].button.interactable = false;
+                buttonList[i].text.text = "";
+                buttonList[i].charData = null;
             }
         }
     }
@@ -433,6 +433,53 @@ public class PartyMenuManager : MonoBehaviour
     public void UpdateGoldAmount(int amount)
     {
         PlayerDataHolder.Instance.partyGold += amount;
-        goldTxt.text = $"Gold: {PlayerDataHolder.Instance.partyGold.ToString("N0")}";
+        goldTxt1.text = $"Gold: {PlayerDataHolder.Instance.partyGold.ToString("N0")}";
+        goldTxt2.text = $"Gold: {PlayerDataHolder.Instance.partyGold.ToString("N0")}";
+    }
+
+    public void KickPartyMember()
+    {
+        if (currentCharacter == null)
+        {
+            Debug.LogWarning("No character selected to kick.");
+            return;
+        }
+
+        if (PlayerDataHolder.Instance.partyMembers.Count <= 1)
+        {
+            Debug.LogWarning("Cannot kick the last party member.");
+            return;
+        }
+
+        Debug.Log($"{currentCharacter.basicInfo.characterName} has been kicked from the party.");
+        PlayerDataHolder.Instance.partyMembers.Remove(currentCharacter);
+
+        // Update the character list and buttons
+        characterList = PlayerDataHolder.Instance.partyMembers;
+        SetCharacterButtons();
+
+        // Select the first available character
+        var firstValidButton = buttonList.FirstOrDefault(btn => btn.charData != null);
+        if (firstValidButton != null)
+        {
+            SelectedCharacter(firstValidButton);
+        }
+        TownPartySystem.Instance.UpdatePartyDisplay();
+    }
+
+    public void RefreshCharacterList()
+    {
+        // Update reference (not strictly necessary, but explicit)
+        characterList = PlayerDataHolder.Instance.partyMembers;
+
+        // Refresh character buttons
+        SetCharacterButtons();
+
+        // Auto-select the first valid character (optional)
+        var firstValidButton = buttonList.FirstOrDefault(btn => btn.charData != null);
+        if (firstValidButton != null)
+        {
+            SelectedCharacter(firstValidButton);
+        }
     }
 }

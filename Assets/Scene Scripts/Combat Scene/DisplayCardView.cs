@@ -1,20 +1,26 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class DisplayCardView : MonoBehaviour
+public class DisplayCardView : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private GameObject cardView;
 
-    private void OnMouseDown()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (CharacterManager.Instance.characterList.Contains(cardView.transform.parent.gameObject))
+        GameObject parentGO = cardView?.transform?.parent?.gameObject;
+
+        if (parentGO != null && CharacterManager.Instance.characterList.Contains(parentGO))
         {
             CharacterManager.Instance.DisplayCardView(cardView);
         }
+        else
+        {
+            Debug.LogWarning("Parent GameObject not found or not in characterList.");
+        }
     }
 
-    public void SetCardView(GameObject cardView)
+    public void SetCardView(GameObject newCardView)
     {
-        this.cardView = cardView;
+        cardView = newCardView;
     }
 }

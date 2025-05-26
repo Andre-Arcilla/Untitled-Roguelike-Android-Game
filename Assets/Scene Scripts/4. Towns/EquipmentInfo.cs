@@ -31,7 +31,7 @@ public class EquipmentInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnDrag(PointerEventData eventData)
     {
-        Vector3 mouseScreenPos = Input.mousePosition;
+        Vector3 mouseScreenPos = eventData.position;
         mouseScreenPos.z = Mathf.Abs(Camera.main.transform.position.z);
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
         transform.position = mouseWorldPos;

@@ -1,11 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.U2D.Animation;
 using UnityEngine;
 
 public class TownPartySystem : MonoBehaviour
 {
     public static TownPartySystem Instance;
+
+    [SerializeField] private List<CharacterData> party;
+    [SerializeField] private GameObject characterPrefab;
+    [SerializeField] private ClassDatabase classDatabase;
+    [SerializeField] private GameObject spriteHolder;
 
     private void Awake()
     {
@@ -18,11 +21,6 @@ public class TownPartySystem : MonoBehaviour
         Instance = this;
     }
 
-    [SerializeField] private List<CharacterData> party;
-    [SerializeField] private GameObject characterPrefab;
-    [SerializeField] private ClassDatabase classDatabase;
-    [SerializeField] private GameObject spriteHolder;
-
     private void Start()
     {
         party = PlayerDataHolder.Instance.partyMembers;
@@ -31,6 +29,8 @@ public class TownPartySystem : MonoBehaviour
 
     private void GenerateCharacterSprite()
     {
+        ClearPreviousSprites();
+
         int position = 0;
 
         foreach (CharacterData member in party)
@@ -54,5 +54,20 @@ public class TownPartySystem : MonoBehaviour
 
             position += 1;
         }
+    }
+
+    private void ClearPreviousSprites()
+    {
+        foreach (Transform child in spriteHolder.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    public void UpdatePartyDisplay()
+    {
+        PartyMenuManager.Instance.RefreshCharacterList();
+        party = PlayerDataHolder.Instance.partyMembers;
+        GenerateCharacterSprite();
     }
 }

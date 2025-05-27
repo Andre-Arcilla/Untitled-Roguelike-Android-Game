@@ -16,6 +16,8 @@ public class Card
 
     public bool isInstantUse => data.isInstantUse;
 
+    public bool isCharged = false;
+
     public int mana {  get; private set; }
     public int power {  get; private set; }
 
@@ -30,8 +32,18 @@ public class Card
         if (hasCharge && owner != null)
         {
             mana = owner.currentEN;
+            isCharged = true;
         }
         power = data.power;
+    }
+
+    public void UpdateManaCost(int cost)
+    {
+        bool hasCharge = data.effects.Any(e => e is ChargeDamageEffect);
+        if (hasCharge)
+        {
+            mana = cost;
+        }
     }
 
     public void ChangeMana(int amount, Change change)

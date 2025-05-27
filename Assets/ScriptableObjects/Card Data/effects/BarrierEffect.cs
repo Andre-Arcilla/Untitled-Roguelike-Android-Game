@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BarrierEffect : ICardEffect
 {
-    public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj)
+    public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj, int manaCost)
     {
         CharacterInfo sender = senderObj.GetComponent<CharacterInfo>();
         CharacterInfo target = targetObj.GetComponent<CharacterInfo>();

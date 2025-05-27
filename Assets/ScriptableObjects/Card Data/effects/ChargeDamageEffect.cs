@@ -6,12 +6,12 @@ public class ChargeDamageEffect : ICardEffect
 {
     [SerializeField] private int multiplier;
 
-    public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj)
+    public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj, int manaCost)
     {
         CharacterInfo sender = senderObj.GetComponent<CharacterInfo>();
         CharacterInfo target = targetObj.GetComponent<CharacterInfo>();
 
-        int cardPower = card.card.mana * multiplier;
+        int cardPower = manaCost * multiplier;
         int damage = Calculate(cardPower, sender.stats.totalPWR);
 
         target.currentHP -= damage;

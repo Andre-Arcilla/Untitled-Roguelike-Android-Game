@@ -26,20 +26,22 @@ public class ActionSystem : MonoBehaviour
         public Targetable sender;
         public CardInformation card;
         public GameObject target;
+        public int manaCost; // NEW FIELD
 
-        public Action(Targetable sender, CardInformation card, GameObject target)
+        public Action(Targetable sender, CardInformation card, GameObject target, int manaCost)
         {
             this.sender = sender;
             this.card = card;
             this.target = target;
+            this.manaCost = manaCost;
         }
     }
 
     [SerializeField] private List<Action> actions = new List<Action>();
 
-    public void AddCard(Targetable sender, CardInformation card, GameObject target)
+    public void AddCard(Targetable sender, CardInformation card, GameObject target, int cost)
     {
-        actions.Add(new (sender, card, target));
+        actions.Add(new (sender, card, target, cost));
     }
 
     public void RemoveCard(CardInformation card)
@@ -148,7 +150,7 @@ public class ActionSystem : MonoBehaviour
 
             foreach (ICardEffect effect in action.card.card.effects)
             {
-                effect.Execute(action.sender, action.card, action.target);
+                effect.Execute(action.sender, action.card, action.target, action.manaCost);
             }
 
             //do an animation where it crashes to the enemy unit ----------------------------------------------------------------------------------
@@ -246,7 +248,7 @@ public class ActionSystem : MonoBehaviour
 
         foreach (ICardEffect effect in card.card.effects)
         {
-            effect.Execute(sender, card, null);
+            effect.Execute(sender, card, null, card.card.mana);
         }
 
         CharacterGenerator.Instance.EnablePlayerRaycasts();
@@ -263,7 +265,7 @@ public class ActionSystem : MonoBehaviour
 
         foreach (ICardEffect effect in card.card.effects)
         {
-            effect.Execute(sender, card, target);
+            effect.Execute(sender, card, target, card.card.mana);
         }
 
         target.GetComponent<CardInformation>().UpdateCard();
@@ -325,5 +327,16 @@ public class ActionSystem : MonoBehaviour
             character.EndTurnRestoreMana();
             character.UpdateResourcesView();
         }
+    }
+    public int GetManaCost(CardInformation card)
+    {
+        foreach (Action action in actions)
+        {
+            if (action.card == card)
+            {
+                return action.manaCost;
+            }
+        }
+        return 0;
     }
 }

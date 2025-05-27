@@ -24,33 +24,7 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
 
     //holds the data of this instance of the card
     public Card card {  get; private set; }
-    void Start()
-    {
-        Debug.Log("---- PointerEventSetupDebugger Start ----");
 
-        // Check EventSystem
-        var eventSystem = EventSystem.current;
-        Debug.Log("EventSystem present? " + (eventSystem != null));
-
-        // Check if this GameObject has a Collider2D
-        var collider2D = GetComponent<Collider2D>();
-        Debug.Log("Collider2D present on this GameObject? " + (collider2D != null));
-
-        // Check if Camera has Physics2DRaycaster
-        var mainCam = Camera.main;
-        if (mainCam == null)
-        {
-            Debug.LogError("Main Camera not found!");
-        }
-        else
-        {
-            var physics2DRaycaster = mainCam.GetComponent<UnityEngine.EventSystems.Physics2DRaycaster>();
-            Debug.Log("Physics2DRaycaster on Main Camera? " + (physics2DRaycaster != null));
-        }
-
-        // Check layer of this GameObject
-        Debug.Log("GameObject Layer: " + LayerMask.LayerToName(gameObject.layer));
-    }
     public void Setup(Card card)
     {
         this.card = card;
@@ -122,7 +96,6 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("aaaa");
         if (card.target == Target.Card)
         {
             CardHolder holder = transform.parent.parent.GetComponent<CardHolder>();
@@ -149,7 +122,6 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("bbbb");
         if (isDragging == false)
         {
             return;
@@ -210,7 +182,6 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("cccc");
         //return valid targets to original state
         bool hasEnoughMana = GetComponentInParent<CharacterInfo>().currentEN >= card.mana;
         bool hasValidTarget = TargetingSystem.Instance.TryGetValidTarget(transform.position, this, out GameObject t);

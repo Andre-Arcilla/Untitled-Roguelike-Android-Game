@@ -103,7 +103,7 @@ public class TargetingSystem : MonoBehaviour
             {
                 Debug.LogWarning("Target is null or inactive!");
             }
-            ActionSystem.Instance.AddCard(sender, card, target);
+            ActionSystem.Instance.AddCard(sender, card, target, card.card.mana);
         }
 
         sender.GetComponent<CharacterInfo>().UpdateResourcesView();
@@ -113,12 +113,16 @@ public class TargetingSystem : MonoBehaviour
     {
         card.isSelected = false;
         card.NewPos(-0.5f);
-        card.GetComponentInParent<CharacterInfo>().currentEN += card.card.mana;
+
+        // Get the action before removal so we can refund its cached cost
+        var manaCost = ActionSystem.Instance.GetManaCost(card);
+        CharacterInfo charInfo = card.GetComponentInParent<CharacterInfo>();
+        charInfo.currentEN += manaCost;
         ActionSystem.Instance.RemoveCard(card);
         DrawLine.Instance.RemoveLineForCard(card.gameObject);
-        CharacterDeck deck = card.GetComponentInParent<CharacterDeck>();
         card.GetComponentInParent<CharacterInfo>().UpdateResourcesView();
     }
+
     private IEnumerator DrawLineCoroutine(GameObject sender, GameObject card, GameObject target)
     {
         yield return new WaitForSeconds(0.1f);

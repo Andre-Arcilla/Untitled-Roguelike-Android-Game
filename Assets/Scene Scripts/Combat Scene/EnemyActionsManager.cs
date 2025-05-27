@@ -64,7 +64,7 @@ public class EnemyActionsManager : MonoBehaviour
 
             GameObject target = targetList[randomTarget];
 
-            ActionSystem.Instance.AddCard(sender, card, target);
+            ActionSystem.Instance.AddCard(sender, card, target, card.card.mana);
         }
     }
 }

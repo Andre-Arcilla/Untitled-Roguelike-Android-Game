@@ -7,7 +7,7 @@ public class DotEffect : ICardEffect
     [SerializeField] private int duration = 0;
     [SerializeField] private int damage = 0;
 
-    public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj)
+    public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj, int manaCost)
     {
         CharacterInfo target = targetObj.GetComponent<CharacterInfo>();
         if (target == null) return;

@@ -2,6 +2,7 @@ using SerializeReferenceEditor;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class CharacterInfo : MonoBehaviour
 {
@@ -302,6 +303,15 @@ public class CharacterInfo : MonoBehaviour
     {
         HPText.text = "×" + currentHP.ToString();
         ENText.text = "×" + currentEN.ToString();
+
+        foreach (GameObject card in characterDeck.hand)
+        {
+            if (!card.GetComponent<CardInformation>().isSelected)
+            {
+                card.GetComponent<CardInformation>().card.UpdateManaCost(currentEN);
+                card.GetComponent<CardInformation>().UpdateCard();
+            }
+        }
     }
 }
 

@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Town2Data
   m_EditorClassIdentifier: 
   townName: Shirone
-  sceneAsset: {fileID: 102900000, guid: 01c7eac80d415f847976b55d483f188c, type: 3}
+  sceneAsset: {fileID: 102900000, guid: b8865f86680ddf04dacde87ab563bd30, type: 3}
   sceneName: Town 2
-  labyrinthCleared: 0
   connectedTowns:
   - {fileID: 11400000, guid: a12e403b6132aea40bc428b7e77358f2, type: 2}
   - {fileID: 11400000, guid: e2bf3c9d7f6c6804784c202e271ea61c, type: 2}

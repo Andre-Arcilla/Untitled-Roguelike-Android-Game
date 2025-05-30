@@ -769,6 +769,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parallaxSpeed: 6
+  manualControl: 1
 --- !u!212 &217626747
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1071,18 +1072,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0019713342, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.8, y: 0.8}
     newSize: {x: 0.16, y: 0.16}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.79892606, y: 0.7981374}
   m_EdgeRadius: 0
 --- !u!4 &452942722
 Transform:
@@ -1151,7 +1152,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fcc6f192f9bd224468b0fcdfba28f430, type: 3}
   m_Color: {r: 0.7830189, g: 0.7830189, b: 0.7830189, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1778,7 +1779,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 728486612}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 551279520}
+        m_TargetAssemblyTypeName: PauseScript, Assembly-CSharp
+        m_MethodName: MainMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &728486612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2016,7 +2029,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 16.01, y: -25}
+  m_AnchoredPosition: {x: 0, y: -25}
   m_SizeDelta: {x: 303.45, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &737080524
@@ -2380,6 +2393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parallaxSpeed: 6
+  manualControl: 1
 --- !u!212 &980800369
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3411,6 +3425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parallaxSpeed: 1
+  manualControl: 1
 --- !u!1 &1323791871
 GameObject:
   m_ObjectHideFlags: 0
@@ -3975,6 +3990,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parallaxSpeed: 6
+  manualControl: 1
 --- !u!1 &1506918882
 GameObject:
   m_ObjectHideFlags: 0
@@ -4638,6 +4654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parallaxSpeed: 1
+  manualControl: 1
 --- !u!4 &1801829123 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4083330775736706477, guid: 81fc58ba7a6c3664a816eb68c41a9103, type: 3}
@@ -5562,6 +5579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parallaxSpeed: 6
+  manualControl: 1
 --- !u!1 &2129467374
 GameObject:
   m_ObjectHideFlags: 0

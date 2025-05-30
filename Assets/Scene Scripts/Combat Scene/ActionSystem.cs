@@ -61,29 +61,18 @@ public class ActionSystem : MonoBehaviour
     private IEnumerator EndTurnCoroutine()
     {
         CharacterGenerator.Instance.DisablePlayerRaycasts();
-        Debug.Log("----------DISABLE RAYCASTS----------");
         CharacterManager.Instance.DisplayCardView();
-        Debug.Log("----------DESELECT CHARACTERS----------");
         DrawLine.Instance.RemoveAllLines();
-        Debug.Log("----------TARGET LINES REMOVED----------");
         EnemyActionsManager.Instance.SetEnemyAction();
-        Debug.Log("----------ENEMY ACTION SET----------");
         SortActions();
-        Debug.Log("----------ACTIONS SORTED----------");
         yield return DoActions();
-        Debug.Log("----------ACTIONS DONE----------");
         DoStatusEffects();
-        Debug.Log("----------STATUS EFFECTS TRIGGERED----------");
         yield return DiscardAndDrawAllDecks();
-        Debug.Log("----------DECKS REDRAWN----------");
         actions.Clear();
-        Debug.Log("----------ACTIONS CLEARED----------");
         EndTurnRestoreMana();
-        Debug.Log("----------MANA RESTORED----------");
         CheckForGroupDefeat();
-        Debug.Log("----------DEATHS CHECKED----------");
+        CharacterManager.Instance.SelectFirstCharacter();
         CharacterGenerator.Instance.EnablePlayerRaycasts();
-        Debug.Log("----------ENABLE RAYCASTS----------");
     }
 
     //sorts all action by sender's speed stat

@@ -409,6 +409,7 @@ MonoBehaviour:
   partyMembers: []
   partyInventory: []
   partyGold: 0
+  partyClearedTowns: []
 --- !u!4 &1425264276
 Transform:
   m_ObjectHideFlags: 0

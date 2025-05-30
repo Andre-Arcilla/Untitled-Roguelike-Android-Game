@@ -14,8 +14,6 @@ public class TownDataSO : ScriptableObject
 
     public string sceneName;
 
-    public bool labyrinthCleared;
-
     [Header("Connected Towns")]
     public List<TownDataSO> connectedTowns;
 

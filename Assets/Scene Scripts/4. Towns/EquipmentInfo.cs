@@ -22,6 +22,8 @@ public class EquipmentInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     //drag logic
     public void OnBeginDrag(PointerEventData eventData)
     {
+        InventoryManager.Instance.equipmentDisplay.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+        InventoryManager.Instance.SendEquipmentInfo(equipment);
         parentAfterDrag = transform.parent;
         transform.SetParent(canvas.transform);
         transform.SetAsLastSibling();
@@ -39,6 +41,7 @@ public class EquipmentInfo : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        InventoryManager.Instance.equipmentDisplay.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         transform.SetParent(parentAfterDrag);
         image.raycastTarget = true;
         parentAfterDrag.GetComponent<InventorySlot>().ForceEmptyIcon();

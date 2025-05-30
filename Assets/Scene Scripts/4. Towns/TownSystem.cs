@@ -20,19 +20,31 @@ public class TownSystem : MonoBehaviour
     }
 
     [SerializeField] public TownDataSO currentTown;
-    [SerializeField] public Button labyrinthEntrance;
+    [SerializeField] public GameObject gateOpen;
+    [SerializeField] public GameObject gateClosed;
 
     private void OnEnable()
     {
-        if (currentTown.labyrinthCleared)
+        bool hasCleared = false;
+
+        if (currentTown != null)
         {
-            labyrinthEntrance.transform.GetChild(0).gameObject.SetActive(false);
-            labyrinthEntrance.interactable = false;
+            string townName = currentTown.townName;
+            var entry = PlayerDataHolder.Instance.partyClearedTowns.Find(e => e.townName == townName);
+
+            if (entry != null)
+            {
+                hasCleared = entry.hasCleared;
+                Debug.Log(hasCleared);
+            }
+            else
+            {
+                Debug.LogWarning($"Town '{townName}' not found in clearedTowns list.");
+            }
         }
-        else
-        {
-            labyrinthEntrance.transform.GetChild(0).gameObject.SetActive(true);
-            labyrinthEntrance.interactable = true;
-        }
+
+        gateClosed.SetActive(hasCleared);
+        gateOpen.SetActive(!hasCleared);
+        gateOpen.GetComponent<Button>().interactable = !hasCleared;
     }
 }

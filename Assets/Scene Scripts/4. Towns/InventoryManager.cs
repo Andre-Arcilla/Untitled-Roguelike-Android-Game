@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] public InventorySlot[] inventorySlots;
     [SerializeField] public InventorySlot[] equipmentSlots;
     [SerializeField] public GameObject equipmentPrefab;
+    [SerializeField] public EquipmentInfoDisplay equipmentDisplay;
     [SerializeField] public Transform trashcan;
 
     public bool AddItem(EquipmentDataSO equipment)
@@ -91,5 +93,10 @@ public class InventoryManager : MonoBehaviour
             }
             equipmentSlots[i].ForceFilledIcon();
         }
+    }
+
+    public void SendEquipmentInfo(EquipmentDataSO equipment)
+    {
+        equipmentDisplay.Setup(equipment);
     }
 }

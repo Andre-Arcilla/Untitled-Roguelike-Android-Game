@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Town6Data
   m_EditorClassIdentifier: 
   townName: Rikarisu
-  sceneAsset: {fileID: 102900000, guid: 78defb42a8507e340bdc056592e2e133, type: 3}
+  sceneAsset: {fileID: 102900000, guid: bd54f98d78480bb47b594c4033a85d19, type: 3}
   sceneName: Town 6
-  labyrinthCleared: 1
   connectedTowns:
   - {fileID: 11400000, guid: a2a204e3a90952045864739d4600af2f, type: 2}
   - {fileID: 11400000, guid: 7eb25aabfb8028d468d0602e8cd0fe8f, type: 2}

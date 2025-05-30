@@ -3,6 +3,8 @@ using UnityEngine;
 public class BackgroundController : MonoBehaviour
 {
     public float parallaxSpeed = 2f;
+    public bool manualControl = true;
+
     private float spriteWidth;
     private Vector3 startPos;
 
@@ -12,7 +14,15 @@ public class BackgroundController : MonoBehaviour
         startPos = transform.position;
     }
 
-    // Called manually by manager
+    private void Update()
+    {
+        if (!manualControl)
+        {
+            Scroll(Time.deltaTime);
+        }
+    }
+
+    // Called manually by manager or automatically if manualControl is false
     public void Scroll(float deltaTime)
     {
         transform.position += Vector3.left * parallaxSpeed * deltaTime;

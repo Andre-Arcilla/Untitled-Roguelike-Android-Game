@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Draw
   description: Draw X cards
-  target: 3
+  target: 5
   isInstantUse: 1
   cost: 2
   power: 3

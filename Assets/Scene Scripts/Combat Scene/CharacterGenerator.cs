@@ -150,7 +150,7 @@ public class CharacterGenerator : MonoBehaviour
 
     private IEnumerator MoveAndScrollCoroutine(Vector3 targetPos)
     {
-        //yield return new WaitForSeconds(moveDelay);
+        CharacterManager.Instance.DisplayCardView();
         DisablePlayerRaycasts();
         clouds.driftSpeed = 3;
 
@@ -186,9 +186,9 @@ public class CharacterGenerator : MonoBehaviour
             }
         }
 
+        CharacterManager.Instance.SelectFirstCharacter();
         EnablePlayerRaycasts();
         clouds.driftSpeed = 1;
-        CharacterManager.Instance.SelectFirstCharacter();
     }
 
     private CharacterData ConvertSOToCharacterData(CharacterDataSO so)

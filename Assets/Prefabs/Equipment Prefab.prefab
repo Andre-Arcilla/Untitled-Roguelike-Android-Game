@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8214546912981207300}
   - component: {fileID: 8214546912981207299}
   - component: {fileID: 8214546912981207301}
+  - component: {fileID: 8111796875247601029}
   m_Layer: 0
   m_Name: Equipment Prefab
   m_TagString: Untagged
@@ -90,5 +91,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentAfterDrag: {fileID: 0}
-  equipment: {fileID: 0}
   image: {fileID: 8214546912981207299}
+  dragLayer: {fileID: 0}
+--- !u!210 &8111796875247601029
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8214546912981207297}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0

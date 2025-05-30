@@ -100,7 +100,21 @@ public class CombatSystem : MonoBehaviour
 
     private void CombatCompleteWin()
     {
-        TownManager.Instance.townTo.labyrinthCleared = true;
+        if (TownManager.Instance.isLabyrinth)
+        {
+            string townName = TownManager.Instance.townTo.townName;
+            var entry = PlayerDataHolder.Instance.partyClearedTowns.Find(e => e.townName == townName);
+
+            if (entry != null)
+            {
+                entry.hasCleared = true;
+            }
+            else
+            {
+                Debug.LogWarning($"Town '{townName}' not found in clearedTowns list.");
+            }
+        }
+
         SceneManager.LoadScene("Victory Screen", LoadSceneMode.Additive);
     }
 

@@ -152,8 +152,8 @@ public class ClassManager : MonoBehaviour
 
         classText.text = selectedClass.className;
         // set position and scale of playerclass
-        playerClass.transform.localScale = new Vector3(4, 4, 0);
-        playerClass.transform.localPosition = new Vector3(0, 1f, 0);
+        playerClass.transform.localScale = new Vector3(20, 20, 0);
+        playerClass.transform.localPosition = new Vector3(0, -1f, 0);
 
         cardDisplay.UpdateSelectedClass(selectedClass);
     }

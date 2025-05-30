@@ -117,6 +117,4 @@ MonoBehaviour:
   allowedSlotType: 0
   slotImage: {fileID: 6503306151407103743}
   emptySlotSprite: {fileID: 21300000, guid: fcc6f192f9bd224468b0fcdfba28f430, type: 3}
-  armorSlotSprite: {fileID: 21300000, guid: bb4d13f9ab4891248b593836c55337d2, type: 3}
-  weaponSlotSprite: {fileID: 21300000, guid: a2b9a4234d3f76b478b0a9f8a10eea31, type: 3}
-  accessorySlotSprite: {fileID: 21300000, guid: 54f32554e54aaaf46b8c69213a8de4b6, type: 3}
+  filledSlotSprite: {fileID: 0}

@@ -21,16 +21,25 @@ public class PlayerDataHolder : MonoBehaviour
     }
 
     [System.Serializable]
+    public class TownClearEntry
+    {
+        public string townName;
+        public bool hasCleared;
+    }
+
+    [System.Serializable]
     private class PartyDataWrapper
     {
         public List<CharacterData> members = new List<CharacterData>();
         public List<string> inventory = new List<string>();
         public int gold;
+        public List<TownClearEntry> clearedTowns = new();
     }
 
     [SerializeField] public List<CharacterData> partyMembers = new List<CharacterData>();
     [SerializeField] public List<string> partyInventory = new List<string>();
     [SerializeField] public int partyGold;
+    [SerializeField] public List<TownClearEntry> partyClearedTowns = new List<TownClearEntry>();
 
     private void LoadPartyFromJson()
     {
@@ -49,8 +58,7 @@ public class PlayerDataHolder : MonoBehaviour
         partyMembers = wrapper.members;
         partyInventory = wrapper.inventory ?? new List<string>();
         partyGold = wrapper.gold;
-
-        Debug.Log("Party loaded with " + partyMembers.Count + " members and " + partyInventory.Count + " inventory items.");
+        partyClearedTowns = wrapper.clearedTowns;
     }
 
     public void SavePartyInfo()
@@ -58,14 +66,14 @@ public class PlayerDataHolder : MonoBehaviour
         PartyDataWrapper wrapper = new PartyDataWrapper
         {
             members = partyMembers,
-            inventory = partyInventory
+            inventory = partyInventory,
+            gold = partyGold,
+            clearedTowns = partyClearedTowns
         };
 
         string saveFile = JsonUtility.ToJson(wrapper, true);
         string path = Path.Combine(Application.persistentDataPath, "PartyData.json");
 
         File.WriteAllText(path, saveFile);
-
-        Debug.Log("Party and inventory saved to: " + path);
     }
 }

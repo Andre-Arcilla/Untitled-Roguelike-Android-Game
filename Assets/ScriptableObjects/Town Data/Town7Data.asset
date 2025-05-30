@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Town7Data
   m_EditorClassIdentifier: 
   townName: Artier
-  sceneAsset: {fileID: 102900000, guid: 515123acde31d954aa8e5e214cada8ad, type: 3}
+  sceneAsset: {fileID: 102900000, guid: 7fb78a6d8333f36418f5808f0494917f, type: 3}
   sceneName: Town 7
-  labyrinthCleared: 0
   connectedTowns:
   - {fileID: 11400000, guid: a12e403b6132aea40bc428b7e77358f2, type: 2}
   - {fileID: 11400000, guid: a2a204e3a90952045864739d4600af2f, type: 2}

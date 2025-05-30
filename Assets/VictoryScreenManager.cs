@@ -38,6 +38,7 @@ public class VictoryScreenManager : MonoBehaviour
     private void GenerateMisc()
     {
         goldText.text = $"Gold: {CombatSystem.Instance.goldAmount.ToString("N0")}";
+        PlayerDataHolder.Instance.partyGold = CombatSystem.Instance.goldAmount;
 
         if (TownManager.Instance.isLabyrinth)
         {

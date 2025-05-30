@@ -49,11 +49,19 @@ public class CharacterSelection : MonoBehaviour
     }
 
     [System.Serializable]
+    public class TownClearEntry
+    {
+        public string townName;
+        public bool hasCleared;
+    }
+
+    [System.Serializable]
     private class PartyDataWrapper
     {
         public List<CharacterData> members = new List<CharacterData>();
         public List<string> inventory = new List<string>();
         public int gold = 0;
+        public List<TownClearEntry> clearedTowns = new List<TownClearEntry>();
     }
 
     public void Create()
@@ -138,12 +146,25 @@ public class CharacterSelection : MonoBehaviour
             }
         };
 
+        // Initialize cleared towns list
+        List<TownClearEntry> townClearEntries = new List<TownClearEntry>
+        {
+            new TownClearEntry { townName = "Fittoa", hasCleared = false },
+            new TownClearEntry { townName = "Shirone", hasCleared = false },
+            new TownClearEntry { townName = "Rapan", hasCleared = false },
+            new TownClearEntry { townName = "Sharia", hasCleared = false },
+            new TownClearEntry { townName = "Fort Necross", hasCleared = false },
+            new TownClearEntry { townName = "Rikarisu", hasCleared = false },
+            new TownClearEntry { townName = "Artier", hasCleared = false }
+        };
+
         // Save character inside a wrapper
         PartyDataWrapper wrapper = new PartyDataWrapper
         {
             members = new List<CharacterData> { character },
             inventory = new List<string>(),
-            gold = 0
+            gold = 0,
+            clearedTowns = townClearEntries
         };
 
         string path = Path.Combine(Application.persistentDataPath, "PartyData.json");

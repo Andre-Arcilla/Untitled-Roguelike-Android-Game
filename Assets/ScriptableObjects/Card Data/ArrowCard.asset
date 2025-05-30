@@ -15,7 +15,7 @@ MonoBehaviour:
   cardName: Arrow
   description: Deal X damage
   target: 0
-  isInstantUse: 0
+  isInstantUse: 1
   cost: 2
   power: 3
   effects:

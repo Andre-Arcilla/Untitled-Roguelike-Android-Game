@@ -114,6 +114,9 @@ public class ActionSystem : MonoBehaviour
             CharacterInfo targetInfo = action.target.GetComponent<CharacterInfo>();
             CardInformation targetCard = targetInfo == null ? action.target.GetComponent<CardInformation>() : null;
 
+            int initialHP = targetInfo != null ? targetInfo.currentHP : -100;
+            string audioSFX = "";
+
             CharacterDeck senderDeck = senderInfo.GetComponent<CharacterDeck>();
 
             if (senderInfo == null || (targetInfo == null && targetCard == null))
@@ -153,8 +156,26 @@ public class ActionSystem : MonoBehaviour
                 effect.Execute(action.sender, action.card, action.target, action.manaCost);
             }
 
-            //do an animation where it crashes to the enemy unit ----------------------------------------------------------------------------------
-            yield return ActionPhaseAnimation.Instance.ActionAnimationPerform(action.sender, action.card, action.target);
+            int currentHP = targetInfo != null ? targetInfo.currentHP : -100;
+
+            if (targetInfo == null)
+            {
+                audioSFX = "hit";
+            }
+            else if (currentHP <= 0 && initialHP > 0)
+            {
+                audioSFX = "kill";
+            }
+            else if (currentHP == initialHP)
+            {
+                audioSFX = "miss";
+            }
+            else
+            {
+                audioSFX = "hit";
+            }
+
+            yield return ActionPhaseAnimation.Instance.ActionAnimationPerform(action.sender, action.card, action.target, audioSFX);
 
             yield return senderDeck.EndPlayCard(action.card);
             ActionPhaseAnimation.Instance.ActionAnimationEnd(action.sender, action.card, action.target);

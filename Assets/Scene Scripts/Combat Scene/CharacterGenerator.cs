@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Splines.Examples;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CharacterGenerator : MonoBehaviour
 {
@@ -29,6 +30,7 @@ public class CharacterGenerator : MonoBehaviour
     [SerializeField] private CloudSpawner clouds;
     [SerializeField] public float moveSpeed => backgrounds.Find(bg => bg.name == "floor bg").parallaxSpeed;
     [SerializeField] public float moveDelay = 2f;
+    [SerializeField] private Button endTurnBtn;
 
     private void Start()
     {
@@ -37,7 +39,7 @@ public class CharacterGenerator : MonoBehaviour
         DisablePlayerRaycasts();
         DOVirtual.DelayedCall(1f, () =>
         {
-            GenerateEnemy();
+            CombatSystem.Instance.GenerateNewEnemyGroup();
         });
 
         CharacterManager.Instance.SetCardViews();
@@ -152,6 +154,15 @@ public class CharacterGenerator : MonoBehaviour
         DisablePlayerRaycasts();
         clouds.driftSpeed = 3;
 
+        foreach (Transform child in allyParent.transform)
+        {
+            Animator anim = child.GetComponentInChildren<Animator>();
+            if (anim != null && child.GetComponentInChildren<CharacterInfo>().currentHP > 0)
+            {
+                anim.SetTrigger("doWalk");
+            }
+        }
+
         while (Vector3.Distance(enemyParent.transform.position, targetPos) > 0.01f)
         {
             // Move enemyParent towards target
@@ -164,6 +175,15 @@ public class CharacterGenerator : MonoBehaviour
             }
 
             yield return new WaitForFixedUpdate(); // wait for next frame
+        }
+
+        foreach (Transform child in allyParent.transform)
+        {
+            Animator anim = child.GetComponentInChildren<Animator>();
+            if (anim != null && child.GetComponentInChildren<CharacterInfo>().currentHP > 0)
+            {
+                anim.SetTrigger("doStop");
+            }
         }
 
         EnablePlayerRaycasts();
@@ -202,22 +222,31 @@ public class CharacterGenerator : MonoBehaviour
 
     public void DisablePlayerRaycasts()
     {
-        int layer = LayerMask.NameToLayer("Ignore Raycast");
-        SetLayerRecursively(allyParent.transform, layer);
+        foreach (Transform child in allyParent.transform)
+        {
+            CharacterInfo character = child.GetComponentInChildren<CharacterInfo>();
+            if (character.currentHP <= 0)
+            {
+                character.transform.Find("Character Sprite").GetComponentInChildren<Collider2D>().enabled = false;
+            }
+        }
+
+        Camera.main.GetComponent<Physics2DRaycaster>().enabled = false;
+        endTurnBtn.interactable = false;
     }
 
     public void EnablePlayerRaycasts()
     {
-        int layer = LayerMask.NameToLayer("Default");
-        SetLayerRecursively(allyParent.transform, layer);
-    }
-
-    private void SetLayerRecursively(Transform parent, int layer)
-    {
-        foreach (Transform child in parent)
+        foreach (Transform child in allyParent.transform)
         {
-            child.gameObject.layer = layer;
-            SetLayerRecursively(child, layer);
+            CharacterInfo character = child.GetComponentInChildren<CharacterInfo>();
+            if (character.currentHP <= 0)
+            {
+                character.transform.Find("Character Sprite").GetComponentInChildren<Collider2D>().enabled = false;
+            }
         }
+
+        Camera.main.GetComponent<Physics2DRaycaster>().enabled = true;
+        endTurnBtn.interactable = true;
     }
 }

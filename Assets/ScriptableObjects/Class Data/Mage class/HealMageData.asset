@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6fff08e89b814e41a13ed34ca4c80e3, type: 3}
+  m_Name: HealMageData
+  m_EditorClassIdentifier: 
+  className: Heal Mage
+  gender: 0
+  spriteMale: {fileID: 8078967876070058995, guid: 33dbb7ac9e0cf894db2155fa7fe8e60a, type: 3}
+  spriteFemale: {fileID: 8078967876070058995, guid: 33dbb7ac9e0cf894db2155fa7fe8e60a, type: 3}
+  imageMale: {fileID: -4004542808840064869, guid: 077f1b3c25d500e408335ef8f8bed90d, type: 3}
+  imageFemale: {fileID: -4004542808840064869, guid: 077f1b3c25d500e408335ef8f8bed90d, type: 3}
+  startingDeck:
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}

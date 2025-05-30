@@ -32,13 +32,15 @@ public class ActionPhaseAnimation : MonoBehaviour
 
     }
 
-    public IEnumerator ActionAnimationPerform(Targetable sender, CardInformation card, GameObject target)
+    public IEnumerator ActionAnimationPerform(Targetable sender, CardInformation card, GameObject target, string audioSFX)
     {
         // Get necessary components
         Collider2D senderCollider = sender.transform.Find("Character Sprite")?.GetComponentInChildren<Collider2D>() ?? target.GetComponentInChildren<Collider2D>(); //should get the one from character sprite
         Collider2D cardCollider = card.GetComponentInChildren<Collider2D>();
         Collider2D targetCollider = target.transform.Find("Character Sprite")?.GetComponentInChildren<Collider2D>() ?? target.GetComponentInChildren<Collider2D>(); //should get the one from character sprite
         Rigidbody2D cardRB = card.gameObject.GetComponentInChildren<Rigidbody2D>();
+        Animator senderController = sender.GetComponentInChildren<Animator>();
+        Animator targetController = target.GetComponentInChildren<Animator>();
 
         // Validate components
         if (senderCollider == null || cardCollider == null || targetCollider == null || cardRB == null)
@@ -77,6 +79,12 @@ public class ActionPhaseAnimation : MonoBehaviour
         card.transform.localScale = new Vector3(0.6f, 0.6f);
         Vector2 targetPos = targetCollider.transform.position;
 
+        if (senderController != null)
+        {
+            senderController.SetTrigger("doAttack");
+            yield return WaitForAnimationToFinishSimple(senderController, "attack");
+        }
+
         // Move the card toward the target
         while (!cardCollider.IsTouching(targetCollider))
         {
@@ -86,12 +94,33 @@ public class ActionPhaseAnimation : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
+        switch (audioSFX)
+        {
+            case "hit":
+                AudioManager.Instance.PlayHitSFX();
+                break;
+            case "miss":
+                AudioManager.Instance.PlayMissSFX();
+                break;
+            case "kill":
+                AudioManager.Instance.PlayKillSFX();
+                break;
+            default:
+                AudioManager.Instance.PlayHitSFX();
+                break;
+        }
+
         // Update resources immediately on impact
         sender.GetComponentInParent<CharacterInfo>()?.UpdateResourcesView();
         CharacterInfo charInfo = target.GetComponentInParent<CharacterInfo>();
         if (charInfo != null)
         {
             charInfo.UpdateResourcesView();
+
+            if (charInfo.currentHP <= 0)
+            {
+                targetController.SetTrigger("doDeath");
+            }
         }
         else
         {
@@ -186,6 +215,17 @@ public class ActionPhaseAnimation : MonoBehaviour
         {
             yield return AllyTargetAnimation(senderObj, targetObj, senderInfo, targetInfo);
         }
+    }
+
+    private IEnumerator WaitForAnimationToFinishSimple(Animator animator, string stateName)
+    {
+        // Wait until the animator is playing the desired state
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(stateName))
+            yield return null;
+
+        // Then wait until it's done (normalizedTime >= 1)
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.55f)
+            yield return null;
     }
 
     //positions depending on sender and target

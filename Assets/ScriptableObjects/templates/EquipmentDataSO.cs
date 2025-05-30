@@ -62,6 +62,7 @@ public enum EquipmentClass
     Any,
     Fire_Mage,
     Earth_Mage,
+    Water_Mage,
     Barrier_Mage,
     Sword_God_Style,
     North_God_Style,

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   className: North God Style
   gender: 0
-  spriteMale: {fileID: 5485172136287448984, guid: b4280f9c9165baa44b1d7d3b7cc034f2, type: 3}
-  spriteFemale: {fileID: 4555630477773582772, guid: 66f4b932c1f0ed549ae2eca588460f76, type: 3}
-  imageMale: {fileID: -597901200, guid: c2b03633b0ebe30469dca34a6c9f0917, type: 3}
-  imageFemale: {fileID: 1379718727, guid: 7a1e82ea1f98fc24a91155d0d2d9cf21, type: 3}
+  spriteMale: {fileID: 7543978028815193226, guid: 5d2cc48c0b69b8e4ea0f31a5b707292d, type: 3}
+  spriteFemale: {fileID: 7543978028815193226, guid: 5d2cc48c0b69b8e4ea0f31a5b707292d, type: 3}
+  imageMale: {fileID: 6933015712622714122, guid: 093cb3f214a156d4ba25a40926b0d41b, type: 3}
+  imageFemale: {fileID: 6933015712622714122, guid: 093cb3f214a156d4ba25a40926b0d41b, type: 3}
   startingDeck:
   - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
   - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}

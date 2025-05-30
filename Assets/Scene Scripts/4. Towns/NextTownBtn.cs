@@ -1,9 +1,11 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NextTownBtn : MonoBehaviour
 {
     [SerializeField] private TownDataSO town;
+    [SerializeField] private bool isLabyrinthEntrance = false;
 
     public void GoToTown()
     {
@@ -31,6 +33,12 @@ public class NextTownBtn : MonoBehaviour
 
             TownManager.Instance.waves = averageRoll;
 
+            TownManager.Instance.isLabyrinth = false;
+
+            if (isLabyrinthEntrance)
+            {
+                TownManager.Instance.isLabyrinth = true;
+            }
             SceneManager.LoadScene("Combat Scene 2");
         }
         else

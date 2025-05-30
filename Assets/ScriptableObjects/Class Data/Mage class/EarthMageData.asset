@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   className: Earth Mage
   gender: 0
-  spriteMale: {fileID: 4681758890207869389, guid: 37cc0f0309be5ed418f07bef1f1864a5, type: 3}
-  spriteFemale: {fileID: 3944877961001108608, guid: 166d20d7b13e21e489c0c5e5d854e1a6, type: 3}
-  imageMale: {fileID: 349360136, guid: fa7ece28ac732d544ae227e3548e3a5c, type: 3}
-  imageFemale: {fileID: 1628826782, guid: 08c4d13b6c024a44ba60da0c24603056, type: 3}
+  spriteMale: {fileID: 8380330880914416377, guid: 409e1f02ee59f3241b8de375c394003a, type: 3}
+  spriteFemale: {fileID: 8380330880914416377, guid: 409e1f02ee59f3241b8de375c394003a, type: 3}
+  imageMale: {fileID: -3559905536886784575, guid: 895b6c0c17a2d4946a741b2897dcf3d4, type: 3}
+  imageFemale: {fileID: -3559905536886784575, guid: 895b6c0c17a2d4946a741b2897dcf3d4, type: 3}
   startingDeck:
   - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
   - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
   - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
   - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
   - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
-  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
-  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
-  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
-  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
-  - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}

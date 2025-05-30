@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   className: Barrier Mage
   gender: 0
-  spriteMale: {fileID: 8553950402791603006, guid: 44f61e59eff10de42a2c13d9a1337325, type: 3}
-  spriteFemale: {fileID: 1342679676178551571, guid: 73db2befcfaaac54898a7202d7e7e3c8, type: 3}
-  imageMale: {fileID: -590652515, guid: 8f58f2330036e8f419836e6dc98ea683, type: 3}
-  imageFemale: {fileID: -1534069498, guid: b1eb38ea22304514d86eabdb54aca5b1, type: 3}
+  spriteMale: {fileID: 5299247592434398527, guid: 836c5d381d5d4f34c887185d2977d75a, type: 3}
+  spriteFemale: {fileID: 5299247592434398527, guid: 836c5d381d5d4f34c887185d2977d75a, type: 3}
+  imageMale: {fileID: -2212438770764017873, guid: e9dc6e66af1b8044898a91ef1bd1b09e, type: 3}
+  imageFemale: {fileID: -2212438770764017873, guid: e9dc6e66af1b8044898a91ef1bd1b09e, type: 3}
   startingDeck:
   - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
   - {fileID: 11400000, guid: 1064ac19135e89244b66dca2f30d403e, type: 2}
@@ -29,13 +29,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
   - {fileID: 11400000, guid: 1c390d2b70e99ce42a647a47e6fe53bc, type: 2}
   - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
-  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
-  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
-  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
-  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
-  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
-  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
-  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
-  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
-  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
-  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}

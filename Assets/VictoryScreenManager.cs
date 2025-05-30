@@ -20,19 +20,34 @@ public class VictoryScreenManager : MonoBehaviour
 
     private void GenerateXP()
     {
+        int extraLevels = 0;
+        if (TownManager.Instance.isLabyrinth)
+        {
+            extraLevels = 5;
+        }
+
         var killList = CombatSystem.Instance.GetKillCounter(); // Access the list
 
         foreach (var entry in killList)
         {
             GameObject xpUI = Instantiate(xpUIPrefab, xpUIParent);
-            xpUI.GetComponent<CharacterXP>().Setup(entry.character, entry.levelDiffs.Count, entry.levelDiffs);
+            xpUI.GetComponent<CharacterXP>().Setup(entry.character, entry.levelDiffs.Count, entry.levelDiffs, extraLevels);
         }
     }
 
     private void GenerateMisc()
     {
         goldText.text = $"Gold: {CombatSystem.Instance.goldAmount.ToString("N0")}";
-        townText.text = $"Next Town: {TownManager.Instance.townTo.townName}";
+
+        if (TownManager.Instance.isLabyrinth)
+        {
+        townText.text = $"{TownManager.Instance.townTo.townName} labyrinth cleared!";
+        }
+        else
+        {
+            townText.text = $"Next Town: {TownManager.Instance.townTo.townName}";
+        }
+
         nextButton.onClick.AddListener(NextButton);
     }
 

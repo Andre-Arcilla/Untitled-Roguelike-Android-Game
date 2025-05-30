@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class TownManager : MonoBehaviour
 {
@@ -23,5 +22,6 @@ public class TownManager : MonoBehaviour
     [SerializeField] private TownDataSO fallBackTown;
     [SerializeField] public TownDataSO townFrom;
     [SerializeField] public TownDataSO townTo;
-    [SerializeField] public int waves;
+    [SerializeField] public bool isLabyrinth;
+    [SerializeField] public int waves = 1;
 }

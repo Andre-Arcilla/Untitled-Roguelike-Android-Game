@@ -12,17 +12,16 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null)
+        if (Instance != null && Instance != this)
         {
             CleanUpAndDestroy();
             return;
         }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            MarkPersistentObjects();
-        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        MarkPersistentObjects();
+        Initialize();
     }
 
     private void MarkPersistentObjects()
@@ -44,5 +43,21 @@ public class GameManager : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+    private void Initialize()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        AudioManager.Instance.LoadBGM(scene);
+        PlayerDataHolder.Instance.SavePartyInfo();
     }
 }

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CombatSystem : MonoBehaviour
 {
@@ -17,8 +19,7 @@ public class CombatSystem : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        waves = TownManager.Instance?.waves ?? 1;
-        currentWave = 1;
+        waves = TownManager.Instance?.waves ?? 2;
     }
 
     private void Start()
@@ -50,18 +51,24 @@ public class CombatSystem : MonoBehaviour
     public List<KillEntry> GetKillCounter() => killCounterList;
     public int goldAmount => goldEarned;
 
-    [SerializeField] private int waves;
-    [SerializeField] private int currentWave = 1;
+    [SerializeField] private int waves = 1;
+    [SerializeField] private int currentWave = 0;
+    [SerializeField] private TMP_Text waveText;
 
     public void GenerateNewEnemyGroup()
     {
         if (currentWave < waves)
         {
+            Debug.Log("current wave" + currentWave);
+            Debug.Log("wave" + waves);
             CharacterGenerator.Instance.ChangeEnemies();
             currentWave++;
+            waveText.text = $"Encounters: {currentWave}/{waves}";
         }
         else if (currentWave >= waves)
         {
+            Debug.Log("current wave" + currentWave);
+            Debug.Log("wave" + waves);
             CombatCompleteWin();
         }
     }
@@ -93,10 +100,7 @@ public class CombatSystem : MonoBehaviour
 
     private void CombatCompleteWin()
     {
-        Debug.Log("|-------------------|");
-        Debug.Log("|  Combat complete  |");
-        Debug.Log("|-------------------|");
-
+        TownManager.Instance.townTo.labyrinthCleared = true;
         SceneManager.LoadScene("Victory Screen", LoadSceneMode.Additive);
     }
 
@@ -106,10 +110,6 @@ public class CombatSystem : MonoBehaviour
         {
             return;
         }
-
-        Debug.Log("|----------------------|");
-        Debug.Log("|  Your party is dead  |");
-        Debug.Log("|----------------------|");
 
         SceneManager.LoadScene(TownManager.Instance.townFrom.sceneName);
     }

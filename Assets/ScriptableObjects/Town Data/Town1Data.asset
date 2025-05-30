@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2465897446a18da45a9305915ab04044, type: 3}
   m_Name: Town1Data
   m_EditorClassIdentifier: 
-  townName: Town 1
-  sceneAsset: {fileID: 102900000, guid: e08c247c8af9c61419608875317e6526, type: 3}
+  townName: Fittoa
+  sceneAsset: {fileID: 102900000, guid: a5af941511a812841b922f88a9fe909d, type: 3}
   sceneName: Town 1
   labyrinthCleared: 0
   connectedTowns:

@@ -13,7 +13,7 @@ public class CharacterXP : MonoBehaviour
     [SerializeField] Image xpBar;
     [SerializeField] private ClassDatabase classDatabase;
 
-    public void Setup(CharacterData characterData, int kills, List<int> levelDiffs)
+    public void Setup(CharacterData characterData, int kills, List<int> levelDiffs, int bonusLevels)
     {
         this.characterData = characterData;
 
@@ -23,37 +23,32 @@ public class CharacterXP : MonoBehaviour
         // Calculate total XP including current XP
         int totalXP = characterData.basicInfo.xp + xpGain;
 
-        // Calculate level gained and leftover XP after leveling up
-        int levelGain = totalXP / 100;
+        // Calculate level gained from XP and leftover XP
+        int levelGainFromXP = totalXP / 100;
         int xpLeft = totalXP % 100;
 
-        // Update character's XP and level
+        // Final level gain includes XP levels and bonus levels
+        int totalLevelGain = levelGainFromXP + bonusLevels;
+
+        // Update character data
         characterData.basicInfo.xp = xpLeft;
-        characterData.basicInfo.level += levelGain;
+        characterData.basicInfo.level += totalLevelGain;
 
-        // Calculate fill amount for the XP bar (0 to 1)
-        float fillAmount = xpLeft / 100f;
-
+        // Update UI
         GenerateCharacterSprite();
-
-        // Set UI text fields
         charName.text = $"Name: {characterData.basicInfo.characterName}";
 
-        // Show level with optional gained levels
-        if (levelGain > 0)
+        if (totalLevelGain > 0)
         {
-            charLevel.text = $"Level: {characterData.basicInfo.level - levelGain} +{levelGain}";
+            charLevel.text = $"Level: {characterData.basicInfo.level - totalLevelGain} +{totalLevelGain}";
         }
         else
         {
             charLevel.text = $"Level: {characterData.basicInfo.level}";
         }
 
-        // Show XP with gained amount in parentheses
         charXP.text = $"XP: {xpLeft} / 100 (+{xpGain})";
-
-        // Update XP bar fill
-        xpBar.fillAmount = fillAmount;
+        xpBar.fillAmount = xpLeft / 100f;
     }
 
     private int XPGainCalculator(int kills, List<int> levelDiffs)

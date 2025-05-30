@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2465897446a18da45a9305915ab04044, type: 3}
   m_Name: Town7Data
   m_EditorClassIdentifier: 
-  townName: Town 7
-  sceneAsset: {fileID: 102900000, guid: e2e1ece173003cf4f9a2830da4155afb, type: 3}
+  townName: Artier
+  sceneAsset: {fileID: 102900000, guid: 515123acde31d954aa8e5e214cada8ad, type: 3}
   sceneName: Town 7
   labyrinthCleared: 0
   connectedTowns:
   - {fileID: 11400000, guid: a12e403b6132aea40bc428b7e77358f2, type: 2}
-  - {fileID: 11400000, guid: ff95d499e8ad69b41a2656702563c1cd, type: 2}
   - {fileID: 11400000, guid: a2a204e3a90952045864739d4600af2f, type: 2}
   - {fileID: 11400000, guid: 753c3fbf8c40283499676e630cb7a164, type: 2}

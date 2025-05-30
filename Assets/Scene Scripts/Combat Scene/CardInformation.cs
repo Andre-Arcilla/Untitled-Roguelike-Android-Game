@@ -96,12 +96,6 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (card.target == Target.Card)
-        {
-            CardHolder holder = transform.parent.parent.GetComponent<CardHolder>();
-            holder.StartCoroutine(holder.FanCardsAction(this));
-        }
-
         // Store the original position and rotation
         originalPosition = transform.position;
         originalRotation = transform.rotation;
@@ -162,6 +156,12 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
             }
         }
 
+        if (card.target == Target.Card)
+        {
+            CardHolder holder = transform.parent.parent.GetComponent<CardHolder>();
+            holder.StartCoroutine(holder.FanCardsAction(this));
+        }
+
         float distance = Vector3.Distance(transform.position, CardShowInfo.Instance._cardPreview.transform.position);
 
         if (distance < distanceLimit && Vector3.Distance(transform.position, originalPosition) > 2f)
@@ -182,6 +182,8 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        CardShowInfo.Instance.Hide();
+        CardShowInfo.Instance.Drag(false);
         //return valid targets to original state
         bool hasEnoughMana = GetComponentInParent<CharacterInfo>().currentEN >= card.mana;
         bool hasValidTarget = TargetingSystem.Instance.TryGetValidTarget(transform.position, this, out GameObject t);
@@ -251,6 +253,7 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
         isDeselecting = false;
 
         //stops the cursor from changing the hovered card 
+        CardShowInfo.Instance.Hide();
         CardShowInfo.Instance.Drag(false);
 
         //disable the collider to avoid catching the card mid animation

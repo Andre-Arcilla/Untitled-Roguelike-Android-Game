@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2465897446a18da45a9305915ab04044, type: 3}
   m_Name: Town4Data
   m_EditorClassIdentifier: 
-  townName: Town 4
-  sceneAsset: {fileID: 102900000, guid: b4d1dffcaf96f5d4ab2341998e7f0482, type: 3}
+  townName: Sharia
+  sceneAsset: {fileID: 102900000, guid: cfef9546bc886404780d560da8c0fc63, type: 3}
   sceneName: Town 4
   labyrinthCleared: 0
   connectedTowns:
   - {fileID: 11400000, guid: ff95d499e8ad69b41a2656702563c1cd, type: 2}
-  - {fileID: 11400000, guid: e2bf3c9d7f6c6804784c202e271ea61c, type: 2}
   - {fileID: 11400000, guid: a2a204e3a90952045864739d4600af2f, type: 2}

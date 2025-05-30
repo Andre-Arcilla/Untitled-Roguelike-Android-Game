@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerDataHolder : MonoBehaviour
 {
@@ -67,5 +68,4 @@ public class PlayerDataHolder : MonoBehaviour
 
         Debug.Log("Party and inventory saved to: " + path);
     }
-
 }

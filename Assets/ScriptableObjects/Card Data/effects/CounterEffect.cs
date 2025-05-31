@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class CounterEffect : ICardEffect
 {
-    [SerializeField] private int damage = 0;
     [SerializeField] private bool negateDamage;
     [SerializeField] private bool expiresOnHit;
 
@@ -11,7 +10,7 @@ public class CounterEffect : ICardEffect
         CharacterInfo target = targetObj.GetComponent<CharacterInfo>();
         if (target == null) return;
 
-        var counter = new CounterStatusEffect(damage, negateDamage, expiresOnHit);
+        var counter = new CounterStatusEffect(negateDamage, expiresOnHit);
         target.ApplyStatusEffect(counter);
     }
 }

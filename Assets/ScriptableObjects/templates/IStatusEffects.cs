@@ -3,6 +3,7 @@ public interface IStatusEffect
     string Name { get; }
     int Duration { get; set; }
     bool IsShortTerm { get; }
+    bool AllowsStacking { get; }
     void OnApply(CharacterInfo target);
     void OnTurnStart();
     void OnRemove();

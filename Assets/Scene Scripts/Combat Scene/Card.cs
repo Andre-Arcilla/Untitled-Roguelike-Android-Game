@@ -20,12 +20,16 @@ public class Card
 
     public int mana {  get; private set; }
     public int power {  get; private set; }
+    public int powerDisplay {  get; private set; }
 
     private readonly CardDataSO data;
+    private readonly CharacterInfo owner;
 
-    public Card(CardDataSO cardData, CharacterInfo owner)
+    public Card(CardDataSO cardData, CharacterInfo ownerData)
     {
         data = cardData;
+        owner = ownerData;
+        power = data.power;
 
         bool hasCharge = data.effects.Any(e => e is ChargeDamageEffect);
         mana = data.cost;
@@ -34,7 +38,36 @@ public class Card
             mana = owner.currentEN;
             isCharged = true;
         }
-        power = data.power;
+        if (ownerData != null)
+        {
+            Debug.Log("yes calc");
+            powerDisplay = Calculate(data.power, ownerData.stats.totalPWR);
+        }
+        else
+        {
+            Debug.Log("no calc");
+            powerDisplay = data.power;
+        }
+    }
+
+    public void UpdateInfo()
+    {
+        bool hasCharge = data.effects.Any(e => e is ChargeDamageEffect);
+        mana = data.cost;
+        if (hasCharge && owner != null)
+        {
+            mana = owner.currentEN;
+            isCharged = true;
+        }
+
+        if (owner != null)
+        {
+            powerDisplay = Calculate(power, owner.stats.totalPWR);
+        }
+        else
+        {
+            powerDisplay = power;
+        }
     }
 
     public void UpdateManaCost(int cost)
@@ -44,6 +77,21 @@ public class Card
         {
             mana = cost;
         }
+
+        if (owner != null)
+        {
+            powerDisplay = Calculate(power, owner.stats.totalPWR);
+        }
+        else
+        {
+            powerDisplay = power;
+        }
+    }
+
+    private int Calculate(int cardPower, int characterPower)
+    {
+        float result = cardPower * (characterPower / 20f);
+        return Mathf.FloorToInt(result);
     }
 
     public void ChangeMana(int amount, Change change)

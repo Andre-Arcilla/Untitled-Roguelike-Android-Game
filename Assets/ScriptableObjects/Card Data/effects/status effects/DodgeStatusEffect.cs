@@ -6,10 +6,12 @@ public class DodgeStatusEffect : IStatusEffect
     public int Duration { get => duration; set => duration = value; }
     public bool IsShortTerm => _IsShortTerm;
     public bool ExpiresOnHit => _ExpiresOnHit;
+    public bool AllowsStacking => _AllowsStacking;
 
     [SerializeField] private int duration = 1;
     [SerializeField] private bool _ExpiresOnHit;
     [SerializeField] private bool _IsShortTerm = true;
+    [SerializeField] private bool _AllowsStacking = false;
     private CharacterInfo target;
 
     public DodgeStatusEffect() { }

@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5bac162723814d46a1b4baf5c225f84, type: 3}
-  m_Name: DrawCard
+  m_Name: Provoke
   m_EditorClassIdentifier: 
-  cardName: Draw
-  description: Draw X cards
-  target: 5
+  cardName: Provoke
+  description: Taunt all enemies
+  target: 2
   isInstantUse: 1
-  cost: 2
-  power: 3
+  cost: 4
+  power: 0
   effects:
-  - rid: 58941040279945253
-  cardSprite: {fileID: 21300000, guid: cb40c208d5b074a4bb7f7c920110b52b, type: 3}
+  - rid: 58941040279945530
+  cardSprite: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: 58941040279945253
-      type: {class: DrawCardEffect, ns: , asm: Assembly-CSharp}
+    - rid: 58941040279945530
+      type: {class: TauntEffect, ns: , asm: Assembly-CSharp}
       data: 

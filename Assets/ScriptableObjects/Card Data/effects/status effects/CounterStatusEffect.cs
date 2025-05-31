@@ -7,19 +7,19 @@ public class CounterStatusEffect : IStatusEffect
     public bool NegatesDamage => _NegateDamage;
     public bool ExpiresOnHit => _ExpiresOnHit;
     public bool IsShortTerm => _IsShortTerm;
+    public bool AllowsStacking => _AllowsStacking;
 
     [SerializeField] private int duration = 1;
-    [SerializeField] private int damage;
     [SerializeField] private bool _NegateDamage = false;
     [SerializeField] private bool _ExpiresOnHit = false;
     [SerializeField] private bool _IsShortTerm = true;
+    [SerializeField] private bool _AllowsStacking = false;
     private CharacterInfo target;
 
     public CounterStatusEffect() { }
 
-    public CounterStatusEffect(int damage, bool negateDamage, bool expiresOnHit)
+    public CounterStatusEffect(bool negateDamage, bool expiresOnHit)
     {
-        this.damage = damage;
         this._NegateDamage = negateDamage;
         this._ExpiresOnHit = expiresOnHit;
     }
@@ -36,8 +36,9 @@ public class CounterStatusEffect : IStatusEffect
 
     public void OnRemove() { }
 
-    public void OnTrigger(CharacterInfo attacker)
+    public void OnTrigger(CharacterInfo attacker, int damage)
     {
+        int finalDamage = target.ApplyPreDamageModifiers(damage);
         attacker.currentHP -= damage;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Splines.Examples;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -55,7 +56,7 @@ public class TargetingSystem : MonoBehaviour
         {
             if (targetObj == null) continue;
 
-            Collider2D targetCollider = targetObj.GetComponentInChildren<Collider2D>();
+            Collider2D targetCollider = targetObj.transform.Find("Character Sprite")?.GetComponentInChildren<Collider2D>() ?? targetObj.GetComponentInChildren<Collider2D>();
             if (targetCollider != null && targetCollider.OverlapPoint(cardPosition))
             {
                 validTarget = targetObj;

@@ -50,6 +50,24 @@ public class EnemyActionsManager : MonoBehaviour
                 continue; 
             }
 
+            // Check if enemy has LockDownStatusEffect active
+            bool isLockedDown = false;
+            foreach (var effect in enemyChar.enemy.activeEffects)
+            {
+                if (effect is LockDownStatusEffect)
+                {
+                    isLockedDown = true;
+                    break;
+                }
+            }
+
+            if (isLockedDown)
+            {
+                continue;
+            }
+
+            //if taunted, check if sender is alive, if alive, make the only target
+
             Targetable sender = enemyChar.enemy.GetComponent<Targetable>();
 
             //pick a random card
@@ -59,12 +77,28 @@ public class EnemyActionsManager : MonoBehaviour
             //pick a random target
             List<GameObject> targetList = TargetSelector.Instance.GetTargets(card, sender);
 
-            int randomTarget = Random.Range(0, targetList.Count);
-            GameObject chosenTarget = targetList[randomTarget];
+            // check for any target with TauntStatusEffect
+            GameObject tauntTarget = targetList.Find(t =>
+            {
+                CharacterInfo info = t.GetComponent<CharacterInfo>();
+                return info != null && info.activeEffects.Exists(e => e is TauntStatusEffect);
+            });
 
-            GameObject target = targetList[randomTarget];
+            GameObject chosenTarget;
 
-            ActionSystem.Instance.AddCard(sender, card, target, card.card.mana);
+            if (tauntTarget != null)
+            {
+                // force target with TauntStatusEffect
+                chosenTarget = tauntTarget;
+            }
+            else
+            {
+                // pick a random target as fallback
+                int randomTarget = Random.Range(0, targetList.Count);
+                chosenTarget = targetList[randomTarget];
+            }
+
+            ActionSystem.Instance.AddCard(sender, card, chosenTarget, card.card.mana);
         }
     }
 }

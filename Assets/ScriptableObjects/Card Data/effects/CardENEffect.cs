@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CardEnDownEffect : ICardEffect
 {
-    //enum, increase or decrease
+    [SerializeField] private int amount;
     [SerializeField] private Change change;
 
     public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj, int manaCost)
@@ -12,6 +12,6 @@ public class CardEnDownEffect : ICardEffect
         CharacterInfo sender = senderObj.GetComponent<CharacterInfo>();
         CardInformation target = targetObj.GetComponent<CardInformation>();
 
-        target.card.ChangeMana(card.card.power, change);
+        target.card.ChangeMana(amount, change);
     }
 }

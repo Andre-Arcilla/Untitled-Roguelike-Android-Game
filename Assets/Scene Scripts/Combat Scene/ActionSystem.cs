@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -271,18 +272,60 @@ public class ActionSystem : MonoBehaviour
 
         CharacterDeck senderDeck = sender.GetComponent<CharacterDeck>();
 
-        yield return StartCoroutine(senderDeck.StartPlayCard(card));
-
-        foreach (ICardEffect effect in card.card.effects)
+        if (target.GetComponent<CardInformation>() == null)
         {
-            effect.Execute(sender, card, target, card.card.mana);
+            ActionPhaseAnimation.Instance.ActionAnimationStart(sender, card, target);
         }
 
-        target.GetComponent<CardInformation>().UpdateCard();
+        yield return StartCoroutine(senderDeck.StartPlayCard(card));
+
+        List<GameObject> targetList = new List<GameObject>();
+
+        if (card.card.target == Target.AllEnemies)
+        {
+            targetList = TargetSelector.Instance.GetTargets(card, sender);
+
+            foreach (GameObject t in targetList)
+            {
+                foreach (ICardEffect effect in card.card.effects)
+                {
+                    effect.Execute(sender, card, t, card.card.mana);
+                }
+
+                if (t.TryGetComponent<CardInformation>(out var cardInfo))
+                {
+                    cardInfo.UpdateCard();
+                }
+            }
+        }
+        else
+        {
+            foreach (ICardEffect effect in card.card.effects)
+            {
+                effect.Execute(sender, card, target, card.card.mana);
+            }
+
+            if (target.TryGetComponent<CardInformation>(out var cardInfo))
+            {
+                cardInfo.UpdateCard();
+            }
+        }
+
+        if (target.GetComponent<CardInformation>() == null)
+        {
+            CharacterInfo targetInfo = target.GetComponent<CharacterInfo>();
+
+            yield return ActionPhaseAnimation.Instance.ActionAnimationPerform(sender, card, target, "hit");
+        }
 
         yield return new WaitForSeconds(0.5f);
 
         yield return senderDeck.EndPlayCard(card);
+
+        if (target.GetComponent<CardInformation>() == null)
+        {
+            ActionPhaseAnimation.Instance.ActionAnimationEnd(sender, card, target);
+        }
 
         yield return senderDeck.EndPlaySortHand();
 

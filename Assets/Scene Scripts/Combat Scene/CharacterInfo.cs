@@ -204,6 +204,15 @@ public class CharacterInfo : MonoBehaviour
 
     public void ApplyStatusEffect(IStatusEffect newEffect)
     {
+        // Check for stacking exceptions
+        if (newEffect.AllowsStacking)
+        {
+            newEffect.OnApply(this);
+            activeEffects.Add(newEffect);
+            return;
+        }
+
+        // Default behavior: merge duration if effect already exists
         foreach (var effect in activeEffects)
         {
             if (effect.Name == newEffect.Name)
@@ -260,7 +269,7 @@ public class CharacterInfo : MonoBehaviour
         return (IStatusEffect)JsonUtility.FromJson(json, original.GetType());
     }
 
-    public bool TriggerOnHitEffects(CharacterInfo attacker)
+    public bool TriggerOnHitEffects(CharacterInfo attacker, int damage)
     {
         bool damageNegated = false;
         List<IStatusEffect> toRemove = new();
@@ -269,7 +278,7 @@ public class CharacterInfo : MonoBehaviour
         {
             if (effect is CounterStatusEffect counter)
             {
-                counter.OnTrigger(attacker);
+                counter.OnTrigger(attacker, damage);
                 if (counter.NegatesDamage)
                 {
                     damageNegated = true;
@@ -297,6 +306,21 @@ public class CharacterInfo : MonoBehaviour
         }
 
         return damageNegated;
+    }
+
+    public int ApplyPreDamageModifiers(int baseDamage)
+    {
+        int modifiedDamage = baseDamage;
+
+        foreach (var effect in activeEffects)
+        {
+            if (effect is DamageReductionStatusEffect dmgReduce)
+            {
+                modifiedDamage = dmgReduce.ModifyIncomingDamage(modifiedDamage);
+            }
+        }
+
+        return modifiedDamage;
     }
 
     public void UpdateResourcesView()

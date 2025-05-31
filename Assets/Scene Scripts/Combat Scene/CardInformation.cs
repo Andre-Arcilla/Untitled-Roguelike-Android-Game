@@ -13,7 +13,7 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
     [Header("Card Display")] //temp
     [SerializeField] private string cardName; //temp
     [SerializeField] private int mana; //temp
-    [SerializeField] private int power; //temp
+    [SerializeField] public int power; //temp
     [SerializeReference, SR] private List<ICardEffect> effects = new List<ICardEffect>(); //temp
 
     [Header("References")]
@@ -30,27 +30,28 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
         this.card = card;
         cardName = card.cardName;
         mana = card.mana;
-        power = card.power;
+        power = card.powerDisplay;
         effects.Clear();
         effects.AddRange(card.effects);
 
         cardManaTxt.text = card.mana.ToString();
         cardNameTxt.text = card.cardName.ToString();
-        cardDescTxt.text = card.description.Replace("X", card.power.ToString());
+        cardDescTxt.text = card.description.Replace("X", card.powerDisplay.ToString());
         ReplaceSprite(sprite, card.sprite);
     }
 
     public void UpdateCard()
     {
+        card.UpdateInfo();
         cardName = card.cardName;
         mana = card.mana;
-        power = card.power;
+        power = card.powerDisplay;
         effects.Clear();
         effects.AddRange(card.effects);
 
         cardManaTxt.text = card.mana.ToString();
         cardNameTxt.text = card.cardName.ToString();
-        cardDescTxt.text = card.description.Replace("X", card.power.ToString());
+        cardDescTxt.text = card.description.Replace("X", card.powerDisplay.ToString());
 
     }
 

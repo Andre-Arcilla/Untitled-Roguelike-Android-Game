@@ -9,11 +9,13 @@ public class DamageEffect : ICardEffect
 
         int damage = Calculate(card.card.power, sender.stats.totalPWR);
 
-        bool damageNegated = target.TriggerOnHitEffects(sender);
+        int finalDamage = target.ApplyPreDamageModifiers(damage);
+
+        bool damageNegated = target.TriggerOnHitEffects(sender, finalDamage);
 
         if (!damageNegated)
         {
-            target.currentHP -= damage;
+            target.currentHP -= finalDamage;
         }
     }
 

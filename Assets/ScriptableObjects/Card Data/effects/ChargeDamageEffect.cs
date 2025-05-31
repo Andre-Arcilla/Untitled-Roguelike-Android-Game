@@ -1,28 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ChargeDamageEffect : ICardEffect
 {
     [SerializeField] private int multiplier;
-
     public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj, int manaCost)
     {
         CharacterInfo sender = senderObj.GetComponent<CharacterInfo>();
         CharacterInfo target = targetObj.GetComponent<CharacterInfo>();
 
-        int cardPower = manaCost * multiplier;
+        float cardPower = manaCost * multiplier;
         int damage = Calculate(cardPower, sender.stats.totalPWR);
 
-        target.currentHP -= damage;
+        int finalDamage = target.ApplyPreDamageModifiers(damage);
 
-        if (target.currentHP <= 0)
+        bool damageNegated = target.TriggerOnHitEffects(sender, finalDamage);
+
+        if (!damageNegated)
         {
-            target.gameObject.SetActive(false);
+            target.currentHP -= finalDamage;
         }
     }
 
-    private int Calculate(int cardPower, int characterPower)
+    private int Calculate(float cardPower, int characterPower)
     {
         float result = cardPower * (characterPower / 20f);
         return Mathf.FloorToInt(result);

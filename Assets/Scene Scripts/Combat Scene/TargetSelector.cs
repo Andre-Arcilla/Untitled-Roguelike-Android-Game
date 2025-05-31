@@ -119,7 +119,8 @@ public class TargetSelector : MonoBehaviour
         allCards = allCards
             .Where(cardObj => cardObj != null
                 && cardObj.GetComponent<CardInformation>() != currentCard
-                && !cardObj.GetComponent<CardInformation>().isSelected)
+                && !cardObj.GetComponent<CardInformation>().isSelected
+                && cardObj.GetComponent<CardInformation>().power > 0)
             .ToList();
         return allCards;
     }

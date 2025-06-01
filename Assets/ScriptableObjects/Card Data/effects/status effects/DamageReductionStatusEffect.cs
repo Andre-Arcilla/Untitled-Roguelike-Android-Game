@@ -6,6 +6,7 @@ public class DamageReductionStatusEffect : IStatusEffect
     public int Duration { get => duration; set => duration = value; }
     public bool IsShortTerm => _IsShortTerm;
     public bool AllowsStacking => _AllowsStacking;
+    public bool IsDebuff => _IsDebuff;
 
     private CharacterInfo target;
 
@@ -13,6 +14,7 @@ public class DamageReductionStatusEffect : IStatusEffect
     [SerializeField] private float percentReduction = 0.5f; // Percent damage reduction
     [SerializeField] private bool _IsShortTerm = false;
     [SerializeField] private bool _AllowsStacking = false;
+    [SerializeField] private bool _IsDebuff = false;
 
     public DamageReductionStatusEffect() { }
 

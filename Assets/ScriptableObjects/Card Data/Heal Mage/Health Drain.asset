@@ -10,16 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5bac162723814d46a1b4baf5c225f84, type: 3}
-  m_Name: Scorch Slash
+  m_Name: Health Drain
   m_EditorClassIdentifier: 
-  cardName: 
-  description: 
+  cardName: Health Drain
+  description: Deal X damage, heal for 50% of damage.
   target: 0
   isInstantUse: 0
-  cost: 0
-  power: 0
-  effects: []
+  cost: 5
+  power: 5
+  effects:
+  - rid: 58941040279945900
   cardSprite: {fileID: 0}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 58941040279945900
+      type: {class: LifeStealEffect, ns: , asm: Assembly-CSharp}
+      data:
+        lifeStealPercent: 0.5

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class DamageBurnedEffect : ICardEffect
 {
-    [SerializeField] private float damagePercent = 1.5f;
+    [SerializeField]
+    [Range(0f, 1f)]
+    private float damagePercent = 0.5f;
     [SerializeField] private string effectName;
 
     public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj, int manaCost)
@@ -19,7 +21,7 @@ public class DamageBurnedEffect : ICardEffect
         {
             if (effect.Name.ToLower() == effectName.ToLower())
             {
-                damage = Mathf.FloorToInt(damagePercent * damage);
+                damage = Mathf.FloorToInt(damage + (damage * damagePercent));
                 break;
             }
         }

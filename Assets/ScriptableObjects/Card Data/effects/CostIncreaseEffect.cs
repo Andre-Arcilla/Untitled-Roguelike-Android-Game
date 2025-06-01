@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class CostIncreaseEffect : ICardEffect
 {
-    [SerializeField] private float increasePercentage = 0.5f;
+    [SerializeField]
+    [Range(0f, 1f)]
+    private float increasePercentage = 0.5f;
 
     public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj, int manaCost)
     {
@@ -14,7 +16,7 @@ public class CostIncreaseEffect : ICardEffect
 
     private int Calculate(int cardCost)
     {
-        float result = cardCost + (cardCost / increasePercentage);
+        float result = cardCost + (cardCost * increasePercentage);
         return Mathf.FloorToInt(result);
     }
 }

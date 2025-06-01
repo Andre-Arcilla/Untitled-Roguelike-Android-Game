@@ -40,12 +40,10 @@ public class Card
         }
         if (ownerData != null)
         {
-            Debug.Log("yes calc");
             powerDisplay = Calculate(data.power, ownerData.stats.totalPWR);
         }
         else
         {
-            Debug.Log("no calc");
             powerDisplay = data.power;
         }
     }

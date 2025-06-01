@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bac162723814d46a1b4baf5c225f84, type: 3}
+  m_Name: Heat Wave
+  m_EditorClassIdentifier: 
+  cardName: Heat Wave
+  description: Deal X damage and apply 3 burn.
+  target: 0
+  isInstantUse: 0
+  cost: 3
+  power: 1
+  effects:
+  - rid: 58941040279945789
+  - rid: 58941040279945788
+  cardSprite: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 58941040279945788
+      type: {class: DotEffect, ns: , asm: Assembly-CSharp}
+      data:
+        duration: 3
+        damage: 2
+    - rid: 58941040279945789
+      type: {class: DamageEffect, ns: , asm: Assembly-CSharp}
+      data: 

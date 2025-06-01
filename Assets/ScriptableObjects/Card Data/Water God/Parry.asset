@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Parry
   m_EditorClassIdentifier: 
   cardName: Parry
-  description: Counter a single attack
+  description: Counter the next attack
   target: 2
   isInstantUse: 1
   cost: 2

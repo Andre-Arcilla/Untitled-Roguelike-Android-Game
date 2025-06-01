@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bac162723814d46a1b4baf5c225f84, type: 3}
+  m_Name: Tempest Veil
+  m_EditorClassIdentifier: 
+  cardName: Tempest Veil
+  description: Deal X damage to all enemies and reduce their SPD and PWR by 5.
+  target: 3
+  isInstantUse: 0
+  cost: 0
+  power: 5
+  effects:
+  - rid: 58941040279945863
+  - rid: 58941040279945864
+  - rid: 58941040279945865
+  cardSprite: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 58941040279945863
+      type: {class: DamageEffect, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 58941040279945864
+      type: {class: SPDUpEffect, ns: , asm: Assembly-CSharp}
+      data:
+        duration: 99
+        buffAmount: -5
+        isShortTerm: 0
+        isStackable: 1
+        isDebuff: 1
+    - rid: 58941040279945865
+      type: {class: PWRUpEffect, ns: , asm: Assembly-CSharp}
+      data:
+        duration: 99
+        buffAmount: -5
+        isShortTerm: 0
+        isStackable: 1
+        isDebuff: 1

@@ -12,14 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bac162723814d46a1b4baf5c225f84, type: 3}
   m_Name: Cross Execution
   m_EditorClassIdentifier: 
-  cardName: 
-  description: 
+  cardName: Cross Execution
+  description: "Deal X damage. 1.3\xD7 if target <30% HP."
   target: 0
   isInstantUse: 0
-  cost: 0
-  power: 0
-  effects: []
+  cost: 3
+  power: 4
+  effects:
+  - rid: 58941040279945771
   cardSprite: {fileID: 0}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 58941040279945771
+      type: {class: ExecuteDamageEffect, ns: , asm: Assembly-CSharp}
+      data:
+        hpThreshold: 0.3
+        executeDamage: 0.5

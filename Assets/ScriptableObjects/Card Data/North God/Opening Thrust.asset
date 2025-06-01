@@ -12,14 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bac162723814d46a1b4baf5c225f84, type: 3}
   m_Name: Opening Thrust
   m_EditorClassIdentifier: 
-  cardName: 
-  description: 
+  cardName: Opening Thrust
+  description: Deal X damage
   target: 0
   isInstantUse: 0
-  cost: 0
-  power: 0
-  effects: []
+  cost: 1
+  power: 2
+  effects:
+  - rid: 58941040279945785
   cardSprite: {fileID: 0}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 58941040279945785
+      type: {class: DamageEffect, ns: , asm: Assembly-CSharp}
+      data: 

@@ -22,6 +22,8 @@ public class PauseScript : MonoBehaviour
 
     public void MainMenu()
     {
+        Time.timeScale = 1f;
+        isPaused = false;
         SceneManager.LoadScene("Main Menu");
     }
 

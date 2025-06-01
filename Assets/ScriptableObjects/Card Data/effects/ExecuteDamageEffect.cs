@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class ExecuteDamageEffect : ICardEffect
 {
-    [SerializeField] private float hpThreshold = 0.3f;
-    [SerializeField] private float executeDamage = 0.5f;
+    [SerializeField]
+    [Range(0f, 1f)]
+    private float hpThreshold = 0.5f;
+    [SerializeField]
+    [Range(0f, 1f)]
+    private float executeDamage = 0.5f;
 
     public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj, int manaCost)
     {

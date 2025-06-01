@@ -59,7 +59,7 @@ public class CharacterInfo : MonoBehaviour
         }
 
         maxEN = stats.totalEN / 5;
-        maxHP = Mathf.FloorToInt(stats.totalHP / 1.5f);
+        maxHP = stats.totalHP;
         currentHP = maxHP;
         currentEN = maxEN;
         UpdateResourcesView();

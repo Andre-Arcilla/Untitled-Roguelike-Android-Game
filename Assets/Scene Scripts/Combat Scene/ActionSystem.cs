@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Splines.Examples;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -141,28 +142,42 @@ public class ActionSystem : MonoBehaviour
             ActionPhaseAnimation.Instance.ActionAnimationStart(action.sender, action.card, action.target);
             yield return senderDeck.StartPlayCard(action.card);
 
-            foreach (ICardEffect effect in action.card.card.effects)
-            {
-                effect.Execute(action.sender, action.card, action.target, action.manaCost);
-            }
+            List<GameObject> targetList = new List<GameObject>();
 
-            int currentHP = targetInfo != null ? targetInfo.currentHP : -100;
+            if (action.card.card.target == Target.AllEnemies || action.card.card.target == Target.AllAllies)
+            {
+                targetList = TargetSelector.Instance.GetTargets(action.card, action.sender);
 
-            if (targetInfo == null)
-            {
-                audioSFX = "hit";
-            }
-            else if (currentHP <= 0 && initialHP > 0)
-            {
-                audioSFX = "kill";
-            }
-            else if (currentHP == initialHP)
-            {
-                audioSFX = "miss";
+                foreach (GameObject t in targetList)
+                {
+                    foreach (ICardEffect effect in action.card.card.effects)
+                    {
+                        effect.Execute(action.sender, action.card, t, action.card.card.mana);
+                    }
+                }
             }
             else
             {
-                audioSFX = "hit";
+                foreach (ICardEffect effect in action.card.card.effects)
+                {
+                    effect.Execute(action.sender, action.card, action.target, action.manaCost);
+                }
+            }
+
+            if (action.card.card.target != Target.AllEnemies && targetInfo != null)
+            {
+                int currentHP = targetInfo.currentHP;
+
+                if (currentHP <= 0 && initialHP > 0)
+                    audioSFX = "kill";
+                else if (currentHP == initialHP)
+                    audioSFX = "miss";
+                else
+                    audioSFX = "hit";
+            }
+            else
+            {
+                audioSFX = "hit"; // fallback for AoE
             }
 
             yield return ActionPhaseAnimation.Instance.ActionAnimationPerform(action.sender, action.card, action.target, audioSFX);

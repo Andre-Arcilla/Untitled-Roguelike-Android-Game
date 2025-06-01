@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class DamageReductionEffect : ICardEffect
 {
-    [SerializeField] private float percentReduction;
+    [SerializeField]
+    [Range(0f, 1f)]
+    private float percentReduction = 0.5f;
     [SerializeField] private int duration = 0;
 
     public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj, int manaCost)

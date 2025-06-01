@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class PercentHPDamageEffect : ICardEffect
 {
-    [SerializeField] private float percentDamage = 0.1f;
+    [SerializeField]
+    [Range(0f, 1f)]
+    private float percentDamage = 0.5f;
 
     public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj, int manaCost)
     {

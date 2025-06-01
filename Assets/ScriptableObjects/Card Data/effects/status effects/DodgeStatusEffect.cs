@@ -7,11 +7,13 @@ public class DodgeStatusEffect : IStatusEffect
     public bool IsShortTerm => _IsShortTerm;
     public bool ExpiresOnHit => _ExpiresOnHit;
     public bool AllowsStacking => _AllowsStacking;
+    public bool IsDebuff => _IsDebuff;
 
     [SerializeField] private int duration = 1;
     [SerializeField] private bool _ExpiresOnHit;
     [SerializeField] private bool _IsShortTerm = true;
     [SerializeField] private bool _AllowsStacking = false;
+    [SerializeField] private bool _IsDebuff = false;
     private CharacterInfo target;
 
     public DodgeStatusEffect() { }

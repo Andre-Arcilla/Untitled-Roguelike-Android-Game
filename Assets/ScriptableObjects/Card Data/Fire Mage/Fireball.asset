@@ -12,14 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bac162723814d46a1b4baf5c225f84, type: 3}
   m_Name: Fireball
   m_EditorClassIdentifier: 
-  cardName: 
-  description: 
+  cardName: Fireball
+  description: "Deal X damage. 1.5\xD7 damage if target is Burning."
   target: 0
   isInstantUse: 0
-  cost: 0
-  power: 0
-  effects: []
+  cost: 2
+  power: 2
+  effects:
+  - rid: 58941040279945791
   cardSprite: {fileID: 0}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 58941040279945791
+      type: {class: DamageBurnedEffect, ns: , asm: Assembly-CSharp}
+      data:
+        damagePercent: 0.5
+        effectName: Burn

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Guard
   description: Block the next attack
-  target: 2
+  target: 1
   isInstantUse: 1
   cost: 2
   power: 0

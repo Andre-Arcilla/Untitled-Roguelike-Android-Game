@@ -8,10 +8,12 @@ public class LockDownStatusEffect : IStatusEffect
     public int Duration { get => duration; set => duration = value; }
     public bool IsShortTerm => _IsShortTerm;
     public bool AllowsStacking => _AllowsStacking;
+    public bool IsDebuff => _IsDebuff;
 
     [SerializeField] private int duration = 1;
     [SerializeField] private bool _IsShortTerm = true;
     [SerializeField] private bool _AllowsStacking = false;
+    [SerializeField] private bool _IsDebuff = true;
     private CharacterInfo target;
 
     public LockDownStatusEffect() { }

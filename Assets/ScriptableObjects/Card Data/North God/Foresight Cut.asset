@@ -12,14 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bac162723814d46a1b4baf5c225f84, type: 3}
   m_Name: Foresight Cut
   m_EditorClassIdentifier: 
-  cardName: 
-  description: 
+  cardName: Foresight Cut
+  description: Deal X damage and draw 1 card
   target: 0
   isInstantUse: 0
-  cost: 0
-  power: 0
-  effects: []
+  cost: 2
+  power: 4
+  effects:
+  - rid: 58941040279945786
+  - rid: 58941040279945787
   cardSprite: {fileID: 0}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 58941040279945786
+      type: {class: DamageEffect, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 58941040279945787
+      type: {class: DrawCardEffect, ns: , asm: Assembly-CSharp}
+      data:
+        drawAmount: 1

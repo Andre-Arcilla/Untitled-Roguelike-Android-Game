@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6fff08e89b814e41a13ed34ca4c80e3, type: 3}
+  m_Name: WizardData
+  m_EditorClassIdentifier: 
+  className: Wizard
+  gender: 0
+  spriteMale: {fileID: 240127698322761179, guid: 88e41c409f8371a498cac2dd8ecd8bb8, type: 3}
+  spriteFemale: {fileID: 240127698322761179, guid: 88e41c409f8371a498cac2dd8ecd8bb8, type: 3}
+  imageMale: {fileID: 3459611713962019155, guid: 8ad05377c16b08743a5a8c3075525fab, type: 3}
+  imageFemale: {fileID: 3459611713962019155, guid: 8ad05377c16b08743a5a8c3075525fab, type: 3}
+  startingDeck:
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}

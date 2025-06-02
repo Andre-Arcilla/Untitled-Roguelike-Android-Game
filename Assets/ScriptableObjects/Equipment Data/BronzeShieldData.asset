@@ -28,14 +28,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
   - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
   effects:
-  - rid: 58940946188600143
+  - rid: 8040608738580889698
   sprite: {fileID: 21300000, guid: 9d087bc2abacfe94fa30d584e7052070, type: 3}
   references:
     version: 2
     RefIds:
-    - rid: 58940946188600143
-      type: {class: DodgeStatusEffect, ns: , asm: Assembly-CSharp}
+    - rid: 8040608738580889698
+      type: {class: BlockStatusEffect, ns: , asm: Assembly-CSharp}
       data:
-        duration: 5
+        duration: 1
         _ExpiresOnHit: 0
-        _IsShortTerm: 0
+        _IsShortTerm: 1
+        _AllowsStacking: 0
+        _IsDebuff: 0

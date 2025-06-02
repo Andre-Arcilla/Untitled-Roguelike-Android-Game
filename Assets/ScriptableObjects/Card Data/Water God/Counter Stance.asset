@@ -20,6 +20,7 @@ MonoBehaviour:
   power: 0
   effects:
   - rid: 58941040279945525
+  - rid: 8040608738580889623
   cardSprite: {fileID: 21300000, guid: 9d087bc2abacfe94fa30d584e7052070, type: 3}
   references:
     version: 2
@@ -29,3 +30,8 @@ MonoBehaviour:
       data:
         negateDamage: 1
         expiresOnHit: 0
+        overrideEffect: 1
+    - rid: 8040608738580889623
+      type: {class: CostIncreaseEffect, ns: , asm: Assembly-CSharp}
+      data:
+        increasePercentage: 0.5

@@ -28,4 +28,4 @@ MonoBehaviour:
       type: {class: RegenEffect, ns: , asm: Assembly-CSharp}
       data:
         duration: 3
-        regen: 0
+        regen: 3

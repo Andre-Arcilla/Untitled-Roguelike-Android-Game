@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6fff08e89b814e41a13ed34ca4c80e3, type: 3}
+  m_Name: WolfData
+  m_EditorClassIdentifier: 
+  className: Wolf
+  gender: 0
+  spriteMale: {fileID: 9222641454167727816, guid: d040167f8f3f0ec4bb4f12701f1ad2cc, type: 3}
+  spriteFemale: {fileID: 9222641454167727816, guid: d040167f8f3f0ec4bb4f12701f1ad2cc, type: 3}
+  imageMale: {fileID: -7119451704749544900, guid: 0e795818b2e17f64bae5ffb6b48767cc, type: 3}
+  imageFemale: {fileID: -7119451704749544900, guid: 0e795818b2e17f64bae5ffb6b48767cc, type: 3}
+  startingDeck:
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}

@@ -1,0 +1,893 @@
+fileFormatVersion: 2
+guid: 5bde62b701a06a34684eebf7a6de8e87
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    isReadable: 0
+    streamingMipmaps: 0
+    streamingMipmapsPriority: 0
+    vTOnly: 0
+    ignoreMasterTextureLimit: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 1
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 100
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    flipbookRows: 0
+    flipbookColumns: 0
+    ignorePngGamma: 0
+    cookieMode: 0
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  previousAsepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    mosaicPadding: 4
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  asepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    mosaicPadding: 4
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  textureAssetName: 
+  singleSpriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  animatedSpriteImportData:
+  - name: Digger_Frame_0
+    originalName: 
+    pivot: {x: 0.6, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 139
+      width: 15
+      height: 14
+    spriteID: f796f8cb381909341aeb9b7a75c86b78
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 139}
+  - name: Digger_Frame_1
+    originalName: 
+    pivot: {x: 0.6, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 29
+      y: 159
+      width: 15
+      height: 13
+    spriteID: 57659ff98eadeb243bdf340f2d258c0a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 29, y: 159}
+  - name: Digger_Frame_2
+    originalName: 
+    pivot: {x: 0.6, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 29
+      y: 180
+      width: 15
+      height: 13
+    spriteID: 446a4abc18b409944ad9bb70922a19da
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 29, y: 180}
+  - name: Digger_Frame_3
+    originalName: 
+    pivot: {x: 0.6, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 161
+      width: 15
+      height: 14
+    spriteID: 24e0293ac2fbbbd49a698eb92d631246
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 161}
+  - name: Digger_Frame_4
+    originalName: 
+    pivot: {x: 0.5714286, y: -0.06666667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 183
+      width: 14
+      height: 15
+    spriteID: f542c27d563229342b7c91453de0b8cc
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 183}
+  - name: Digger_Frame_5
+    originalName: 
+    pivot: {x: 0.5714286, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 29
+      y: 224
+      width: 14
+      height: 13
+    spriteID: 33149d97932fbcc48843913241923f38
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 29, y: 224}
+  - name: Digger_Frame_6
+    originalName: 
+    pivot: {x: 0.6, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 206
+      width: 15
+      height: 14
+    spriteID: 1e7d86b296cdcf14cbf1cd05a2fe9b5c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 206}
+  - name: Digger_Frame_7
+    originalName: 
+    pivot: {x: 0.5882353, y: -0.06666667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 17
+      height: 15
+    spriteID: fb0015a8723c66b45acd42483493802d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+  - name: Digger_Frame_8
+    originalName: 
+    pivot: {x: 0.5882353, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 118
+      width: 17
+      height: 13
+    spriteID: c4d664ea0aca72b43ae497814dc5443d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 118}
+  - name: Digger_Frame_9
+    originalName: 
+    pivot: {x: 0.6, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 228
+      width: 15
+      height: 14
+    spriteID: d4f855ee7f9e9594fbf74c21bd4eb9cf
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 228}
+  - name: Digger_Frame_10
+    originalName: 
+    pivot: {x: 0.6, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 29
+      y: 26
+      width: 15
+      height: 14
+    spriteID: d3d3913a9aea7f140b1a200e50d0ac29
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 29, y: 26}
+  - name: Digger_Frame_11
+    originalName: 
+    pivot: {x: 0.53846157, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 55
+      y: 25
+      width: 13
+      height: 14
+    spriteID: 340b2d61846f77c4aa6780721df44dfb
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 55, y: 25}
+  - name: Digger_Frame_12
+    originalName: 
+    pivot: {x: 0.4615385, y: -0.06666667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 29
+      y: 201
+      width: 13
+      height: 15
+    spriteID: 54d46bbb29b7c7b42a9954c31c49a28e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 29, y: 201}
+  - name: Digger_Frame_13
+    originalName: 
+    pivot: {x: 0.5882353, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 50
+      width: 17
+      height: 14
+    spriteID: 9d23193d8a087a1448e6d2dd2b4cb0a6
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 50}
+  - name: Digger_Frame_14
+    originalName: 
+    pivot: {x: 0.35714287, y: -0.06666667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 29
+      y: 48
+      width: 14
+      height: 15
+    spriteID: 305dc48eaab62864da87aae8c2bb2f74
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 29, y: 48}
+  - name: Digger_Frame_15
+    originalName: 
+    pivot: {x: 0.33333334, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 29
+      y: 71
+      width: 15
+      height: 14
+    spriteID: ab4147d5088df71429444e3d721f662b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 29, y: 71}
+  - name: Digger_Frame_16
+    originalName: 
+    pivot: {x: 0.5714286, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 29
+      y: 137
+      width: 14
+      height: 14
+    spriteID: 87f84843e348cf241ade2cf3c1a203c5
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 29, y: 137}
+  - name: Digger_Frame_17
+    originalName: 
+    pivot: {x: 0.6, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 29
+      y: 93
+      width: 15
+      height: 14
+    spriteID: 78cd1d909a160d94d8312ebd061bae8b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 29, y: 93}
+  - name: Digger_Frame_18
+    originalName: 
+    pivot: {x: 0.6666667, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 29
+      y: 4
+      width: 18
+      height: 14
+    spriteID: 4d258644745bfcf4d9d77ec203c6b86a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 29, y: 4}
+  - name: Digger_Frame_19
+    originalName: 
+    pivot: {x: 0.64705884, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 72
+      width: 17
+      height: 14
+    spriteID: beab17850dfa7cd47af9de2f8ab4fea4
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 72}
+  - name: Digger_Frame_20
+    originalName: 
+    pivot: {x: 0.6, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 29
+      y: 115
+      width: 15
+      height: 14
+    spriteID: 2cc730a0ceb768e4aa43a2095e40403a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 29, y: 115}
+  - name: Digger_Frame_21
+    originalName: 
+    pivot: {x: 0.5, y: -0.0625}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 94
+      width: 14
+      height: 16
+    spriteID: a8c2b21f1c9b3734489912940e63d8af
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 94}
+  - name: Digger_Frame_22
+    originalName: 
+    pivot: {x: 0.4117647, y: -0.06666667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 27
+      width: 17
+      height: 15
+    spriteID: c5815249aa2a835489b7e96f867a6bcd
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 27}
+  - name: Digger_Frame_23
+    originalName: 
+    pivot: {x: 0.42105263, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 55
+      y: 4
+      width: 19
+      height: 13
+    spriteID: f73c73ad8bd3c664085aa3f7d0c3639b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 55, y: 4}
+  - name: Digger_Frame_24
+    originalName: 
+    pivot: {x: 0.42857143, y: -0.1}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 82
+      y: 4
+      width: 21
+      height: 10
+    spriteID: 715bbf2712c2b7242a697f28367bfb66
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 82, y: 4}
+  - name: Digger_Frame_25
+    originalName: 
+    pivot: {x: 0.42857143, y: -0.14285715}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 82
+      y: 22
+      width: 21
+      height: 7
+    spriteID: 10d628dd89ea10a4b8d3824b48c90862
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 82, y: 22}
+  - name: Digger_Frame_26
+    originalName: 
+    pivot: {x: 0.42857143, y: -0.16666667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 82
+      y: 37
+      width: 21
+      height: 6
+    spriteID: a648dfc646f19924184c815677a3916e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 82, y: 37}
+  spriteSheetImportData: []
+  asepriteLayers:
+  - layerIndex: 0
+    guid: 481681024
+    name: Digger
+    layerFlags: 0
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Digger_Frame_0
+      frameIndex: 0
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 14
+      spriteId: f796f8cb381909341aeb9b7a75c86b78
+    - name: Digger_Frame_1
+      frameIndex: 1
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 13
+      spriteId: 57659ff98eadeb243bdf340f2d258c0a
+    - name: Digger_Frame_2
+      frameIndex: 2
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 13
+      spriteId: 446a4abc18b409944ad9bb70922a19da
+    - name: Digger_Frame_3
+      frameIndex: 3
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 14
+      spriteId: 24e0293ac2fbbbd49a698eb92d631246
+    - name: Digger_Frame_4
+      frameIndex: 4
+      cellRect:
+        x: 8
+        y: 1
+        width: 14
+        height: 15
+      spriteId: f542c27d563229342b7c91453de0b8cc
+    - name: Digger_Frame_5
+      frameIndex: 5
+      cellRect:
+        x: 8
+        y: 1
+        width: 14
+        height: 13
+      spriteId: 33149d97932fbcc48843913241923f38
+    - name: Digger_Frame_6
+      frameIndex: 6
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 14
+      spriteId: 1e7d86b296cdcf14cbf1cd05a2fe9b5c
+    - name: Digger_Frame_7
+      frameIndex: 7
+      cellRect:
+        x: 6
+        y: 1
+        width: 17
+        height: 15
+      spriteId: fb0015a8723c66b45acd42483493802d
+    - name: Digger_Frame_8
+      frameIndex: 8
+      cellRect:
+        x: 6
+        y: 1
+        width: 17
+        height: 13
+      spriteId: c4d664ea0aca72b43ae497814dc5443d
+    - name: Digger_Frame_9
+      frameIndex: 9
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 14
+      spriteId: d4f855ee7f9e9594fbf74c21bd4eb9cf
+    - name: Digger_Frame_10
+      frameIndex: 10
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 14
+      spriteId: d3d3913a9aea7f140b1a200e50d0ac29
+    - name: Digger_Frame_11
+      frameIndex: 11
+      cellRect:
+        x: 9
+        y: 1
+        width: 13
+        height: 14
+      spriteId: 340b2d61846f77c4aa6780721df44dfb
+    - name: Digger_Frame_12
+      frameIndex: 12
+      cellRect:
+        x: 10
+        y: 1
+        width: 13
+        height: 15
+      spriteId: 54d46bbb29b7c7b42a9954c31c49a28e
+    - name: Digger_Frame_13
+      frameIndex: 13
+      cellRect:
+        x: 6
+        y: 1
+        width: 17
+        height: 14
+      spriteId: 9d23193d8a087a1448e6d2dd2b4cb0a6
+    - name: Digger_Frame_14
+      frameIndex: 14
+      cellRect:
+        x: 11
+        y: 1
+        width: 14
+        height: 15
+      spriteId: 305dc48eaab62864da87aae8c2bb2f74
+    - name: Digger_Frame_15
+      frameIndex: 15
+      cellRect:
+        x: 11
+        y: 1
+        width: 15
+        height: 14
+      spriteId: ab4147d5088df71429444e3d721f662b
+    - name: Digger_Frame_16
+      frameIndex: 16
+      cellRect:
+        x: 8
+        y: 1
+        width: 14
+        height: 14
+      spriteId: 87f84843e348cf241ade2cf3c1a203c5
+    - name: Digger_Frame_17
+      frameIndex: 17
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 14
+      spriteId: 78cd1d909a160d94d8312ebd061bae8b
+    - name: Digger_Frame_18
+      frameIndex: 18
+      cellRect:
+        x: 4
+        y: 1
+        width: 18
+        height: 14
+      spriteId: 4d258644745bfcf4d9d77ec203c6b86a
+    - name: Digger_Frame_19
+      frameIndex: 19
+      cellRect:
+        x: 5
+        y: 1
+        width: 17
+        height: 14
+      spriteId: beab17850dfa7cd47af9de2f8ab4fea4
+    - name: Digger_Frame_20
+      frameIndex: 20
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 14
+      spriteId: 2cc730a0ceb768e4aa43a2095e40403a
+    - name: Digger_Frame_21
+      frameIndex: 21
+      cellRect:
+        x: 9
+        y: 1
+        width: 14
+        height: 16
+      spriteId: a8c2b21f1c9b3734489912940e63d8af
+    - name: Digger_Frame_22
+      frameIndex: 22
+      cellRect:
+        x: 9
+        y: 1
+        width: 17
+        height: 15
+      spriteId: c5815249aa2a835489b7e96f867a6bcd
+    - name: Digger_Frame_23
+      frameIndex: 23
+      cellRect:
+        x: 8
+        y: 1
+        width: 19
+        height: 13
+      spriteId: f73c73ad8bd3c664085aa3f7d0c3639b
+    - name: Digger_Frame_24
+      frameIndex: 24
+      cellRect:
+        x: 7
+        y: 1
+        width: 21
+        height: 10
+      spriteId: 715bbf2712c2b7242a697f28367bfb66
+    - name: Digger_Frame_25
+      frameIndex: 25
+      cellRect:
+        x: 7
+        y: 1
+        width: 21
+        height: 7
+      spriteId: 10d628dd89ea10a4b8d3824b48c90862
+    - name: Digger_Frame_26
+      frameIndex: 26
+      cellRect:
+        x: 7
+        y: 1
+        width: 21
+        height: 6
+      spriteId: a648dfc646f19924184c815677a3916e
+    linkedCells: []
+    parentIndex: -1
+  platformSettings: []
+  generatePhysicsShape: 0
+  secondarySpriteTextures: []
+  spritePackingTag: 
+  canvasSize: {x: 32, y: 32}

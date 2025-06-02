@@ -72,6 +72,7 @@ public class ActionPhaseAnimation : MonoBehaviour
 
         //pass the senderHolder/targetHolder to targetanimation methods
         yield return ChooseAnimation(senderHolder, targetHolder, sender.gameObject, target);
+        senderHolder.transform.DOKill();
 
         yield return new WaitForSeconds(0.15f);
 
@@ -129,6 +130,22 @@ public class ActionPhaseAnimation : MonoBehaviour
                 cardInfo.UpdateCard();
         }
 
+        foreach (var t in TargetingSystem.Instance.enemies.members)
+        {
+            if (t.TryGetComponent<CharacterInfo>(out var character))
+            {
+                character.UpdateResourcesView();
+            }
+        }
+
+        foreach (var t in TargetingSystem.Instance.allies.members)
+        {
+            if (t.TryGetComponent<CharacterInfo>(out var character))
+            {
+                character.UpdateResourcesView();
+            }
+        }
+
         float knockbackDistance = 1f;
         float shakeStrength = 0.2f;
 
@@ -149,20 +166,22 @@ public class ActionPhaseAnimation : MonoBehaviour
         sequence.Join(targetHolder.transform.DOShakeRotation(animationSpeed, shakeStrength, vibrato: 10, randomness: 90, fadeOut: true));
         sequence.Join(targetHolder.transform.DOShakeScale(animationSpeed, shakeStrength, vibrato: 10, randomness: 90, fadeOut: true));
 
-        //restore changes made to position and scale of sender and target
-        sequence.Append(senderHolder.transform.DOLocalMove(senderOrigPos, animationSpeed));
-        sequence.Join(senderHolder.transform.DOScale(senderOrigScale, animationSpeed));
-
         yield return sequence.WaitForCompletion();
+
+        //restore changes made to position and scale of sender and target
 
         sequence = DOTween.Sequence();
         if (targetCollider.GetComponent<CardInformation>() == null)
         {
+            sequence.Append(senderHolder.transform.DOLocalMove(senderOrigPos, animationSpeed));
+            sequence.Join(senderHolder.transform.DOScale(senderOrigScale, animationSpeed));
             sequence.Join(targetHolder.transform.DOLocalMove(targetOrigPos, animationSpeed));
             sequence.Join(targetHolder.transform.DOScale(targetOrigScale, animationSpeed));
         }
         else
         {
+            sequence.Append(senderHolder.transform.DOLocalMove(senderOrigPos, animationSpeed));
+            sequence.Join(senderHolder.transform.DOScale(senderOrigScale, animationSpeed));
             sequence.Append(targetHolder.transform.DOLocalMove(senderHolder.transform.position, animationSpeed));
             sequence.Join(targetHolder.transform.DOScale(Vector3.zero, animationSpeed));
         }

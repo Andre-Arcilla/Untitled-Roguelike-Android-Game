@@ -27,15 +27,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
   - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
   - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
-  effects:
-  - rid: 58940946188600134
+  effects: []
   sprite: {fileID: 21300000, guid: 0bd32aeabf4ce9d449bd2029730bcf78, type: 3}
   references:
     version: 2
-    RefIds:
-    - rid: 58940946188600134
-      type: {class: DodgeStatusEffect, ns: , asm: Assembly-CSharp}
-      data:
-        duration: 10
-        _ExpiresOnHit: 0
-        _IsShortTerm: 0
+    RefIds: []

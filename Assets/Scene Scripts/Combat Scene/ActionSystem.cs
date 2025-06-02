@@ -4,7 +4,9 @@ using System.Linq;
 using Unity.Splines.Examples;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class ActionSystem : MonoBehaviour
 {
@@ -227,6 +229,23 @@ public class ActionSystem : MonoBehaviour
         {
             character.OnTurnEnd();
         }
+
+        foreach (CharacterInfo character in infoList)
+        {
+            if (character.currentHP <= 0)
+            {
+                character.currentHP = 0;
+                character.UpdateResourcesView();
+
+                Animator animator = character.GetComponentInChildren<Animator>();
+                AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+                if (!stateInfo.IsName("Death") && !stateInfo.IsName("death"))
+                {
+                    animator.SetTrigger("doDeath");
+                }
+            }
+        }
     }
 
     //check if either group is dead
@@ -257,12 +276,10 @@ public class ActionSystem : MonoBehaviour
 
         if (allAlliesDead == true)
         {
-            Debug.Log("All allies are dead. Defeat.");
             CombatSystem.Instance.CombatCompleteLose(allAlliesDead);
         }
         else if (allEnemiesDead == true)
         {
-            Debug.Log("All enemies are dead. Victory!");
             CombatSystem.Instance.GenerateNewEnemyGroup();
         }
     }
@@ -283,7 +300,9 @@ public class ActionSystem : MonoBehaviour
     //do instant action cards with target (e.g. buff cards)
     public IEnumerator TriggerAction(Targetable sender, CardInformation card, GameObject target)
     {
+        TargetingSystem.Instance.darkPanel.SetActive(true);
         CharacterGenerator.Instance.DisablePlayerRaycasts();
+        CharacterManager.Instance.DisplayCardView();
 
         CharacterDeck senderDeck = sender.GetComponent<CharacterDeck>();
 
@@ -295,7 +314,7 @@ public class ActionSystem : MonoBehaviour
         yield return StartCoroutine(senderDeck.StartPlayCard(card));
 
         List<GameObject> targetList = new List<GameObject>();
-
+                
         if (card.card.target == Target.AllEnemies || card.card.target == Target.AllAllies)
         {
             targetList = TargetSelector.Instance.GetTargets(card, sender);
@@ -304,7 +323,14 @@ public class ActionSystem : MonoBehaviour
             {
                 foreach (ICardEffect effect in card.card.effects)
                 {
-                    effect.Execute(sender, card, t, card.card.mana);
+                    if (effect is DrawCardEffect)
+                    {
+                        effect.Execute(sender, card, null, card.card.mana);
+                    }
+                    else
+                    {
+                        effect.Execute(sender, card, t, card.card.mana);
+                    }
                 }
 
                 if (t.TryGetComponent<CardInformation>(out var cardInfo))
@@ -317,7 +343,14 @@ public class ActionSystem : MonoBehaviour
         {
             foreach (ICardEffect effect in card.card.effects)
             {
-                effect.Execute(sender, card, target, card.card.mana);
+                if (effect is DrawCardEffect)
+                {
+                    effect.Execute(sender, card, null, card.card.mana);
+                }
+                else
+                {
+                    effect.Execute(sender, card, target, card.card.mana);
+                }
             }
 
             if (target.TryGetComponent<CardInformation>(out var cardInfo))
@@ -331,6 +364,16 @@ public class ActionSystem : MonoBehaviour
             CharacterInfo targetInfo = target.GetComponent<CharacterInfo>();
 
             yield return ActionPhaseAnimation.Instance.ActionAnimationPerform(sender, card, target, "hit");
+
+            targetInfo.currentHP = 0;
+            targetInfo.UpdateResourcesView();
+
+            if (sender.GetComponent<CharacterInfo>().currentHP <= 0)
+            {
+                sender.GetComponent<CharacterInfo>().currentHP = 0;
+                sender.GetComponent<CharacterInfo>().UpdateResourcesView();
+                sender.GetComponentInChildren<Animator>().SetTrigger("doDeath");
+            }
         }
 
         yield return new WaitForSeconds(0.5f);
@@ -346,6 +389,11 @@ public class ActionSystem : MonoBehaviour
 
         yield return senderDeck.UpdateSelectedCardPos();
 
+        if (sender.GetComponent<CharacterInfo>().currentHP <= 0)
+        {
+            CharacterManager.Instance.SelectFirstCharacter();
+        }
+        TargetingSystem.Instance.darkPanel.SetActive(false);
         CharacterGenerator.Instance.EnablePlayerRaycasts();
     }
 

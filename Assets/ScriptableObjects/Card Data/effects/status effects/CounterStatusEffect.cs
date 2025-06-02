@@ -45,5 +45,11 @@ public class CounterStatusEffect : IStatusEffect
     {
         int finalDamage = target.ApplyPreDamageModifiers(damage);
         attacker.currentHP -= damage;
+
+        if (attacker.currentHP <= 0)
+        {
+            attacker.UpdateResourcesView();
+            attacker.currentHP = 0;
+        }
     }
 }

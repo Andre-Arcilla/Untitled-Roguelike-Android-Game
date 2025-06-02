@@ -19,12 +19,12 @@ MonoBehaviour:
   cost: 2
   power: 0
   effects:
-  - rid: 58941040279945526
+  - rid: 8040608738580889697
   cardSprite: {fileID: 0}
   references:
     version: 2
     RefIds:
-    - rid: 58941040279945526
-      type: {class: DodgeEffect, ns: , asm: Assembly-CSharp}
+    - rid: 8040608738580889697
+      type: {class: BlockEffect, ns: , asm: Assembly-CSharp}
       data:
-        expiresOnHit: 1
+        expiresOnHit: 0

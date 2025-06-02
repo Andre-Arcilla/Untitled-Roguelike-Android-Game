@@ -155,26 +155,26 @@ public class CharacterDeck : MonoBehaviour
     }
 
     //draw card effect method to draw x amount of cards
-    public void DrawCard(int amount, CardInformation card)
+    public void DrawCard(int amount, CardInformation card, bool drawOnly)
     {
-        StartCoroutine(DrawCardCoroutine(amount, card));
+        StartCoroutine(DrawCardCoroutine(amount, card, drawOnly));
     }
 
     //draw card effect draw coroutine
-    private IEnumerator DrawCardCoroutine(int amount, CardInformation card)
+    private IEnumerator DrawCardCoroutine(int amount, CardInformation card, bool drawOnly)
     {
         foreach (GameObject cardObj in hand)
         {
             cardObj.GetComponent<Collider2D>().enabled = false;
         }
 
-        yield return StartPlayCard(card);
-
-        yield return new WaitForSeconds(0.2f);
-
-        yield return EndPlayCard(card);
-
-        yield return EndPlaySortHand();
+        if (drawOnly)
+        {
+            yield return StartPlayCard(card);
+            yield return new WaitForSeconds(0.2f);
+            yield return EndPlayCard(card);
+            yield return EndPlaySortHand();
+        }
 
         for (int i = 0; i < amount; i++)
         {

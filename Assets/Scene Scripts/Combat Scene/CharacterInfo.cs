@@ -51,6 +51,7 @@ public class CharacterInfo : MonoBehaviour
         SetCharacterEquipment();
         GenerateCharacterSprite();
         characterDeck.SetDeck(deck);
+        UpdateResourcesView();
     }
 
     public void SetResources()
@@ -64,7 +65,6 @@ public class CharacterInfo : MonoBehaviour
         maxHP = stats.totalHP;
         currentHP = maxHP;
         currentEN = maxEN;
-        UpdateResourcesView();
     }
 
     public void EndTurnRestoreMana()
@@ -297,19 +297,28 @@ public class CharacterInfo : MonoBehaviour
                 {
                     damageNegated = true;
                 }
-                if (counter.ExpiresOnHit)
+
+                counter.Duration--;
+
+                if (counter.Duration <= 0 || counter.ExpiresOnHit)
                 {
                     toRemove.Add(effect);
                 }
             }
-            else if (effect is DodgeStatusEffect dodge)
+            else if (effect is BlockStatusEffect block)
             {
-                dodge.OnTrigger(attacker);
+                block.OnTrigger(attacker);
                 damageNegated = true;
-                if (dodge.ExpiresOnHit)
+
+                block.Duration--;
+                if (block.Duration <= 0 || block.ExpiresOnHit)
                 {
                     toRemove.Add(effect);
                 }
+            }
+            else
+            {
+                toRemove.Add(effect);
             }
         }
 
@@ -359,11 +368,13 @@ public class CharacterInfo : MonoBehaviour
         statusesText.text = "";
 
         string Normalize(string input) => input.Replace(" ", "").ToLowerInvariant();
+
         if (activeEffects.Any(e =>
            (Normalize(e.Name) == "healthup" ||
             Normalize(e.Name) == "energyup" ||
             Normalize(e.Name) == "powerup" ||
-            Normalize(e.Name) == "speedup")))
+            Normalize(e.Name) == "speedup")
+             && e.IsDebuff == false))
         {
             statusesText.text += "<color=#00D6FF>Stat Up</color>\n";
         }
@@ -371,21 +382,27 @@ public class CharacterInfo : MonoBehaviour
         {
             statusesText.text += "<color=#00D6FF>Dmg Red</color>\n";
         }
-        if (activeEffects.Any(e => Normalize(e.Name) == "counter"))
-        {
-            statusesText.text += "<color=#00D6FF>Counter</color>\n";
-        }
-        if (activeEffects.Any(e => Normalize(e.Name) == "dodge"))
-        {
-            statusesText.text += "<color=#00D6FF>Dodge</color>\n";
-        }
-        if (activeEffects.Any(e => Normalize(e.Name) == "regeneration"))
-        {
-            statusesText.text += "<color=#00D6FF>Regen</color>\n";
-        }
         if (activeEffects.Any(e => Normalize(e.Name) == "taunt"))
         {
             statusesText.text += "<color=#00D6FF>Taunt</color>\n";
+        }
+        var counterEffects = activeEffects.Where(e => Normalize(e.Name) == "counter").ToList();
+        if (counterEffects.Any())
+        {
+            int totalcounterDuration = counterEffects.Sum(e => e.Duration);
+            statusesText.text += $"<color=#00D6FF>{totalcounterDuration}× Counter</color>\n";
+        }
+        var dodgeEffects = activeEffects.Where(e => Normalize(e.Name) == "block").ToList();
+        if (dodgeEffects.Any())
+        {
+            int totaldodgeDuration = dodgeEffects.Sum(e => e.Duration);
+            statusesText.text += $"<color=#00D6FF>{totaldodgeDuration}× Block</color>\n";
+        }
+        var regenerationEffects = activeEffects.Where(e => Normalize(e.Name) == "regeneration").ToList();
+        if (regenerationEffects.Any())
+        {
+            int totalregenerationDuration = regenerationEffects.Sum(e => e.Duration);
+            statusesText.text += $"<color=#00D6FF>{totalregenerationDuration}× Regeneration</color>\n";
         }
 
         //check for debuffs

@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
@@ -24,7 +25,9 @@ public class CharacterGenerator : MonoBehaviour
     [SerializeField] private GameObject prefab;
     [SerializeField] private GameObject allyParent;
     [SerializeField] private GameObject enemyParent;
-    [SerializeField] private EnemyDatabase enemyDatabase;
+    [SerializeField] private ClassDatabase enemyClassesDatabase;
+    [SerializeField] private EquipmentDatabase equipmentDatabase;
+    [SerializeField] private RaceDatabase raceDatabase;
     [SerializeField] private List<BackgroundController> backgrounds;
     [SerializeField] private CloudSpawner clouds;
     [SerializeField] public float moveSpeed => backgrounds.Find(bg => bg.name == "floor bg").parallaxSpeed;
@@ -70,7 +73,6 @@ public class CharacterGenerator : MonoBehaviour
             GenerateEnemy();
         });
     }
-
 
     private void GenerateParty()
     {
@@ -131,12 +133,11 @@ public class CharacterGenerator : MonoBehaviour
         
         for (int i = 0; i < count && i < positions.Length; i++)
         {
-            CharacterDataSO randomEnemySO = enemyDatabase.allEnemies[Random.Range(0, enemyDatabase.allEnemies.Count)];
-            CharacterData randomEnemy = ConvertSOToCharacterData(randomEnemySO);
+            CharacterData randomEnemy = GenerateRandomEnemy(AverageLevel());
+            randomEnemy.basicInfo.characterName = $"Enemy_{i + 1}";
 
             GameObject characterObj = Instantiate(prefab);
             characterObj.transform.SetParent(enemyParent.transform, false);
-            //characterObj.transform.Find("Card View").gameObject.SetActive(false);
 
             GameObject childObj = characterObj.transform.Find("Character Sprite").gameObject;
             childObj.transform.localPosition = new Vector3(positions[i].x, positions[i].y, childObj.transform.localPosition.z);
@@ -145,6 +146,7 @@ public class CharacterGenerator : MonoBehaviour
             info.characterData = randomEnemy;
             info.gameObject.GetComponent<Targetable>().team = Team.Enemy;
 
+            childObj.transform.Find("Status Effects").gameObject.SetActive(isStatusVisible);
             enemyStatuses.Add(childObj.transform.Find("Status Effects").gameObject);
             TargetingSystem.Instance.enemies.members.Add(info.gameObject.GetComponent<Targetable>());
             EnemyActionsManager.Instance.AddEnemyDeck(info);
@@ -167,6 +169,22 @@ public class CharacterGenerator : MonoBehaviour
             if (anim != null && child.GetComponentInChildren<CharacterInfo>().currentHP > 0)
             {
                 anim.SetTrigger("doWalk");
+            }
+        }
+
+        foreach (var t in TargetingSystem.Instance.enemies.members)
+        {
+            if (t.TryGetComponent<CharacterInfo>(out var character))
+            {
+                character.UpdateResourcesView();
+            }
+        }
+
+        foreach (var t in TargetingSystem.Instance.allies.members)
+        {
+            if (t.TryGetComponent<CharacterInfo>(out var character))
+            {
+                character.UpdateResourcesView();
             }
         }
 
@@ -255,6 +273,89 @@ public class CharacterGenerator : MonoBehaviour
 
         Camera.main.GetComponent<Physics2DRaycaster>().enabled = true;
         endTurnBtn.interactable = true;
+    }
+
+    public CharacterData GenerateRandomEnemy(int averageLevel)
+    {
+        var enemyClassList = enemyClassesDatabase.allClasses;
+        if (enemyClassList == null || enemyClassList.Count == 0)
+        {
+            Debug.LogError("Enemy database is empty!");
+            return null;
+        }
+
+        // Create a new character
+        CharacterData enemy = new CharacterData();
+        // Basic Info
+        enemy.basicInfo.characterName = $"enemy";
+        enemy.basicInfo.level = Mathf.Clamp(averageLevel + Random.Range(-5, 6), 1, 99);
+        enemy.basicInfo.xp = 0;
+        enemy.basicInfo.gender = "Male";
+
+        // Random class and race from databases
+        var randomClass = enemyClassesDatabase.allClasses[Random.Range(0, enemyClassesDatabase.allClasses.Count)];
+        var randomRace = raceDatabase.allRaces[Random.Range(0, raceDatabase.allRaces.Count)];
+        enemy.classes.Add(randomClass.className);
+        enemy.basicInfo.raceName = randomRace.raceName;
+
+        // Pick random enemy class
+        ClassDataSO chosenClass = enemyClassList[Random.Range(0, enemyClassList.Count)];
+        enemy.classes.Add(chosenClass.className);
+
+        // Level and stats
+        enemy.basicInfo.xp = 0;
+        AllocateStatsRandomly(enemy.allocatedStats, enemy.basicInfo.level * 5);
+
+        // Equipment
+        EquipmentDatabase equipDB = equipmentDatabase;
+        int equipChance = Random.Range(0, 100);
+        if (equipChance < 101)
+        {
+            enemy.equipment.armor = GetRandomEquipmentNameByType(equipDB, EquipmentType.Armor);
+            enemy.equipment.weapon = GetRandomEquipmentNameByType(equipDB, EquipmentType.Weapon);
+            enemy.equipment.accessory1 = GetRandomEquipmentNameByType(equipDB, EquipmentType.Accessory);
+            enemy.equipment.accessory2 = GetRandomEquipmentNameByType(equipDB, EquipmentType.Accessory);
+            enemy.equipment.accessory3 = GetRandomEquipmentNameByType(equipDB, EquipmentType.Accessory);
+        }
+
+        return enemy;
+    }
+
+    private void AllocateStatsRandomly(CharacterData.AllocatedStats stats, int totalPoints)
+    {
+        int[] points = new int[4]; // HP, EN, PWR, SPD
+        for (int i = 0; i < totalPoints; i++)
+        {
+            points[Random.Range(0, 4)]++;
+        }
+
+        stats.allocatedHP = points[0];
+        stats.allocatedEN = points[1];
+        stats.allocatedPWR = points[2];
+        stats.allocatedSPD = points[3];
+    }
+
+    private string GetRandomEquipmentNameByType(EquipmentDatabase db, EquipmentType type)
+    {
+        var filtered = db.allEquipments.FindAll(e => e.slotType == type);
+        if (filtered.Count == 0) return "";
+        return filtered[Random.Range(0, filtered.Count)].equipmentName;
+    }
+
+    private int AverageLevel()
+    {
+        var party = PlayerDataHolder.Instance.partyMembers;
+
+        if (party == null || party.Count == 0)
+            return 1; // Default if no party
+
+        int totalLevel = 0;
+        foreach (var member in party)
+        {
+            totalLevel += member.basicInfo.level;
+        }
+
+        return Mathf.Max(1, totalLevel / party.Count);
     }
 
     public void StatusEffectView()

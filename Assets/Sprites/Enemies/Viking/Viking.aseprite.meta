@@ -1,0 +1,865 @@
+fileFormatVersion: 2
+guid: 2d0661e43a583044386a9ed14bd2ef00
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    isReadable: 0
+    streamingMipmaps: 0
+    streamingMipmapsPriority: 0
+    vTOnly: 0
+    ignoreMasterTextureLimit: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 1
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 100
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    flipbookRows: 0
+    flipbookColumns: 0
+    ignorePngGamma: 0
+    cookieMode: 0
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  previousAsepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    mosaicPadding: 4
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  asepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    mosaicPadding: 4
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  textureAssetName: 
+  singleSpriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  animatedSpriteImportData:
+  - name: Viking_Frame_0
+    originalName: 
+    pivot: {x: 0.625, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 4
+      width: 16
+      height: 13
+    spriteID: 391f91157e9e81443b85da7e8d57e3b4
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 4}
+  - name: Viking_Frame_1
+    originalName: 
+    pivot: {x: 0.625, y: -0.083333336}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 49
+      y: 69
+      width: 16
+      height: 12
+    spriteID: c637acce91a687c429f64bd40d482673
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 49, y: 69}
+  - name: Viking_Frame_2
+    originalName: 
+    pivot: {x: 0.625, y: -0.083333336}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 73
+      y: 69
+      width: 16
+      height: 12
+    spriteID: 23ad1fff64900854e9c81a377be8171f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 73, y: 69}
+  - name: Viking_Frame_3
+    originalName: 
+    pivot: {x: 0.625, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 81
+      y: 4
+      width: 16
+      height: 13
+    spriteID: 28c62ffed188b5343846009d41b7525d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 81, y: 4}
+  - name: Viking_Frame_4
+    originalName: 
+    pivot: {x: 0.625, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 28
+      y: 25
+      width: 16
+      height: 14
+    spriteID: 2309371ded67d4642998795b79b7a4af
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 28, y: 25}
+  - name: Viking_Frame_5
+    originalName: 
+    pivot: {x: 0.625, y: -0.083333336}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 97
+      y: 69
+      width: 16
+      height: 12
+    spriteID: 17aff758a47e37047bb4ea85215a6e1a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 97, y: 69}
+  - name: Viking_Frame_6
+    originalName: 
+    pivot: {x: 0.625, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 105
+      y: 4
+      width: 16
+      height: 13
+    spriteID: a0ad89f151c7b6d4d941c25d7f508731
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 105, y: 4}
+  - name: Viking_Frame_7
+    originalName: 
+    pivot: {x: 0.625, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 52
+      y: 25
+      width: 16
+      height: 14
+    spriteID: 5801b02183438d64ca634f384cb6b0c0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 52, y: 25}
+  - name: Viking_Frame_8
+    originalName: 
+    pivot: {x: 0.625, y: -0.083333336}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 91
+      width: 16
+      height: 12
+    spriteID: b21963d57fbeecf41bb497f9275ee87b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 91}
+  - name: Viking_Frame_9
+    originalName: 
+    pivot: {x: 0.625, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 48
+      width: 16
+      height: 13
+    spriteID: d56c1d4374b7e9a418fc033e58823d28
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 48}
+  - name: Viking_Frame_10
+    originalName: 
+    pivot: {x: 0.625, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 28
+      y: 48
+      width: 16
+      height: 13
+    spriteID: 061e2fd19af322e4e94e66d28072339e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 28, y: 48}
+  - name: Viking_Frame_11
+    originalName: 
+    pivot: {x: 0.6666667, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 26
+      y: 69
+      width: 15
+      height: 13
+    spriteID: 4685ec2fe7c24344199eae7e94296be7
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 26, y: 69}
+  - name: Viking_Frame_12
+    originalName: 
+    pivot: {x: 0.6428572, y: -0.071428575}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 69
+      width: 14
+      height: 14
+    spriteID: cbb57892b0b605c49b7b2742956cbe38
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 69}
+  - name: Viking_Frame_13
+    originalName: 
+    pivot: {x: 0.25, y: -0.06666667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 25
+      width: 16
+      height: 15
+    spriteID: e2844041ff660e446b79bde9c5a84aaa
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 25}
+  - name: Viking_Frame_14
+    originalName: 
+    pivot: {x: 0.22222222, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 31
+      y: 4
+      width: 18
+      height: 13
+    spriteID: 314ce5d1addf736408832218790b4485
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 31, y: 4}
+  - name: Viking_Frame_15
+    originalName: 
+    pivot: {x: 0.21052632, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 19
+      height: 13
+    spriteID: e93a24ca35d83f847a3fbfa6468ec53f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+  - name: Viking_Frame_16
+    originalName: 
+    pivot: {x: 0.23529412, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 76
+      y: 25
+      width: 17
+      height: 13
+    spriteID: faab52a131e233b48bfe9452ebc5214c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 76, y: 25}
+  - name: Viking_Frame_17
+    originalName: 
+    pivot: {x: 0.5, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 111
+      width: 14
+      height: 13
+    spriteID: 5ec6ff7823e4bd145973db5256d132b9
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 111}
+  - name: Viking_Frame_18
+    originalName: 
+    pivot: {x: 0.625, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 52
+      y: 48
+      width: 16
+      height: 13
+    spriteID: 5e2b3ef2d51113844af12c8e39adb593
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 52, y: 48}
+  - name: Viking_Frame_19
+    originalName: 
+    pivot: {x: 0.7647059, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 101
+      y: 25
+      width: 17
+      height: 13
+    spriteID: 5f7cc4a2655358c4cafaf5d467a8badd
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 101, y: 25}
+  - name: Viking_Frame_20
+    originalName: 
+    pivot: {x: 0.6875, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 76
+      y: 48
+      width: 16
+      height: 13
+    spriteID: 139255f2ab7d1fb4195ce5390b8b4f4d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 76, y: 48}
+  - name: Viking_Frame_21
+    originalName: 
+    pivot: {x: 0.625, y: -0.07692308}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 100
+      y: 48
+      width: 16
+      height: 13
+    spriteID: c98178abdf9082d4da02490819d0389b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 100, y: 48}
+  - name: Viking_Frame_22
+    originalName: 
+    pivot: {x: 0.6, y: -0.083333336}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 28
+      y: 91
+      width: 15
+      height: 12
+    spriteID: c693257ef6e2ae04ba428972d13691cc
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 28, y: 91}
+  - name: Viking_Frame_23
+    originalName: 
+    pivot: {x: 0.6, y: -0.1}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 51
+      y: 91
+      width: 15
+      height: 10
+    spriteID: 1f0f515e152f44e4cb56da0b5516fbc9
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 51, y: 91}
+  - name: Viking_Frame_24
+    originalName: 
+    pivot: {x: 0.6, y: -0.16666667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 74
+      y: 91
+      width: 15
+      height: 6
+    spriteID: 48e658db36c6e9a45835666180454703
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 74, y: 91}
+  - name: Viking_Frame_25
+    originalName: 
+    pivot: {x: 0.6, y: -0.25}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 97
+      y: 91
+      width: 15
+      height: 4
+    spriteID: 75b582dd97e303b4abb38057014395e5
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 97, y: 91}
+  spriteSheetImportData: []
+  asepriteLayers:
+  - layerIndex: 0
+    guid: -1012362432
+    name: Viking
+    layerFlags: 0
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Viking_Frame_0
+      frameIndex: 0
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 13
+      spriteId: 391f91157e9e81443b85da7e8d57e3b4
+    - name: Viking_Frame_1
+      frameIndex: 1
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 12
+      spriteId: c637acce91a687c429f64bd40d482673
+    - name: Viking_Frame_2
+      frameIndex: 2
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 12
+      spriteId: 23ad1fff64900854e9c81a377be8171f
+    - name: Viking_Frame_3
+      frameIndex: 3
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 13
+      spriteId: 28c62ffed188b5343846009d41b7525d
+    - name: Viking_Frame_4
+      frameIndex: 4
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 14
+      spriteId: 2309371ded67d4642998795b79b7a4af
+    - name: Viking_Frame_5
+      frameIndex: 5
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 12
+      spriteId: 17aff758a47e37047bb4ea85215a6e1a
+    - name: Viking_Frame_6
+      frameIndex: 6
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 13
+      spriteId: a0ad89f151c7b6d4d941c25d7f508731
+    - name: Viking_Frame_7
+      frameIndex: 7
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 14
+      spriteId: 5801b02183438d64ca634f384cb6b0c0
+    - name: Viking_Frame_8
+      frameIndex: 8
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 12
+      spriteId: b21963d57fbeecf41bb497f9275ee87b
+    - name: Viking_Frame_9
+      frameIndex: 9
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 13
+      spriteId: d56c1d4374b7e9a418fc033e58823d28
+    - name: Viking_Frame_10
+      frameIndex: 10
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 13
+      spriteId: 061e2fd19af322e4e94e66d28072339e
+    - name: Viking_Frame_11
+      frameIndex: 11
+      cellRect:
+        x: 6
+        y: 1
+        width: 15
+        height: 13
+      spriteId: 4685ec2fe7c24344199eae7e94296be7
+    - name: Viking_Frame_12
+      frameIndex: 12
+      cellRect:
+        x: 7
+        y: 1
+        width: 14
+        height: 14
+      spriteId: cbb57892b0b605c49b7b2742956cbe38
+    - name: Viking_Frame_13
+      frameIndex: 13
+      cellRect:
+        x: 12
+        y: 1
+        width: 16
+        height: 15
+      spriteId: e2844041ff660e446b79bde9c5a84aaa
+    - name: Viking_Frame_14
+      frameIndex: 14
+      cellRect:
+        x: 12
+        y: 1
+        width: 18
+        height: 13
+      spriteId: 314ce5d1addf736408832218790b4485
+    - name: Viking_Frame_15
+      frameIndex: 15
+      cellRect:
+        x: 12
+        y: 1
+        width: 19
+        height: 13
+      spriteId: e93a24ca35d83f847a3fbfa6468ec53f
+    - name: Viking_Frame_16
+      frameIndex: 16
+      cellRect:
+        x: 12
+        y: 1
+        width: 17
+        height: 13
+      spriteId: faab52a131e233b48bfe9452ebc5214c
+    - name: Viking_Frame_17
+      frameIndex: 17
+      cellRect:
+        x: 9
+        y: 1
+        width: 14
+        height: 13
+      spriteId: 5ec6ff7823e4bd145973db5256d132b9
+    - name: Viking_Frame_18
+      frameIndex: 18
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 13
+      spriteId: 5e2b3ef2d51113844af12c8e39adb593
+    - name: Viking_Frame_19
+      frameIndex: 19
+      cellRect:
+        x: 3
+        y: 1
+        width: 17
+        height: 13
+      spriteId: 5f7cc4a2655358c4cafaf5d467a8badd
+    - name: Viking_Frame_20
+      frameIndex: 20
+      cellRect:
+        x: 5
+        y: 1
+        width: 16
+        height: 13
+      spriteId: 139255f2ab7d1fb4195ce5390b8b4f4d
+    - name: Viking_Frame_21
+      frameIndex: 21
+      cellRect:
+        x: 6
+        y: 1
+        width: 16
+        height: 13
+      spriteId: c98178abdf9082d4da02490819d0389b
+    - name: Viking_Frame_22
+      frameIndex: 22
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 12
+      spriteId: c693257ef6e2ae04ba428972d13691cc
+    - name: Viking_Frame_23
+      frameIndex: 23
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 10
+      spriteId: 1f0f515e152f44e4cb56da0b5516fbc9
+    - name: Viking_Frame_24
+      frameIndex: 24
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 6
+      spriteId: 48e658db36c6e9a45835666180454703
+    - name: Viking_Frame_25
+      frameIndex: 25
+      cellRect:
+        x: 7
+        y: 1
+        width: 15
+        height: 4
+      spriteId: 75b582dd97e303b4abb38057014395e5
+    linkedCells: []
+    parentIndex: -1
+  platformSettings: []
+  generatePhysicsShape: 0
+  secondarySpriteTextures: []
+  spritePackingTag: 
+  canvasSize: {x: 32, y: 32}

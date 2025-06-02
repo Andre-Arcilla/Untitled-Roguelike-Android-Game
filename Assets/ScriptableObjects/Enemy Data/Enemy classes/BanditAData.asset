@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   className: Bandit A
   gender: 0
-  spriteMale: {fileID: 2001555931113258950, guid: 6a641810644edc94196b98c592673a13, type: 3}
-  spriteFemale: {fileID: 2001555931113258950, guid: 6a641810644edc94196b98c592673a13, type: 3}
-  imageMale: {fileID: 3640552283019640440, guid: 60c8dd6605c91e64d8a2f7f2a3142e15, type: 3}
-  imageFemale: {fileID: 3640552283019640440, guid: 60c8dd6605c91e64d8a2f7f2a3142e15, type: 3}
+  spriteMale: {fileID: 6287224890856407913, guid: 85fc8428c090a014db3553ca8bc0b535, type: 3}
+  spriteFemale: {fileID: 6287224890856407913, guid: 85fc8428c090a014db3553ca8bc0b535, type: 3}
+  imageMale: {fileID: -4971808315291760950, guid: 2867dbc0338b6fc4d96245a2aa532ab7, type: 3}
+  imageFemale: {fileID: -4971808315291760950, guid: 2867dbc0338b6fc4d96245a2aa532ab7, type: 3}
   startingDeck:
   - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
   - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}

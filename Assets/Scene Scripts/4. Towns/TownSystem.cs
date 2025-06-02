@@ -35,7 +35,6 @@ public class TownSystem : MonoBehaviour
             if (entry != null)
             {
                 hasCleared = entry.hasCleared;
-                Debug.Log(hasCleared);
             }
             else
             {

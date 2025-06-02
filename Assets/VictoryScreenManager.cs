@@ -48,12 +48,25 @@ public class VictoryScreenManager : MonoBehaviour
         {
             townText.text = $"Next Town: {TownManager.Instance.townTo.townName}";
         }
-
-        nextButton.onClick.AddListener(NextButton);
     }
 
     public void NextButton()
     {
+        foreach (Targetable characterObj in TargetingSystem.Instance.allies.members)
+        {
+            CharacterInfo characterInfo = characterObj.GetComponent<CharacterInfo>();
+
+            if (characterInfo == null)
+            {
+                continue;
+            }
+
+            if (characterInfo.currentHP <= 0)
+            {
+                PlayerDataHolder.Instance.partyMembers.Remove(characterInfo.characterData);
+            }
+        }
+
         SceneManager.LoadScene(TownManager.Instance.townTo.sceneName);
     }
 }

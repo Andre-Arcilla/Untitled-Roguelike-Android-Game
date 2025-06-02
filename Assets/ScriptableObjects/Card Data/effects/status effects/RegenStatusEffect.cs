@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class RegenStatusEffect : IStatusEffect
 {
-    public string Name => "Regen";
+    public string Name => "Regeneration";
     public int Duration { get => duration; set => duration = value; }
     public bool IsShortTerm => false;
     public bool AllowsStacking => false;
+    public bool Override => false;
     public bool IsDebuff => false;
 
     [SerializeField] private int duration;

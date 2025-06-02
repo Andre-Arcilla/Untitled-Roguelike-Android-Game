@@ -10,10 +10,10 @@ using UnityEngine.UIElements;
 
 public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    [Header("Card Display")] //temp
-    [SerializeField] private string cardName; //temp
-    [SerializeField] private int mana; //temp
-    [SerializeField] public int power; //temp
+    [Header("Card Display")]
+    [SerializeField] private string cardName;
+    [SerializeField] private int mana;
+    [SerializeField] public int power;
     [SerializeReference, SR] private List<ICardEffect> effects = new List<ICardEffect>(); //temp
 
     [Header("References")]
@@ -52,7 +52,6 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
         cardManaTxt.text = card.mana.ToString();
         cardNameTxt.text = card.cardName.ToString();
         cardDescTxt.text = card.description.Replace("X", card.powerDisplay.ToString());
-
     }
 
     void ReplaceSprite(SpriteRenderer renderer, Sprite newSprite)

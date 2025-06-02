@@ -1,10 +1,9 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.Splines.Examples;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class CharacterGenerator : MonoBehaviour
@@ -31,9 +30,14 @@ public class CharacterGenerator : MonoBehaviour
     [SerializeField] public float moveSpeed => backgrounds.Find(bg => bg.name == "floor bg").parallaxSpeed;
     [SerializeField] public float moveDelay = 2f;
     [SerializeField] private Button endTurnBtn;
+    [SerializeField] private List<GameObject> allyStatuses;
+    [SerializeField] private List<GameObject> enemyStatuses;
+    [SerializeField] private GameObject statusEffectBox;
+    private bool isStatusVisible = false;
 
     private void Start()
     {
+
         GenerateParty();
 
         DisablePlayerRaycasts();
@@ -56,6 +60,7 @@ public class CharacterGenerator : MonoBehaviour
             }
         }
 
+        enemyStatuses.Clear();
         TargetingSystem.Instance.enemies.members.Clear();
         EnemyActionsManager.Instance.enemyList.Clear();
 
@@ -99,6 +104,7 @@ public class CharacterGenerator : MonoBehaviour
 
             info.gameObject.GetComponent<Targetable>().team = Team.Player;
 
+            allyStatuses.Add(childObj.transform.Find("Status Effects").gameObject);
             TargetingSystem.Instance.allies.members.Add(info.gameObject.GetComponent<Targetable>());
             CharacterManager.Instance.characterList.Add(info.gameObject);
             info.Initialize();
@@ -139,6 +145,7 @@ public class CharacterGenerator : MonoBehaviour
             info.characterData = randomEnemy;
             info.gameObject.GetComponent<Targetable>().team = Team.Enemy;
 
+            enemyStatuses.Add(childObj.transform.Find("Status Effects").gameObject);
             TargetingSystem.Instance.enemies.members.Add(info.gameObject.GetComponent<Targetable>());
             EnemyActionsManager.Instance.AddEnemyDeck(info);
 
@@ -248,5 +255,48 @@ public class CharacterGenerator : MonoBehaviour
 
         Camera.main.GetComponent<Physics2DRaycaster>().enabled = true;
         endTurnBtn.interactable = true;
+    }
+
+    public void StatusEffectView()
+    {
+        if (isStatusVisible)
+        {
+            HideStatusEffect();
+        }
+        else
+        {
+            ShowStatusEffect();
+        }
+    }
+
+    private void ShowStatusEffect()
+    {
+        statusEffectBox.SetActive(true);
+
+        foreach (GameObject view in allyStatuses)
+        {
+            view.SetActive(true);
+        }
+
+        foreach (GameObject view in enemyStatuses)
+        {
+            view.SetActive(true);
+        }
+        isStatusVisible = true;
+    }
+
+    private void HideStatusEffect()
+    {
+        statusEffectBox.SetActive(false);
+
+        foreach (GameObject view in allyStatuses)
+        {
+            view.SetActive(false);
+        }
+        foreach (GameObject view in enemyStatuses)
+        {
+            view.SetActive(false);
+        }
+        isStatusVisible = false;
     }
 }

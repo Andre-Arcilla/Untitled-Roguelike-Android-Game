@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Town3Data
   m_EditorClassIdentifier: 
   townName: Rapan
-  sceneAsset: {fileID: 102900000, guid: 0c9375849d03fab419c6a3bd3612a273, type: 3}
+  sceneAsset: {fileID: 102900000, guid: 83e5c7fe271cf084490281a5136af223, type: 3}
   sceneName: Town 3
   connectedTowns:
   - {fileID: 11400000, guid: a12e403b6132aea40bc428b7e77358f2, type: 2}

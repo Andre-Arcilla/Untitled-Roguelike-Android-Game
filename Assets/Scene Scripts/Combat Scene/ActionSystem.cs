@@ -296,7 +296,7 @@ public class ActionSystem : MonoBehaviour
 
         List<GameObject> targetList = new List<GameObject>();
 
-        if (card.card.target == Target.AllEnemies)
+        if (card.card.target == Target.AllEnemies || card.card.target == Target.AllAllies)
         {
             targetList = TargetSelector.Instance.GetTargets(card, sender);
 

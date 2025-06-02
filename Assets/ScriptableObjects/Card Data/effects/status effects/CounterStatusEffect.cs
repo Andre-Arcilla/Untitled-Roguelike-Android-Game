@@ -8,6 +8,7 @@ public class CounterStatusEffect : IStatusEffect
     public bool ExpiresOnHit => _ExpiresOnHit;
     public bool IsShortTerm => _IsShortTerm;
     public bool AllowsStacking => _AllowsStacking;
+    public bool Override => _Override;
     public bool IsDebuff => _IsDebuff;
 
     [SerializeField] private int duration = 1;
@@ -15,15 +16,17 @@ public class CounterStatusEffect : IStatusEffect
     [SerializeField] private bool _ExpiresOnHit = false;
     [SerializeField] private bool _IsShortTerm = true;
     [SerializeField] private bool _AllowsStacking = false;
+    [SerializeField] private bool _Override = false;
     [SerializeField] private bool _IsDebuff = false;
     private CharacterInfo target;
 
     public CounterStatusEffect() { }
 
-    public CounterStatusEffect(bool negateDamage, bool expiresOnHit)
+    public CounterStatusEffect(bool negateDamage, bool expiresOnHit, bool _Override)
     {
         this._NegateDamage = negateDamage;
         this._ExpiresOnHit = expiresOnHit;
+        this._Override = _Override;
     }
 
     public void OnApply(CharacterInfo target)

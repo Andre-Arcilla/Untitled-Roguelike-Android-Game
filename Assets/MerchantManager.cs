@@ -55,7 +55,7 @@ public class MerchantManager : MonoBehaviour
     //generate random list of items for buy panel
     private void GenerateRandomItems()
     {
-        int amount = Random.Range(5, amountOfItems);
+        int amount = Random.Range(1, amountOfItems);
 
         List<EquipmentDataSO> itemPool = new List<EquipmentDataSO>(equipmentDatabase.allEquipments);
 

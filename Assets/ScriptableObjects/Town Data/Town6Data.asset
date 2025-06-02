@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Town6Data
   m_EditorClassIdentifier: 
   townName: Rikarisu
-  sceneAsset: {fileID: 102900000, guid: bd54f98d78480bb47b594c4033a85d19, type: 3}
+  sceneAsset: {fileID: 102900000, guid: 0f4a8c39013f8ff479db903511df4d21, type: 3}
   sceneName: Town 6
   connectedTowns:
   - {fileID: 11400000, guid: a2a204e3a90952045864739d4600af2f, type: 2}

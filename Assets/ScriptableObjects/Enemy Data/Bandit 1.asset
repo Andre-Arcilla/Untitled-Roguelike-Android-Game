@@ -12,27 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0021b148f8b84b24abffd692e8235604, type: 3}
   m_Name: Bandit 1
   m_EditorClassIdentifier: 
+  isAlive: 0
   basicInfo:
     characterName: Bandit 1
     level: 10
+    xp: 0
     gender: Male
     raceName: Human
-    faction: 1
   allocatedStats:
-    allocatedHP: 20
-    allocatedEN: 20
-    allocatedPWR: 20
-    allocatedSPD: 20
+    allocatedHP: 0
+    allocatedEN: 0
+    allocatedPWR: 0
+    allocatedSPD: 0
+    statPoints: 0
   classes:
   - Bandit A
   equipment:
-    headGear: 
-    chestArmor: 
-    legwear: 
-    gloves: 
-    boots: 
-    mainHand: 
-    offHand: 
+    armor: 
+    weapon: 
     accessory1: 
     accessory2: 
     accessory3: 

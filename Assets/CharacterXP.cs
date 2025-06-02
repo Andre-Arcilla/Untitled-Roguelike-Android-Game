@@ -10,7 +10,8 @@ public class CharacterXP : MonoBehaviour
     [SerializeField] private TMP_Text charName;
     [SerializeField] private TMP_Text charLevel;
     [SerializeField] private TMP_Text charXP;
-    [SerializeField] Image xpBar;
+    [SerializeField] private RectTransform fillImage; // Reference to FillImage
+    [SerializeField] private RectTransform fillMask;  // Reference to FillMask container
     [SerializeField] private ClassDatabase classDatabase;
 
     public void Setup(CharacterData characterData, int kills, List<int> levelDiffs, int bonusLevels)
@@ -33,10 +34,32 @@ public class CharacterXP : MonoBehaviour
         // Update character data
         characterData.basicInfo.xp = xpLeft;
         characterData.basicInfo.level += totalLevelGain;
+    
+        //find the matching characterInfo here
+        CharacterInfo matchedInfo = null;
+
+        foreach (Targetable ally in TargetingSystem.Instance.allies.members)
+        {
+            CharacterInfo info = ally.GetComponent<CharacterInfo>();
+
+            if (info != null && info.characterData.basicInfo.characterName == characterData.basicInfo.characterName)
+            {
+                matchedInfo = info;
+                break;
+            }
+        }
 
         // Update UI
-        GenerateCharacterSprite();
-        charName.text = $"Name: {characterData.basicInfo.characterName}";
+        GenerateCharacterSprite(matchedInfo);
+
+        if (matchedInfo != null && matchedInfo.currentHP <= 0)
+        {
+            charName.text = $"Name: {characterData.basicInfo.characterName} (DEAD)";
+        }
+        else
+        {
+            charName.text = $"Name: {characterData.basicInfo.characterName}";
+        }
 
         if (totalLevelGain > 0)
         {
@@ -48,7 +71,15 @@ public class CharacterXP : MonoBehaviour
         }
 
         charXP.text = $"XP: {xpLeft} / 100 (+{xpGain})";
-        xpBar.fillAmount = xpLeft / 100f;
+
+        float fillRatio = xpLeft / 100f;
+        Canvas.ForceUpdateCanvases();
+        float maskWidth = fillMask.rect.width;
+        float minWidth = fillImage.rect.height;
+
+        float targetWidth = Mathf.Max(maskWidth * fillRatio, minWidth);
+
+        fillImage.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, targetWidth);
     }
 
     private int XPGainCalculator(int kills, List<int> levelDiffs)
@@ -61,7 +92,7 @@ public class CharacterXP : MonoBehaviour
         return totalXPFromKills;
     }
 
-    private void GenerateCharacterSprite()
+    private void GenerateCharacterSprite(CharacterInfo info)
     {
         string targetClassName = characterData.classes[0];
         string playerGender = characterData.basicInfo.gender.ToLower();

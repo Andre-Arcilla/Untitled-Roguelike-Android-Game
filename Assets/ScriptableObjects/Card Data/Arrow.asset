@@ -17,7 +17,7 @@ MonoBehaviour:
   target: 0
   isInstantUse: 1
   cost: 2
-  power: 3
+  power: 1
   effects:
   - rid: 58941040279945257
   cardSprite: {fileID: 21300000, guid: 8d0de72b22fc7e14a8c9a731583be72e, type: 3}

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Splines.Examples;
 using UnityEngine;
 
 public class Card
@@ -51,7 +52,6 @@ public class Card
     public void UpdateInfo()
     {
         bool hasCharge = data.effects.Any(e => e is ChargeDamageEffect);
-        mana = data.cost;
         if (hasCharge && owner != null)
         {
             mana = owner.currentEN;

@@ -6,6 +6,7 @@ public class DamageReductionStatusEffect : IStatusEffect
     public int Duration { get => duration; set => duration = value; }
     public bool IsShortTerm => _IsShortTerm;
     public bool AllowsStacking => _AllowsStacking;
+    public bool Override => false;
     public bool IsDebuff => _IsDebuff;
 
     private CharacterInfo target;

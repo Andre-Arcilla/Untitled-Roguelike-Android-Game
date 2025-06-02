@@ -44,7 +44,7 @@ public class CharDisplayInfo : MonoBehaviour
         charClass2.text = characterData.classes.Count > 1 ? characterData.classes[1] : "";
         charClass3.text = characterData.classes.Count > 2 ? characterData.classes[2] : "";
         charClass4.text = characterData.classes.Count > 3 ? characterData.classes[3] : "";
-        buyButtonTxt.text = $"BUY ({price.ToString("N0")}g)";
+        buyButtonTxt.text = $"RECRUIT ({price.ToString("N0")}g)";
     }
     public void BuyButtonAction()
     {

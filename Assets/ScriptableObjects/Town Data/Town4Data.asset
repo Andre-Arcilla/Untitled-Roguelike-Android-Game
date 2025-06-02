@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Town4Data
   m_EditorClassIdentifier: 
   townName: Sharia
-  sceneAsset: {fileID: 102900000, guid: 00c6be389cf4bc2499ece326c24c991d, type: 3}
+  sceneAsset: {fileID: 102900000, guid: 5b5a78166b96b6543a5c8b4a4170175d, type: 3}
   sceneName: Town 4
   connectedTowns:
   - {fileID: 11400000, guid: ff95d499e8ad69b41a2656702563c1cd, type: 2}

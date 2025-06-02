@@ -20,8 +20,7 @@ public class TavernManager : MonoBehaviour
     }
 
     [Header("Generation Settings")]
-    public int minCharacters = 3;
-    public int maxCharacters = 10;
+    public int maxCharacters = 5;
 
     [Header("Databases")]
     [SerializeField] private ClassDatabase classDatabase;
@@ -47,7 +46,7 @@ public class TavernManager : MonoBehaviour
     public void GenerateCharacters(int averageLevel)
     {
         tavernCharacters.Clear();
-        int count = Random.Range(minCharacters, maxCharacters + 1);
+        int count = Random.Range(1, maxCharacters + 1);
 
         for (int i = 0; i < count; i++)
         {

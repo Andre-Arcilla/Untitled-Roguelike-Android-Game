@@ -8,15 +8,17 @@ public class CostIncreaseEffect : ICardEffect
     [Range(0f, 1f)]
     private float increasePercentage = 0.5f;
 
-    public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj, int manaCost)
+    public void Execute(Targetable senderObj, CardInformation cardInfo, GameObject targetObj, int manaCost)
     {
-        card.card.ChangeMana(Calculate(card.card.mana), Change.Increase);
-        card.UpdateCard();
+        var card = cardInfo.card;
+        int newCost = Calculate(card.mana);
+
+        card.ChangeMana(newCost, Change.Increase);
     }
 
     private int Calculate(int cardCost)
     {
-        float result = cardCost + (cardCost * increasePercentage);
+        float result = (cardCost * increasePercentage);
         return Mathf.FloorToInt(result);
     }
 }

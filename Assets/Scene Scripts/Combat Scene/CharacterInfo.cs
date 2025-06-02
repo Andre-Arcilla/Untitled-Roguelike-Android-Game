@@ -1,5 +1,6 @@
 using SerializeReferenceEditor;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.XR;
@@ -14,6 +15,7 @@ public class CharacterInfo : MonoBehaviour
     [SerializeField] public int maxEN;
     [SerializeField] private TMP_Text HPText;
     [SerializeField] private TMP_Text ENText;
+    [SerializeField] private TMP_Text statusesText;
 
     [Header("Character Information")]
     [SerializeField] private GameObject spriteHolder;
@@ -204,7 +206,7 @@ public class CharacterInfo : MonoBehaviour
 
     public void ApplyStatusEffect(IStatusEffect newEffect)
     {
-        // Check for stacking exceptions
+        // Check for stacking
         if (newEffect.AllowsStacking)
         {
             newEffect.OnApply(this);
@@ -212,17 +214,29 @@ public class CharacterInfo : MonoBehaviour
             return;
         }
 
-        // Default behavior: merge duration if effect already exists
-        foreach (var effect in activeEffects)
+        for (int i = 0; i < activeEffects.Count; i++)
         {
-            if (effect.Name == newEffect.Name)
+            var existing = activeEffects[i];
+
+            if (existing.Name == newEffect.Name)
             {
-                effect.Duration += newEffect.Duration;
-                Debug.Log($"{effect.Name} effect duration extended by {newEffect.Duration} turns.");
+                if (newEffect.Override)
+                {
+                    existing.OnRemove();
+                    activeEffects[i] = newEffect;
+                    newEffect.OnApply(this);
+                    Debug.Log($"{existing.Name} effect overridden.");
+                }
+                else
+                {
+                    existing.Duration += newEffect.Duration;
+                    Debug.Log($"{existing.Name} effect duration extended by {newEffect.Duration} turns.");
+                }
                 return;
             }
         }
 
+        // If no match found, add it
         newEffect.OnApply(this);
         activeEffects.Add(newEffect);
     }
@@ -325,6 +339,11 @@ public class CharacterInfo : MonoBehaviour
 
     public void UpdateResourcesView()
     {
+        if (currentHP <= 0)
+        {
+            activeEffects.Clear();
+        }
+
         HPText.text = "×" + currentHP.ToString();
         ENText.text = "×" + currentEN.ToString();
 
@@ -335,6 +354,59 @@ public class CharacterInfo : MonoBehaviour
                 card.GetComponent<CardInformation>().card.UpdateManaCost(currentEN);
                 card.GetComponent<CardInformation>().UpdateCard();
             }
+        }
+
+        statusesText.text = "";
+
+        string Normalize(string input) => input.Replace(" ", "").ToLowerInvariant();
+        if (activeEffects.Any(e =>
+           (Normalize(e.Name) == "healthup" ||
+            Normalize(e.Name) == "energyup" ||
+            Normalize(e.Name) == "powerup" ||
+            Normalize(e.Name) == "speedup")))
+        {
+            statusesText.text += "<color=#00D6FF>Stat Up</color>\n";
+        }
+        if (activeEffects.Any(e => Normalize(e.Name) == "damagereduction"))
+        {
+            statusesText.text += "<color=#00D6FF>Dmg Red</color>\n";
+        }
+        if (activeEffects.Any(e => Normalize(e.Name) == "counter"))
+        {
+            statusesText.text += "<color=#00D6FF>Counter</color>\n";
+        }
+        if (activeEffects.Any(e => Normalize(e.Name) == "dodge"))
+        {
+            statusesText.text += "<color=#00D6FF>Dodge</color>\n";
+        }
+        if (activeEffects.Any(e => Normalize(e.Name) == "regeneration"))
+        {
+            statusesText.text += "<color=#00D6FF>Regen</color>\n";
+        }
+        if (activeEffects.Any(e => Normalize(e.Name) == "taunt"))
+        {
+            statusesText.text += "<color=#00D6FF>Taunt</color>\n";
+        }
+
+        //check for debuffs
+        if (activeEffects.Any(e =>
+           (Normalize(e.Name) == "healthup" ||
+            Normalize(e.Name) == "energyup" ||
+            Normalize(e.Name) == "powerup" ||
+            Normalize(e.Name) == "speedup")
+             && e.IsDebuff))
+        {
+            statusesText.text += "<color=#FF6F5D>Stat Down</color>\n";
+        }
+        if (activeEffects.Any(e => Normalize(e.Name) == "lockdown"))
+        {
+            statusesText.text += "<color=#FF6F5D>Lock Down</color>\n";
+        }
+        var burnEffects = activeEffects.Where(e => Normalize(e.Name) == "burn").ToList();
+        if (burnEffects.Any())
+        {
+            int totalBurnDuration = burnEffects.Sum(e => e.Duration);
+            statusesText.text += $"<color=#FF6F5D>{totalBurnDuration}× Burn</color>\n";
         }
     }
 }

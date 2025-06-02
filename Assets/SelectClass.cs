@@ -19,10 +19,7 @@ public class SelectClass : MonoBehaviour
         Instance = this;
     }
     //a select class method that detects what is chosen between the classchoicedisplays
-    [SerializeField] private Button class1;
-    [SerializeField] private Button class2;
-    [SerializeField] private Button class3;
-    private ClassDataSO classData;
+    [SerializeField] private ClassDataSO classData;
 
     public void SetClassChoice(ClassDataSO classData)
     {
@@ -31,6 +28,8 @@ public class SelectClass : MonoBehaviour
 
     public void ButtonAction()
     {
+        if (classData == null) return;
         PartyMenuManager.Instance.AddSelectedClass(classData);
+        classData = null;
     }
 }

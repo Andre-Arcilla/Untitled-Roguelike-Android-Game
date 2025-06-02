@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Town2Data
   m_EditorClassIdentifier: 
   townName: Shirone
-  sceneAsset: {fileID: 102900000, guid: b8865f86680ddf04dacde87ab563bd30, type: 3}
+  sceneAsset: {fileID: 102900000, guid: 9dae20cfc87be544e873054865d9fd5a, type: 3}
   sceneName: Town 2
   connectedTowns:
   - {fileID: 11400000, guid: a12e403b6132aea40bc428b7e77358f2, type: 2}

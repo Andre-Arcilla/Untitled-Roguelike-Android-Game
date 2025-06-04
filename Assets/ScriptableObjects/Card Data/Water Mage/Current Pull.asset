@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Current Pull
   m_EditorClassIdentifier: 
   cardName: Current Pull
-  description: Makes the target move last.
+  description: Makes the target move last. +20% cost per use.
   target: 0
   isInstantUse: 1
   cost: 4
@@ -21,7 +21,8 @@ MonoBehaviour:
   effects:
   - rid: 58941040279945851
   - rid: 58941040279945852
-  cardSprite: {fileID: 0}
+  - rid: 8040608738580889772
+  cardSprite: {fileID: 21300000, guid: 602551ba29c691a4887caf910f6b4f80, type: 3}
   references:
     version: 2
     RefIds:
@@ -36,3 +37,7 @@ MonoBehaviour:
         isShortTerm: 1
         isStackable: 1
         isDebuff: 1
+    - rid: 8040608738580889772
+      type: {class: CostIncreaseEffect, ns: , asm: Assembly-CSharp}
+      data:
+        increasePercentage: 0.2

@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3e06572b8209464897a5a3f630f15e4, type: 3}
+  m_Name: BronzeShieldData
+  m_EditorClassIdentifier: 
+  equipmentName: Bronze Shield
+  description: Sturdy and timeworn, this shield has seen countless battles. It may
+    not gleam like silver, but it will stand firm to guard its bearer.
+  price: 450
+  slotType: 3
+  classType: 0
+  bonusHP: 0
+  bonusEN: 13
+  bonusPWR: 0
+  bonusSPD: 0
+  cards:
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  - {fileID: 11400000, guid: c22098c2d55e3b8419a652c0c91c058d, type: 2}
+  effects:
+  - rid: 8040608738580889698
+  sprite: {fileID: 21300000, guid: 9d087bc2abacfe94fa30d584e7052070, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8040608738580889698
+      type: {class: BlockStatusEffect, ns: , asm: Assembly-CSharp}
+      data:
+        duration: 1
+        _ExpiresOnHit: 0
+        _IsShortTerm: 1
+        _AllowsStacking: 0
+        _IsDebuff: 0

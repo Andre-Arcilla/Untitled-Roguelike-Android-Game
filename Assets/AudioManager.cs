@@ -66,6 +66,16 @@ public class AudioManager : MonoBehaviour
                 fadeCoroutine = StartCoroutine(FadeToNewBGM(clip));
             }
         }
+
+        // Set volume depending on scene
+        if (scene.name.ToLower().Contains("combat"))
+        {
+            musicSource.volume = 0.3f; // Lower volume for combat
+        }
+        else
+        {
+            musicSource.volume = 1f; // Full volume otherwise
+        }
     }
 
     private IEnumerator FadeToNewBGM(AudioClip newClip)

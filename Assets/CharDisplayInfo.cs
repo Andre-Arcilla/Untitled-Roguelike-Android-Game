@@ -31,7 +31,7 @@ public class CharDisplayInfo : MonoBehaviour
 
         ClassDataSO selectedClass = classDatabase.allClasses.Find(c => c.className == characterData.classes[0]);
         RaceDataSO selectedRace = raceDatabase.allRaces.Find(r => r.raceName == characterData.basicInfo.raceName);
-        price = characterData.basicInfo.level * 30;
+        price = characterData.basicInfo.level * 150;
 
         charName.text = $"{characterData.basicInfo.characterName}";
         charIcon.sprite = selectedClass.imageMale;

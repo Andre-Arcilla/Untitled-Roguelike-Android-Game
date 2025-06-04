@@ -4,7 +4,6 @@ using System.Linq;
 using Unity.Splines.Examples;
 using Unity.VisualScripting;
 using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -156,6 +155,33 @@ public class ActionSystem : MonoBehaviour
                     {
                         effect.Execute(action.sender, action.card, t, action.card.card.mana);
                     }
+
+                    if (t.TryGetComponent<CharacterInfo>(out var tInfo) && tInfo.currentHP <= 0)
+                    {
+                        // gives xp
+                        if (TargetingSystem.Instance.allies.members.Contains(senderInfo.GetComponent<Targetable>()))
+                        {
+                            int levelDiff = Mathf.Max(tInfo.characterData.basicInfo.level - senderInfo.characterData.basicInfo.level, 1);
+                            int XPGain = CalculateXP(senderInfo.characterData.basicInfo.level, levelDiff);
+
+                            float goldMultiplier = Mathf.Max(levelDiff * 0.75f, 1.25f);
+                            int goldFound = Mathf.RoundToInt(Random.Range(50, 101) * goldMultiplier);
+
+                            CombatSystem.Instance.AddGoldFound(goldFound);
+                            foreach (Targetable ally in TargetingSystem.Instance.allies.members)
+                            {
+                                CharacterData allyData = ally.GetComponent<CharacterInfo>().characterData;
+                                if (allyData == senderInfo.characterData)
+                                {
+                                    CombatSystem.Instance.AddXP(allyData, XPGain);
+                                }
+                                else
+                                {
+                                    CombatSystem.Instance.AddXP(allyData, XPGain / 2);
+                                }
+                            }
+                        }
+                    }
                 }
             }
             else
@@ -163,6 +189,33 @@ public class ActionSystem : MonoBehaviour
                 foreach (ICardEffect effect in action.card.card.effects)
                 {
                     effect.Execute(action.sender, action.card, action.target, action.manaCost);
+                }
+
+                if (action.target.TryGetComponent<CharacterInfo>(out var tInfo) && tInfo.currentHP <= 0)
+                {
+                    // gives xp
+                    if (TargetingSystem.Instance.allies.members.Contains(senderInfo.GetComponent<Targetable>()))
+                    {
+                        int levelDiff = Mathf.Max(tInfo.characterData.basicInfo.level - senderInfo.characterData.basicInfo.level, 1);
+                        int XPGain = CalculateXP(senderInfo.characterData.basicInfo.level, levelDiff);
+
+                        float goldMultiplier = Mathf.Max(levelDiff * 0.75f, 1.25f);
+                        int goldFound = Mathf.RoundToInt(Random.Range(50, 101) * goldMultiplier);
+
+                        CombatSystem.Instance.AddGoldFound(goldFound);
+                        foreach (Targetable ally in TargetingSystem.Instance.allies.members)
+                        {
+                            CharacterData allyData = ally.GetComponent<CharacterInfo>().characterData;
+                            if (allyData == senderInfo.characterData)
+                            {
+                                CombatSystem.Instance.AddXP(allyData, XPGain);
+                            }
+                            else
+                            {
+                                CombatSystem.Instance.AddXP(allyData, XPGain / 2);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -184,24 +237,21 @@ public class ActionSystem : MonoBehaviour
 
             yield return ActionPhaseAnimation.Instance.ActionAnimationPerform(action.sender, action.card, action.target, audioSFX);
 
-            yield return senderDeck.EndPlayCard(action.card);
-            ActionPhaseAnimation.Instance.ActionAnimationEnd(action.sender, action.card, action.target);
+            if (senderInfo.currentHP <= 0)
+            {
+                senderInfo.currentHP = 0;
+                senderInfo.UpdateResourcesView();
+                senderInfo.GetComponentInChildren<Animator>().SetTrigger("doDeath");
+            }
 
             if (targetInfo != null && targetInfo.currentHP <= 0)
             {
                 targetInfo.currentHP = 0;
                 targetInfo.UpdateResourcesView();
-
-                if (TargetingSystem.Instance.allies.members.Contains(senderInfo.GetComponent<Targetable>()))
-                {
-                    int levelDiff = Mathf.Max(targetInfo.characterData.basicInfo.level - senderInfo.characterData.basicInfo.level, 1);
-                    float multiplier = Mathf.Max(levelDiff * 0.75f, 1.25f);
-                    int goldFound = Mathf.RoundToInt(Random.Range(50, 101) * multiplier);
-
-                    CombatSystem.Instance.AddKillCount(senderInfo.characterData, levelDiff, goldFound);
-                }
-                //targetInfo.gameObject.SetActive(false);
             }
+
+            yield return senderDeck.EndPlayCard(action.card);
+            ActionPhaseAnimation.Instance.ActionAnimationEnd(action.sender, action.card, action.target);
 
             yield return new WaitForSeconds(0.1f);
         }
@@ -216,13 +266,45 @@ public class ActionSystem : MonoBehaviour
         characters.AddRange(TargetingSystem.Instance.allies.members);
         characters.AddRange(TargetingSystem.Instance.enemies.members);
 
-        List<CharacterInfo> infoList = characters
-            .Select(c => c.GetComponent<CharacterInfo>())
-            .ToList();
+        List<CharacterInfo> infoList = characters.Select(c => c.GetComponent<CharacterInfo>()).ToList();
 
         foreach (CharacterInfo character in infoList)
         {
+            int charHP = character.currentHP;
             character.OnTurnStart();
+
+            if (character.currentHP <= 0 && charHP > 0)
+            {
+                IStatusEffect burnEffect = character.activeEffects.FirstOrDefault(s => s is BurnStatusEffect && ((BurnStatusEffect)s).Sender != null);
+                Targetable targetable = character.GetComponent<Targetable>();
+
+                // Only reward XP if the dead character was an enemy and was burned
+                if (burnEffect != null && TargetingSystem.Instance.enemies.members.Contains(targetable))
+                {
+                    CharacterInfo senderInfo = ((BurnStatusEffect)burnEffect).Sender;
+                    CharacterInfo targetInfo = character;
+
+                    int levelDiff = Mathf.Max(targetInfo.characterData.basicInfo.level - senderInfo.characterData.basicInfo.level, 1);
+                    int XPGain = CalculateXP(senderInfo.characterData.basicInfo.level, levelDiff);
+
+                    float goldMultiplier = Mathf.Max(levelDiff * 0.75f, 1.25f);
+                    int goldFound = Mathf.RoundToInt(Random.Range(50, 101) * goldMultiplier);
+
+                    CombatSystem.Instance.AddGoldFound(goldFound);
+                    foreach (Targetable ally in TargetingSystem.Instance.allies.members)
+                    {
+                        CharacterData allyData = ally.GetComponent<CharacterInfo>().characterData;
+                        if (allyData == senderInfo.characterData)
+                        {
+                            CombatSystem.Instance.AddXP(allyData, XPGain);
+                        }
+                        else
+                        {
+                            CombatSystem.Instance.AddXP(allyData, XPGain / 2);
+                        }
+                    }
+                }
+            }
         }
 
         foreach (CharacterInfo character in infoList)
@@ -300,7 +382,6 @@ public class ActionSystem : MonoBehaviour
     //do instant action cards with target (e.g. buff cards)
     public IEnumerator TriggerAction(Targetable sender, CardInformation card, GameObject target)
     {
-        TargetingSystem.Instance.darkPanel.SetActive(true);
         CharacterGenerator.Instance.DisablePlayerRaycasts();
         CharacterManager.Instance.DisplayCardView();
 
@@ -308,6 +389,7 @@ public class ActionSystem : MonoBehaviour
 
         if (target.GetComponent<CardInformation>() == null)
         {
+            TargetingSystem.Instance.darkPanel.SetActive(true);
             ActionPhaseAnimation.Instance.ActionAnimationStart(sender, card, target);
         }
 
@@ -337,6 +419,35 @@ public class ActionSystem : MonoBehaviour
                 {
                     cardInfo.UpdateCard();
                 }
+
+                if (t.TryGetComponent<CharacterInfo>(out var tInfo) && tInfo.currentHP <= 0)
+                {
+                    // gives xp
+                    if (TargetingSystem.Instance.allies.members.Contains(sender))
+                    {
+                        CharacterInfo senderInfo = sender.GetComponent<CharacterInfo>();
+
+                        int levelDiff = Mathf.Max(tInfo.characterData.basicInfo.level - senderInfo.characterData.basicInfo.level, 1);
+                        int XPGain = CalculateXP(senderInfo.characterData.basicInfo.level, levelDiff);
+
+                        float goldMultiplier = Mathf.Max(levelDiff * 0.75f, 1.25f);
+                        int goldFound = Mathf.RoundToInt(Random.Range(50, 101) * goldMultiplier);
+
+                        CombatSystem.Instance.AddGoldFound(goldFound);
+                        foreach (Targetable ally in TargetingSystem.Instance.allies.members)
+                        {
+                            CharacterData allyData = ally.GetComponent<CharacterInfo>().characterData;
+                            if (allyData == senderInfo.characterData)
+                            {
+                                CombatSystem.Instance.AddXP(allyData, XPGain);
+                            }
+                            else
+                            {
+                                CombatSystem.Instance.AddXP(allyData, XPGain / 2);
+                            }
+                        }
+                    }
+                }
             }
         }
         else
@@ -357,6 +468,35 @@ public class ActionSystem : MonoBehaviour
             {
                 cardInfo.UpdateCard();
             }
+
+            if (target.TryGetComponent<CharacterInfo>(out var tInfo) && tInfo.currentHP <= 0)
+            {
+                // gives xp
+                if (TargetingSystem.Instance.allies.members.Contains(sender))
+                {
+                    CharacterInfo senderInfo = sender.GetComponent<CharacterInfo>();
+
+                    int levelDiff = Mathf.Max(tInfo.characterData.basicInfo.level - senderInfo.characterData.basicInfo.level, 1);
+                    int XPGain = CalculateXP(senderInfo.characterData.basicInfo.level, levelDiff);
+
+                    float goldMultiplier = Mathf.Max(levelDiff * 0.75f, 1.25f);
+                    int goldFound = Mathf.RoundToInt(Random.Range(50, 101) * goldMultiplier);
+
+                    CombatSystem.Instance.AddGoldFound(goldFound);
+                    foreach (Targetable ally in TargetingSystem.Instance.allies.members)
+                    {
+                        CharacterData allyData = ally.GetComponent<CharacterInfo>().characterData;
+                        if (allyData == senderInfo.characterData)
+                        {
+                            CombatSystem.Instance.AddXP(allyData, XPGain);
+                        }
+                        else
+                        {
+                            CombatSystem.Instance.AddXP(allyData, XPGain / 2);
+                        }
+                    }
+                }
+            }
         }
 
         if (target.GetComponent<CardInformation>() == null)
@@ -365,7 +505,11 @@ public class ActionSystem : MonoBehaviour
 
             yield return ActionPhaseAnimation.Instance.ActionAnimationPerform(sender, card, target, "hit");
 
-            targetInfo.currentHP = 0;
+            if (targetInfo.currentHP <= 0)
+            {
+                targetInfo.currentHP = 0;
+            }
+
             targetInfo.UpdateResourcesView();
 
             if (sender.GetComponent<CharacterInfo>().currentHP <= 0)
@@ -383,6 +527,7 @@ public class ActionSystem : MonoBehaviour
         if (target.GetComponent<CardInformation>() == null)
         {
             ActionPhaseAnimation.Instance.ActionAnimationEnd(sender, card, target);
+            TargetingSystem.Instance.darkPanel.SetActive(false);
         }
 
         yield return senderDeck.EndPlaySortHand();
@@ -393,7 +538,6 @@ public class ActionSystem : MonoBehaviour
         {
             CharacterManager.Instance.SelectFirstCharacter();
         }
-        TargetingSystem.Instance.darkPanel.SetActive(false);
         CharacterGenerator.Instance.EnablePlayerRaycasts();
     }
 
@@ -405,7 +549,6 @@ public class ActionSystem : MonoBehaviour
         characters.AddRange(TargetingSystem.Instance.enemies.members);
 
         List<CharacterDeck> deckList = characters
-            .Where(c => c.GetComponent<CharacterInfo>().currentHP > 0)
             .Select(c => c.GetComponent<CharacterDeck>())
             .ToList();
 
@@ -454,5 +597,15 @@ public class ActionSystem : MonoBehaviour
             }
         }
         return 0;
+    }
+
+    private int CalculateXP(int charLevel, int enemyLevel)
+    {
+        int levelDiff = Mathf.Max(enemyLevel, 1);
+        int totalXP = 0;
+
+        totalXP += levelDiff * 10;
+
+        return totalXP;
     }
 }

@@ -182,8 +182,8 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        CardShowInfo.Instance.Hide();
         CardShowInfo.Instance.Drag(false);
+        CardShowInfo.Instance.Hide();
         //return valid targets to original state
         bool hasEnoughMana = GetComponentInParent<CharacterInfo>().currentEN >= card.mana;
         bool hasValidTarget = TargetingSystem.Instance.TryGetValidTarget(transform.position, this, out GameObject t);
@@ -253,8 +253,8 @@ public class CardInformation : MonoBehaviour, IPointerDownHandler, IDragHandler,
         isDeselecting = false;
 
         //stops the cursor from changing the hovered card 
-        CardShowInfo.Instance.Hide();
         CardShowInfo.Instance.Drag(false);
+        CardShowInfo.Instance.Hide();
 
         //disable the collider to avoid catching the card mid animation
         BoxCollider2D collider = GetComponent<BoxCollider2D>();

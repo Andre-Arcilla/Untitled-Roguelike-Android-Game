@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,11 +12,24 @@ public class VictoryScreenManager : MonoBehaviour
     [SerializeField] private TMP_Text goldText;
     [SerializeField] private TMP_Text townText;
     [SerializeField] private Button nextButton;
+    [SerializeField] private GameObject gameClearScreen;
 
     private void Start()
     {
         GenerateXP();
         GenerateMisc();
+        CheckIfAllTownsCleared();
+    }
+
+    private void CheckIfAllTownsCleared()
+    {
+        // Only show game clear screen if the player has cleared ALL listed towns
+        bool allCleared = PlayerDataHolder.Instance.partyClearedTowns.All(t => t.hasCleared);
+
+        if (allCleared && PlayerDataHolder.Instance.partyClearedTowns.Count > 0)
+        {
+            gameClearScreen.SetActive(true);
+        }
     }
 
     private void GenerateXP()
@@ -26,12 +40,12 @@ public class VictoryScreenManager : MonoBehaviour
             extraLevels = 5;
         }
 
-        var killList = CombatSystem.Instance.GetKillCounter(); // Access the list
+        var XPGainList = CombatSystem.Instance.GetXPGainList(); // Access the list
 
-        foreach (var entry in killList)
+        foreach (var entry in XPGainList)
         {
             GameObject xpUI = Instantiate(xpUIPrefab, xpUIParent);
-            xpUI.GetComponent<CharacterXP>().Setup(entry.character, entry.levelDiffs.Count, entry.levelDiffs, extraLevels);
+            xpUI.GetComponent<CharacterXP>().Setup(entry.character, entry.XP, extraLevels);
         }
     }
 
@@ -42,7 +56,7 @@ public class VictoryScreenManager : MonoBehaviour
 
         if (TownManager.Instance.isLabyrinth)
         {
-        townText.text = $"{TownManager.Instance.townTo.townName} labyrinth cleared!";
+            townText.text = $"{TownManager.Instance.townTo.townName} labyrinth cleared!";
         }
         else
         {
@@ -68,5 +82,10 @@ public class VictoryScreenManager : MonoBehaviour
         }
 
         SceneManager.LoadScene(TownManager.Instance.townTo.sceneName);
+    }
+
+    public void QuitGame()
+    {
+        SceneManager.LoadScene("Main Menu");
     }
 }

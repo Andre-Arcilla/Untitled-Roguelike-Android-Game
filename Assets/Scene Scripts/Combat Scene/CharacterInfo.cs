@@ -49,6 +49,7 @@ public class CharacterInfo : MonoBehaviour
         GenerateCharacterStats();
         GenerateCharacterDeck();
         SetCharacterEquipment();
+        SetResources();
         GenerateCharacterSprite();
         characterDeck.SetDeck(deck);
         UpdateResourcesView();
@@ -80,8 +81,6 @@ public class CharacterInfo : MonoBehaviour
         stats.totalEN = selectedRace.EN + characterData.allocatedStats.allocatedEN;
         stats.totalPWR = selectedRace.PWR + characterData.allocatedStats.allocatedPWR;
         stats.totalSPD = selectedRace.SPD + characterData.allocatedStats.allocatedSPD;
-
-        SetResources();
     }
 
     private void GenerateCharacterDeck()
@@ -298,8 +297,6 @@ public class CharacterInfo : MonoBehaviour
                     damageNegated = true;
                 }
 
-                counter.Duration--;
-
                 if (counter.Duration <= 0 || counter.ExpiresOnHit)
                 {
                     toRemove.Add(effect);
@@ -315,10 +312,6 @@ public class CharacterInfo : MonoBehaviour
                 {
                     toRemove.Add(effect);
                 }
-            }
-            else
-            {
-                toRemove.Add(effect);
             }
         }
 

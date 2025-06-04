@@ -1,4 +1,7 @@
+using System;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class CounterStatusEffect : IStatusEffect
 {
@@ -50,6 +53,42 @@ public class CounterStatusEffect : IStatusEffect
         {
             attacker.UpdateResourcesView();
             attacker.currentHP = 0;
+
+            Targetable attackerTargetable = attacker.GetComponent<Targetable>();
+
+            if (TargetingSystem.Instance.enemies.members.Contains(attackerTargetable))
+            {
+                int levelDiff = Mathf.Max(attacker.characterData.basicInfo.level - target.characterData.basicInfo.level, 1);
+                int XPGain = CalculateXP(target.characterData.basicInfo.level, levelDiff);
+
+                float goldMultiplier = Mathf.Max(levelDiff * 0.75f, 1.25f);
+                int goldFound = Mathf.RoundToInt(UnityEngine.Random.Range(50, 101) * goldMultiplier);
+
+                CombatSystem.Instance.AddGoldFound(goldFound);
+
+                foreach (Targetable ally in TargetingSystem.Instance.allies.members)
+                {
+                    CharacterData allyData = ally.GetComponent<CharacterInfo>().characterData;
+                    if (allyData == target.characterData)
+                    {
+                        CombatSystem.Instance.AddXP(allyData, XPGain);
+                    }
+                    else
+                    {
+                        CombatSystem.Instance.AddXP(allyData, XPGain / 2);
+                    }
+                }
+            }
         }
+    }
+
+    private int CalculateXP(int charLevel, int enemyLevel)
+    {
+        int levelDiff = Mathf.Max(enemyLevel, 1);
+        int totalXP = 0;
+
+        totalXP += levelDiff * 10;
+
+        return totalXP;
     }
 }

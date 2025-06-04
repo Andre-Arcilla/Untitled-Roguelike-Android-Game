@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Iron Shackles
   m_EditorClassIdentifier: 
   cardName: Iron Shackles
-  description: Prevent the target from attacking
+  description: Prevent the target from attacking.
   target: 0
   isInstantUse: 1
   cost: 3
   power: 0
   effects:
   - rid: 58941040279945527
-  cardSprite: {fileID: 0}
+  cardSprite: {fileID: 21300000, guid: 8e204f4a122a84a4695ecbe7e1ed7637, type: 3}
   references:
     version: 2
     RefIds:

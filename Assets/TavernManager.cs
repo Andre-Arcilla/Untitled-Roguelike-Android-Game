@@ -29,12 +29,27 @@ public class TavernManager : MonoBehaviour
 
     [Header("Generated Characters")]
     public List<CharacterData> tavernCharacters = new List<CharacterData>();
-    public List<int> price = new List<int>();
 
     [Header("others")]
     [SerializeField] public Transform parentHolder;
     [SerializeField] private GameObject listObjPrefab;
     [SerializeField] private CharDisplayInfo charDisplay;
+
+    [Header("Name Pool")]
+    [SerializeField]
+    private List<string> possibleNames = new List<string>
+    {
+        "Arden", "Bryn", "Eliot", "Emery", "Finley",
+        "Harlen", "Jaden", "Kiran", "Linden", "Marlowe",
+        "Nova", "Oakley", "Parker", "Quinn", "Rory",
+        "Sage", "Tegan", "Vale", "Wren", "Xen",
+        "Yarden", "Zephyr", "Ash", "Bay", "Calder",
+        "Dale", "Eden", "Fifer", "Gray", "Haven",
+        "Ira", "Jules", "Kai", "Lior", "Marin",
+        "Nico", "Onyx", "Perry", "Riven", "Sky",
+        "Seigen", "Umber", "Vesper", "West", "Yael",
+        "Zion", "Rowan", "Sutton", "Ellis", "Soren"
+    };
 
     private void Start()
     {
@@ -46,14 +61,15 @@ public class TavernManager : MonoBehaviour
     public void GenerateCharacters(int averageLevel)
     {
         tavernCharacters.Clear();
-        int count = Random.Range(1, maxCharacters + 1);
+        int count = Random.Range(3, maxCharacters + 1);
 
         for (int i = 0; i < count; i++)
         {
             CharacterData newChar = new CharacterData();
 
-            // Basic Info
-            newChar.basicInfo.characterName = $"Adventurer_{Random.Range(1000, 9999)}";
+            // Basic Info// Pick a unique name
+            string uniqueName = GetUniqueName();
+            newChar.basicInfo.characterName = uniqueName;
             newChar.basicInfo.level = Mathf.Clamp(averageLevel + Random.Range(-5, 6), 1, 99);
             newChar.basicInfo.xp = 0;
             newChar.basicInfo.gender = "Male";
@@ -92,6 +108,44 @@ public class TavernManager : MonoBehaviour
             newChar.isAlive = true;
 
             tavernCharacters.Add(newChar);
+        }
+    }
+
+    private string GetUniqueName()
+    {
+        HashSet<string> takenNames = new HashSet<string>();
+
+        // Add names from current party members
+        foreach (var member in PlayerDataHolder.Instance.partyMembers)
+        {
+            if (!string.IsNullOrEmpty(member.basicInfo.characterName))
+                takenNames.Add(member.basicInfo.characterName);
+        }
+
+        // Add names from already generated tavern characters to avoid duplicates in the batch
+        foreach (var tavernChar in tavernCharacters)
+        {
+            if (!string.IsNullOrEmpty(tavernChar.basicInfo.characterName))
+                takenNames.Add(tavernChar.basicInfo.characterName);
+        }
+
+        // Filter available names
+        var availableNames = possibleNames.FindAll(name => !takenNames.Contains(name));
+
+        if (availableNames.Count > 0)
+        {
+            return availableNames[Random.Range(0, availableNames.Count)];
+        }
+        else
+        {
+            // Fallback unique name
+            string baseName = "Adventurer";
+            int suffix = 1;
+            while (takenNames.Contains($"{baseName}_{suffix}"))
+            {
+                suffix++;
+            }
+            return $"{baseName}_{suffix}";
         }
     }
 

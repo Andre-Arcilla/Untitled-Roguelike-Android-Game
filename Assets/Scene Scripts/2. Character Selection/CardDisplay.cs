@@ -42,6 +42,7 @@ public class CardDisplay : MonoBehaviour
             Card card = new Card(cardData, null);
             InventoryCardInformation cardInfo = CardSpriteGenerator.Instance.GenerateCardSprite(card, cardParent, count);
             cardInfo.name = $"Card_{card.cardName} (×{count})";
+            cardInfo.transform.localScale = Vector3.one;
         }
     }
 }

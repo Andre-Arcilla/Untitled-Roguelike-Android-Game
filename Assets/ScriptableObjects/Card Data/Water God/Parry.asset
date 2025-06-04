@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Parry
   m_EditorClassIdentifier: 
   cardName: Parry
-  description: Counter the next attack
+  description: Counter the next attack.
   target: 2
   isInstantUse: 1
   cost: 2
   power: 0
   effects:
   - rid: 58941040279945524
-  cardSprite: {fileID: 21300000, guid: 9d087bc2abacfe94fa30d584e7052070, type: 3}
+  cardSprite: {fileID: 21300000, guid: fd1f942c2c77fcd4794054c7f0367981, type: 3}
   references:
     version: 2
     RefIds:
@@ -29,3 +29,4 @@ MonoBehaviour:
       data:
         negateDamage: 1
         expiresOnHit: 1
+        overrideEffect: 0

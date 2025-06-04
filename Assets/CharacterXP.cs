@@ -14,15 +14,12 @@ public class CharacterXP : MonoBehaviour
     [SerializeField] private RectTransform fillMask;  // Reference to FillMask container
     [SerializeField] private ClassDatabase classDatabase;
 
-    public void Setup(CharacterData characterData, int kills, List<int> levelDiffs, int bonusLevels)
+    public void Setup(CharacterData characterData, int XPGain, int bonusLevels)
     {
         this.characterData = characterData;
 
-        // Calculate total XP gained from kills and level differences
-        int xpGain = XPGainCalculator(kills, levelDiffs);
-
         // Calculate total XP including current XP
-        int totalXP = characterData.basicInfo.xp + xpGain;
+        int totalXP = characterData.basicInfo.xp + XPGain;
 
         // Calculate level gained from XP and leftover XP
         int levelGainFromXP = totalXP / 100;
@@ -70,7 +67,7 @@ public class CharacterXP : MonoBehaviour
             charLevel.text = $"Level: {characterData.basicInfo.level}";
         }
 
-        charXP.text = $"XP: {xpLeft} / 100 (+{xpGain})";
+        charXP.text = $"XP: {xpLeft} / 100 (+{XPGain})";
 
         float fillRatio = xpLeft / 100f;
         Canvas.ForceUpdateCanvases();
@@ -80,16 +77,6 @@ public class CharacterXP : MonoBehaviour
         float targetWidth = Mathf.Max(maskWidth * fillRatio, minWidth);
 
         fillImage.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, targetWidth);
-    }
-
-    private int XPGainCalculator(int kills, List<int> levelDiffs)
-    {
-        int totalXPFromKills = 0;
-        for (int i = 0; i < kills; i++)
-        {
-            totalXPFromKills += levelDiffs[i] * 7;
-        }
-        return totalXPFromKills;
     }
 
     private void GenerateCharacterSprite(CharacterInfo info)

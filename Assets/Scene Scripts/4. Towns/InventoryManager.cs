@@ -50,6 +50,7 @@ public class InventoryManager : MonoBehaviour
 
             if (itemInSlot == null && slot.allowedSlotType == equipment.slotType)
             {
+                slot.ForceEmptyIcon();
                 SpawnItem(equipment, slot);
                 return;
             }

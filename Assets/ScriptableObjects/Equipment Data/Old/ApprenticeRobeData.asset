@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3e06572b8209464897a5a3f630f15e4, type: 3}
+  m_Name: ApprenticeRobeData
+  m_EditorClassIdentifier: 
+  equipmentName: Apprentice Robe
+  description: Woven from humble threads, this robe offers the barest protection
+    but empowers the fledgling mage with a spark of potential.
+  price: 500
+  slotType: 1
+  classType: 0
+  bonusHP: 13
+  bonusEN: 0
+  bonusPWR: 0
+  bonusSPD: 0
+  cards:
+  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
+  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
+  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
+  - {fileID: 11400000, guid: 58f77b12aee8dc6459b8bea034113de7, type: 2}
+  effects:
+  - rid: 8040608738580889739
+  sprite: {fileID: 21300000, guid: 0bd32aeabf4ce9d449bd2029730bcf78, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8040608738580889739
+      type: {class: CounterStatusEffect, ns: , asm: Assembly-CSharp}
+      data:
+        duration: 5
+        _NegateDamage: 1
+        _ExpiresOnHit: 0
+        _IsShortTerm: 0
+        _AllowsStacking: 0
+        _Override: 0
+        _IsDebuff: 0

@@ -16,13 +16,13 @@ MonoBehaviour:
   description: Deal X damage to all enemies and reduce their SPD and PWR by 5.
   target: 3
   isInstantUse: 0
-  cost: 0
+  cost: 5
   power: 5
   effects:
   - rid: 58941040279945863
   - rid: 58941040279945864
   - rid: 58941040279945865
-  cardSprite: {fileID: 0}
+  cardSprite: {fileID: 21300000, guid: 56eda8827670dd345b9ead2692b318f7, type: 3}
   references:
     version: 2
     RefIds:

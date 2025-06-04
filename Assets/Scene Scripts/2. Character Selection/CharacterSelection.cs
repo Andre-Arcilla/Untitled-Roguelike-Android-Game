@@ -86,10 +86,17 @@ public class CharacterSelection : MonoBehaviour
 
     public void UpdatePlayerInfo()
     {
+        string charName = classManager.charName;
+
+        if (string.IsNullOrWhiteSpace(charName))
+        {
+            charName = "Hoshiyomi";
+        }
+
         // Fill PlayerSaveData from UI
         playerData.basicInfo = new PlayerSaveData.PlayerInfo
         {
-            playerName = "NewPlayer", // Replace this with actual input if needed
+            playerName = charName,
             level = 1,
             gender = classManager.selectedGender,
             raceName = statManager.selectedRace.raceName
@@ -163,7 +170,7 @@ public class CharacterSelection : MonoBehaviour
         {
             members = new List<CharacterData> { character },
             inventory = new List<string>(),
-            gold = 0,
+            gold = 1000,
             clearedTowns = townClearEntries
         };
 

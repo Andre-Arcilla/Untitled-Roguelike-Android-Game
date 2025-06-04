@@ -58,6 +58,13 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         AudioManager.Instance.LoadBGM(scene);
+        
+        if (PlayerDataHolder.Instance.partyMembers == null || PlayerDataHolder.Instance.partyMembers.Count == 0)
+        {
+            Debug.Log("Party is empty, loading from JSON...");
+            PlayerDataHolder.Instance.LoadPartyFromJson();
+        }
+        
         PlayerDataHolder.Instance.SavePartyInfo();
     }
 }

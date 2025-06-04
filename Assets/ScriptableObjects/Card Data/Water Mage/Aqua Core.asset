@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: Aqua Core
   m_EditorClassIdentifier: 
   cardName: Aqua Core
-  description: Gain 5 EN and max EN
+  description: Gain 5 EN and max EN. +20% cost per use.
   target: 1
   isInstantUse: 1
-  cost: 0
+  cost: 2
   power: 0
   effects:
   - rid: 58941040279945853
   - rid: 58941040279945857
-  cardSprite: {fileID: 0}
+  - rid: 8040608738580889773
+  cardSprite: {fileID: 21300000, guid: cdd4a88174813834bb06635acbf00342, type: 3}
   references:
     version: 2
     RefIds:
@@ -37,3 +38,7 @@ MonoBehaviour:
         isShortTerm: 0
         isStackable: 1
         isDebuff: 0
+    - rid: 8040608738580889773
+      type: {class: CostIncreaseEffect, ns: , asm: Assembly-CSharp}
+      data:
+        increasePercentage: 0.2

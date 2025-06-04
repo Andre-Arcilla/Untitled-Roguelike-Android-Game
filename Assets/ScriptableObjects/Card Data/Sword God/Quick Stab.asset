@@ -20,7 +20,7 @@ MonoBehaviour:
   power: 3
   effects:
   - rid: 58941040279945769
-  cardSprite: {fileID: 0}
+  cardSprite: {fileID: 21300000, guid: 338e2df71663320498ed29998ec10cfe, type: 3}
   references:
     version: 2
     RefIds:

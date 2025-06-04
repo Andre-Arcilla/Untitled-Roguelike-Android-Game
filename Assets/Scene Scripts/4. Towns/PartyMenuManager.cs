@@ -73,6 +73,10 @@ public class PartyMenuManager : MonoBehaviour
     private int HP;
     private int EN;
     private int pointsLeft;
+    private int itemHP = 0;
+    private int itemEN = 0;
+    private int itemPWR = 0;
+    private int itemSPD = 0;
     private List<ClassDataSO> availableClasses = new List<ClassDataSO>();
 
     [Header("Databases")]
@@ -301,9 +305,9 @@ public class PartyMenuManager : MonoBehaviour
         pointsLeft = maxAllocated - totalAllocated;
 
         //generate character specific things
+        GenerateEquipment();
         GenerateCards();
         SetCharacterStats();
-        GenerateEquipment();
         classAddBtn.gameObject.SetActive(ClassAdditions());
 
         //input text on screen
@@ -351,13 +355,13 @@ public class PartyMenuManager : MonoBehaviour
     {
         RaceDataSO selectedRace = raceDatabase.allRaces.Find(r => r.raceName == currentCharacter.basicInfo.raceName);
         remainingStats.text = $"Remaining stat points: {pointsLeft}";
-        charHPStatTxt.text = $"{selectedRace.HP.ToString("D2")}+{currentCharacter.allocatedStats.allocatedHP.ToString("D2")}";
-        charENStatTxt.text = $"{selectedRace.EN.ToString("D2")}+{currentCharacter.allocatedStats.allocatedEN.ToString("D2")}";
-        charPWRStatTxt.text = $"{selectedRace.PWR.ToString("D2")}+{currentCharacter.allocatedStats.allocatedPWR.ToString("D2")}";
-        charSPDStatTxt.text = $"{selectedRace.SPD.ToString("D2")}+{currentCharacter.allocatedStats.allocatedSPD.ToString("D2")}";
+        charHPStatTxt.text = $"{selectedRace.HP:D2}+{currentCharacter.allocatedStats.allocatedHP + itemHP:D2}";
+        charENStatTxt.text = $"{selectedRace.EN:D2}+{currentCharacter.allocatedStats.allocatedEN + itemEN:D2}";
+        charPWRStatTxt.text = $"{selectedRace.PWR:D2}+{currentCharacter.allocatedStats.allocatedPWR + itemPWR:D2}";
+        charSPDStatTxt.text = $"{selectedRace.SPD:D2}+{currentCharacter.allocatedStats.allocatedSPD + itemSPD:D2}";
 
-        HP = Mathf.FloorToInt(1.5f * (selectedRace.HP + currentCharacter.allocatedStats.allocatedHP));
-        EN = Mathf.FloorToInt((selectedRace.EN + currentCharacter.allocatedStats.allocatedEN) / 5);
+        HP = Mathf.FloorToInt(1.5f * (selectedRace.HP + currentCharacter.allocatedStats.allocatedHP + itemHP));
+        EN = Mathf.FloorToInt((selectedRace.EN + currentCharacter.allocatedStats.allocatedEN + itemEN) / 5);
     }
 
     //method to increase stats
@@ -464,17 +468,37 @@ public class PartyMenuManager : MonoBehaviour
     //changes the items in the equipment slots to match the current character's
     private void GenerateEquipment()
     {
-        EquipmentDataSO armor = equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.armor);
-        EquipmentDataSO weapon = equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.weapon);
-        EquipmentDataSO accessory1 = equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.accessory1);
-        EquipmentDataSO accessory2 = equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.accessory2);
-        EquipmentDataSO accessory3 = equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.accessory3);
+        itemHP = itemEN = itemPWR = itemSPD = 0;
 
-        if (armor != null) InventoryManager.Instance.AddEquippedItem(armor);
-        if (weapon != null) InventoryManager.Instance.AddEquippedItem(weapon);
-        if (accessory1 != null) InventoryManager.Instance.AddEquippedItem(accessory1);
-        if (accessory2 != null) InventoryManager.Instance.AddEquippedItem(accessory2);
-        if (accessory3 != null) InventoryManager.Instance.AddEquippedItem(accessory3);
+        ApplyEquipment(equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.armor));
+        ApplyEquipment(equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.weapon));
+        ApplyEquipment(equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.accessory1));
+        ApplyEquipment(equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.accessory2));
+        ApplyEquipment(equipmentDatabase.allEquipments.Find(e => e.equipmentName == currentCharacter.equipment.accessory3));
+    }
+
+    private void ApplyEquipment(EquipmentDataSO item)
+    {
+        if (item == null) return;
+
+        itemHP += item.bonusHP;
+        itemEN += item.bonusEN;
+        itemPWR += item.bonusPWR;
+        itemSPD += item.bonusSPD;
+
+        foreach (CardDataSO card in item.cards)
+        {
+            if (deck.ContainsKey(card))
+            {
+                deck[card]++;
+            }
+            else
+            {
+                deck[card] = 1;
+            }
+        }
+
+        InventoryManager.Instance.AddEquippedItem(item);
     }
 
     //updates the current character's data and party's inventory to match what is shown in UI
@@ -494,6 +518,8 @@ public class PartyMenuManager : MonoBehaviour
                 PlayerDataHolder.Instance.partyInventory.Add(slot.transform.GetComponentInChildren<EquipmentInfo>().equipment.equipmentName);
             }
         }
+
+        SetCharacterInfo();
     }
 
     //method to update gold amount text on merchant screen

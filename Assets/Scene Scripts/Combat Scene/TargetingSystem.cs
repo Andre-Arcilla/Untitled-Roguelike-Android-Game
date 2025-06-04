@@ -4,9 +4,6 @@ using System.Linq;
 using Unity.Splines.Examples;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using static Cinemachine.CinemachineTargetGroup;
-using static UnityEngine.GraphicsBuffer;
 
 public class TargetingSystem : MonoBehaviour
 {

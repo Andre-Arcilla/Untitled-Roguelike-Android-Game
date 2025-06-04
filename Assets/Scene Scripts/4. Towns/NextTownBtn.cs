@@ -21,6 +21,7 @@ public class NextTownBtn : MonoBehaviour
             if (isLabyrinthEntrance)
             {
                 TownManager.Instance.isLabyrinth = true;
+                TownManager.Instance.townTo = TownSystem.Instance.currentTown;
             }
             SceneManager.LoadScene("Combat Scene 2");
         }

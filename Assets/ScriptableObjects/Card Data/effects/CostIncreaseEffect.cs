@@ -19,6 +19,6 @@ public class CostIncreaseEffect : ICardEffect
     private int Calculate(int cardCost)
     {
         float result = (cardCost * increasePercentage);
-        return Mathf.FloorToInt(result);
+        return Mathf.CeilToInt(result);
     }
 }

@@ -55,7 +55,7 @@ public class ClassChoiceDisplay : MonoBehaviour
                 cardText = newTextObj.GetComponent<TMP_Text>();
             }
 
-            cardText.text = $"Card_{entry.Key} (×{entry.Value})";
+            cardText.text = $"{entry.Key} (×{entry.Value})";
             index++;
         }
     }

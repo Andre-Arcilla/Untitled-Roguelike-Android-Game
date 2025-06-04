@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3e06572b8209464897a5a3f630f15e4, type: 3}
+  m_Name: Warden's Mail
+  m_EditorClassIdentifier: 
+  equipmentName: 'Warden''s Mail '
+  description: Armor used by Water God Style users, provides Iron Shackles and Provoke.
+  price: 650
+  slotType: 1
+  classType: 0
+  bonusHP: 0
+  bonusEN: 0
+  bonusPWR: 0
+  bonusSPD: 0
+  cards:
+  - {fileID: 11400000, guid: 4816acfc2de03ff4e94ea7f3f3fc8e56, type: 2}
+  - {fileID: 11400000, guid: fd86cd15a25898b438d84b962355fe0e, type: 2}
+  effects: []
+  sprite: {fileID: 21300000, guid: b0a4a01708cc2c642a2271645600c678, type: 3}
+  references:
+    version: 2
+    RefIds: []

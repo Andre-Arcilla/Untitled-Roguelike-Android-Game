@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3e06572b8209464897a5a3f630f15e4, type: 3}
+  m_Name: Aegis of Gold
+  m_EditorClassIdentifier: 
+  equipmentName: Aegis of Gold
+  description: A radiant shield granting +10 HP.
+  price: 450
+  slotType: 2
+  classType: 0
+  bonusHP: 10
+  bonusEN: 0
+  bonusPWR: 0
+  bonusSPD: 0
+  cards: []
+  effects: []
+  sprite: {fileID: 21300000, guid: 083a1bbb42af2fd4dbd34232d9319421, type: 3}
+  references:
+    version: 2
+    RefIds: []

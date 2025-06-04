@@ -9,10 +9,11 @@ public class DotEffect : ICardEffect
 
     public void Execute(Targetable senderObj, CardInformation card, GameObject targetObj, int manaCost)
     {
+        CharacterInfo sender = senderObj.GetComponent<CharacterInfo>();
         CharacterInfo target = targetObj.GetComponent<CharacterInfo>();
         if (target == null) return;
 
-        var DOT = new BurnStatusEffect(duration, damage);
+        var DOT = new BurnStatusEffect(duration, damage, sender);
         target.ApplyStatusEffect(DOT);
     }
 }

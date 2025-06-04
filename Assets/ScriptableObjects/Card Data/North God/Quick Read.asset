@@ -20,7 +20,7 @@ MonoBehaviour:
   power: 0
   effects:
   - rid: 58941040279945779
-  cardSprite: {fileID: 0}
+  cardSprite: {fileID: 21300000, guid: 43d46133e2c81254098f350ed139d734, type: 3}
   references:
     version: 2
     RefIds:
@@ -28,3 +28,4 @@ MonoBehaviour:
       type: {class: DrawCardEffect, ns: , asm: Assembly-CSharp}
       data:
         drawAmount: 2
+        drawOnly: 1

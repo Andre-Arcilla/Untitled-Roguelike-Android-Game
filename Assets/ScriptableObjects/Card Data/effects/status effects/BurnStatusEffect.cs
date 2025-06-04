@@ -8,6 +8,7 @@ public class BurnStatusEffect : IStatusEffect
     public bool AllowsStacking => _AllowsStacking;
     public bool Override => false;
     public bool IsDebuff => _IsDebuff;
+    public CharacterInfo Sender => _Sender;
 
     [SerializeField] private int duration;
     [SerializeField] private int damage;
@@ -15,13 +16,15 @@ public class BurnStatusEffect : IStatusEffect
     [SerializeField] private bool _AllowsStacking = false;
     [SerializeField] private bool _IsDebuff = true;
     private CharacterInfo target;
+    private CharacterInfo _Sender;
 
     public BurnStatusEffect() { }
 
-    public BurnStatusEffect(int duration, int damage)
+    public BurnStatusEffect(int duration, int damage, CharacterInfo sender)
     {
         this.duration = duration;
         this.damage = damage;
+        _Sender = sender;
     }
 
     public void OnApply(CharacterInfo target)

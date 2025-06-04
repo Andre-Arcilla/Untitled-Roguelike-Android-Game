@@ -26,34 +26,45 @@ public class CombatSystem : MonoBehaviour
     {
         foreach (var member in PlayerDataHolder.Instance.partyMembers)
         {
-            if (!killCounterList.Exists(e => e.character == member))
+            if (!xpGainList.Exists(e => e.character == member))
             {
-                killCounterList.Add(new KillEntry
+                xpGainList.Add(new XPGain
                 {
                     character = member,
-                    killCount = 0,
-                    levelDiffs = new List<int>()
+                    XP = 0
                 });
             }
+        }
+
+        if (TownManager.Instance.isLabyrinth)
+        {
+            wall1.SetActive(true);
+            wall2.SetActive(true);
+        }
+        else
+        {
+            wall1.SetActive(false);
+            wall2.SetActive(false);
         }
     }
 
     [System.Serializable]
-    public class KillEntry
+    public class XPGain
     {
         public CharacterData character;
-        public int killCount;
-        public List<int> levelDiffs = new();
+        public int XP;
     }
 
-    [SerializeField] private List<KillEntry> killCounterList = new List<KillEntry>();
+    [SerializeField] private List<XPGain> xpGainList = new List<XPGain>();
     [SerializeField] private int goldEarned;
-    public List<KillEntry> GetKillCounter() => killCounterList;
+    public List<XPGain> GetXPGainList() => xpGainList;
     public int goldAmount => goldEarned;
 
     [SerializeField] private int waves = 1;
     [SerializeField] private int currentWave = 0;
     [SerializeField] private TMP_Text waveText;
+    [SerializeField] private GameObject wall1;
+    [SerializeField] private GameObject wall2;
 
     public void GenerateNewEnemyGroup()
     {
@@ -73,28 +84,27 @@ public class CombatSystem : MonoBehaviour
         }
     }
 
-    public void AddKillCount(CharacterData character, int levelDiff, int goldEarned)
+    public void AddGoldFound(int goldEarned)
     {
         this.goldEarned += goldEarned;
-        levelDiff = Mathf.Max(levelDiff, 1);
+    }
 
-        KillEntry entry = killCounterList.Find(e => e.character == character);
+    public void AddXP(CharacterData character, int XP)
+    {
+        XPGain entry = xpGainList.Find(e => e.character == character);
 
         if (entry != null)
         {
-            entry.killCount++;
-            entry.levelDiffs.Add(levelDiff);
+            entry.XP += XP;
         }
         else
         {
-            KillEntry newEntry = new KillEntry
+            XPGain newEntry = new XPGain
             {
                 character = character,
-                killCount = 1,
-                levelDiffs = new List<int> { levelDiff }
+                XP = XP
             };
-
-            killCounterList.Add(newEntry);
+            xpGainList.Add(newEntry);
         }
     }
 

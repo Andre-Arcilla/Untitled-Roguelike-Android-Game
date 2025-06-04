@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public class ClassManager : MonoBehaviour
 {
     public ClassDataSO selectedClass { get; private set; }
+    public string charName { get; private set; }
+    public string _charName;
 
     [SerializeField] private CardDisplay cardDisplay;
     [SerializeField] private GameObject playerClass;
@@ -156,5 +158,11 @@ public class ClassManager : MonoBehaviour
         playerClass.transform.localPosition = new Vector3(0, -1f, 0);
 
         cardDisplay.UpdateSelectedClass(selectedClass);
+    }
+
+    public void GrabNameFromInput(string name)
+    {
+        charName = name;
+        _charName = name;
     }
 }

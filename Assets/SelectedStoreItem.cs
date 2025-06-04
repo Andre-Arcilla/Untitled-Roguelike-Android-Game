@@ -32,9 +32,9 @@ public class SelectedStoreItem : MonoBehaviour
         itemDescription.text = newEquipment.description;
         itemRequirement.text = $"{newEquipment.slotType} - {ToReadableString(newEquipment.classType.ToString())}";
         itemHP.text = $"HP:  {newEquipment.bonusHP}";
-        itemEN.text = $"HP:  {newEquipment.bonusEN}";
-        itemPWR.text = $"HP:  {newEquipment.bonusPWR}";
-        itemSPD.text = $"HP:  {newEquipment.bonusSPD}";
+        itemEN.text = $"EN:  {newEquipment.bonusEN}";
+        itemPWR.text = $"PWR:  {newEquipment.bonusPWR}";
+        itemSPD.text = $"SPD:  {newEquipment.bonusSPD}";
         buyButtonTxt.text = $"BUY ({newEquipment.price.ToString("N0")}g)";
         sellButtonTxt.text = $"SELL ({newEquipment.price.ToString("N0")}g)";
 

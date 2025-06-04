@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Provoke
   m_EditorClassIdentifier: 
   cardName: Provoke
-  description: Taunt all enemies
+  description: Taunt all enemies.
   target: 2
   isInstantUse: 1
   cost: 4
   power: 0
   effects:
   - rid: 58941040279945530
-  cardSprite: {fileID: 0}
+  cardSprite: {fileID: 21300000, guid: 9c9213c00e21f6546bf2beca5f230fcd, type: 3}
   references:
     version: 2
     RefIds:

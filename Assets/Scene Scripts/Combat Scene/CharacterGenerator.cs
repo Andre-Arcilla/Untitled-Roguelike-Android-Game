@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
@@ -118,7 +117,7 @@ public class CharacterGenerator : MonoBehaviour
 
     private void GenerateEnemy()
     {
-        int count = Random.Range(1, 5);
+        int count = Random.Range(1, allyParent.transform.childCount + 1);
 
         Vector2[] positions = new Vector2[] 
         {
@@ -308,13 +307,23 @@ public class CharacterGenerator : MonoBehaviour
 
         // Equipment
         EquipmentDatabase equipDB = equipmentDatabase;
-        int equipChance = Random.Range(0, 100);
-        if (equipChance < 101)
+        const int weaponChance = 15;
+        const int accessoryChance = 20;
+
+        if (Random.Range(0, 100) < weaponChance)
         {
-            enemy.equipment.armor = GetRandomEquipmentNameByType(equipDB, EquipmentType.Armor);
             enemy.equipment.weapon = GetRandomEquipmentNameByType(equipDB, EquipmentType.Weapon);
+        }
+        if (Random.Range(0, 100) < accessoryChance)
+        {
             enemy.equipment.accessory1 = GetRandomEquipmentNameByType(equipDB, EquipmentType.Accessory);
+        }
+        if (Random.Range(0, 100) < accessoryChance)
+        {
             enemy.equipment.accessory2 = GetRandomEquipmentNameByType(equipDB, EquipmentType.Accessory);
+        }
+        if (Random.Range(0, 100) < accessoryChance)
+        {
             enemy.equipment.accessory3 = GetRandomEquipmentNameByType(equipDB, EquipmentType.Accessory);
         }
 
@@ -329,9 +338,9 @@ public class CharacterGenerator : MonoBehaviour
             points[Random.Range(0, 4)]++;
         }
 
-        stats.allocatedHP = points[0];
+        stats.allocatedHP = Mathf.FloorToInt(points[0] * 0.75f);
         stats.allocatedEN = points[1];
-        stats.allocatedPWR = points[2];
+        stats.allocatedPWR = Mathf.FloorToInt(points[2] * 0.5f);
         stats.allocatedSPD = points[3];
     }
 
